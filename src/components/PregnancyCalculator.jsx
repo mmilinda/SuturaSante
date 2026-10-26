@@ -1,71 +1,98 @@
 import React, { useState } from 'react';
-import AudioPlayerButton from './AudioPlayerButton';
 
-export default function PregnancyCalculator({ t, lang, onActionTrack, onNavigateToTriage }) {
-  const [calcMode, setCalcMode] = useState('ddr');
-  const [ddrDate, setDdrDate] = useState('2025-10-15');
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [folicTaken, setFolicTaken] = useState(true);
+export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [calcTab, setCalcTab] = useState('ddr');
+  const [folicChecked, setFolicChecked] = useState(true);
 
-  const calculateStats = () => {
-    const lmp = new Date(ddrDate);
-    const today = new Date();
-    const diffDays = Math.max(0, Math.floor((today - lmp) / (1000 * 60 * 60 * 24)));
-    const weeks = Math.min(40, Math.floor(diffDays / 7) || 24);
-    const daysLeft = Math.max(0, 280 - diffDays);
-    const progress = Math.min(100, Math.round((weeks / 40) * 100));
-
-    const dpaDate = new Date(lmp);
-    dpaDate.setDate(dpaDate.getDate() + 280);
-
-    return {
-      weeks,
-      month: Math.min(9, Math.ceil(weeks / 4.3)),
-      daysLeft: daysLeft || 112,
-      progress: progress || 60,
-      dpaFormatted: dpaDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
-    };
-  };
-
-  const stats = calculateStats();
-
-  const handleDateChange = (e) => {
-    setDdrDate(e.target.value);
-    setShowDatePicker(false);
-    if (onActionTrack) onActionTrack('pregnancy_calculation');
+  const toggleAudio = () => {
+    if ('speechSynthesis' in window) {
+      if (isPlaying) {
+        window.speechSynthesis.cancel();
+        setIsPlaying(false);
+      } else {
+        const u = new SpeechSynthesisUtterance(
+          "Asalaam alaykum. Saytul sa birr te nga topp sa ñeenti saytu CPN yi ci fajuwaay bi. Bul fatte jël sa garapu fer ak acide folique."
+        );
+        u.lang = 'fr-SN';
+        u.rate = 0.9;
+        u.onend = () => setIsPlaying(false);
+        window.speechSynthesis.speak(u);
+        setIsPlaying(true);
+        if (onActionTrack) onActionTrack('audio_listen');
+      }
+    }
   };
 
   return (
-    <div className="flex flex-col w-full gap-4 max-w-md mx-auto">
-      {/* 1. ASSISTANCE VOCALE GUIDÉE (Fond Pêche Chaud #ffe3c7 + Bouton Play Chocolat #724600) */}
-      <AudioPlayerButton
-        lang={lang}
-        variant="banner"
-        label="Déglul ci Wolof"
-        subtitle="Explications du calendrier et de votre stade"
-        textToSpeak={
-          lang === 'wo'
-            ? "Asalaam alaykum. Saytul sa birr te nga topp sa 4 saytu CPN yi ci fajuwaay bi. Bul fatte jël sa garapu fer ak acide folique te lekkal xob-u Neverdie ak ñebbe."
-            : "Bienvenue sur SuturaSanté. Suivez vos 4 consultations prénatales au poste de santé. Prenez vos comprimés de fer et consommez des aliments riches en fer."
-        }
-        onPlayRecord={() => onActionTrack && onActionTrack('audio_listen')}
-      />
+    <div className="flex flex-col w-full px-margin gap-space-lg">
+      {/* 1. ASSISTANCE VOCALE GUIDÉE STITCH EXACT */}
+      <div className="w-full bg-tertiary-fixed text-on-tertiary-fixed rounded-xl p-space-md shadow-sm relative overflow-hidden flex flex-col gap-space-sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-space-xs">
+            <span className="material-symbols-outlined text-[22px] text-tertiary" style={{ fontVariationSettings: "'FILL' 1" }}>
+              volume_up
+            </span>
+            <span className="font-label-sm text-label-sm uppercase tracking-wider text-tertiary font-bold">
+              Assistance Vocale Guidée
+            </span>
+          </div>
+          <span className="font-label-sm text-label-sm bg-surface-container-lowest/90 text-on-tertiary-fixed px-2.5 py-1 rounded-full font-bold shadow-xs">
+            Wolof / FR
+          </span>
+        </div>
 
-      {/* 2. RACCOURCIS SÉNÉGAL (USSD *1515# & WHATSAPP AUDIO) */}
-      <div className="grid grid-cols-2 gap-2.5 w-full">
+        <div className="flex items-center justify-between gap-space-sm pt-1">
+          <div className="flex items-center gap-space-sm min-w-0">
+            <button
+              aria-label="Lancer la lecture audio en Wolof"
+              onClick={toggleAudio}
+              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform flex-shrink-0 ${
+                isPlaying ? 'bg-primary text-on-primary animate-pulse' : 'bg-tertiary text-on-tertiary'
+              }`}
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[30px]">
+                {isPlaying ? 'pause' : 'play_arrow'}
+              </span>
+            </button>
+            <div className="flex flex-col min-w-0">
+              <span className="font-title-md text-title-md truncate leading-tight font-bold text-on-tertiary-fixed">
+                Déglul ci Wolof
+              </span>
+              <span className="font-body-sm text-body-sm text-on-tertiary-fixed/80 truncate">
+                Explications du calendrier et de votre stade
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1 h-8 px-2.5 flex-shrink-0 bg-surface-container-lowest/60 rounded-full">
+            <span className={`w-1 h-3.5 bg-tertiary rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
+            <span className={`w-1 h-5 bg-tertiary rounded-full ${isPlaying ? 'animate-bounce' : ''}`}></span>
+            <span className={`w-1 h-2.5 bg-tertiary rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
+            <span className={`w-1 h-4 bg-tertiary rounded-full ${isPlaying ? 'animate-bounce' : ''}`}></span>
+            <span className="font-label-sm text-label-sm ml-1.5 text-on-tertiary-fixed font-bold">
+              {isPlaying ? 'En cours' : '01:45'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. RACCOURCIS USSD & WHATSAPP STITCH EXACT */}
+      <div className="grid grid-cols-2 gap-space-sm w-full">
         <a
           href="tel:*1515%23"
-          className="bg-white border border-[#dee2ec] rounded-2xl p-3 flex items-center gap-2.5 shadow-xs hover:bg-[#f0f4fd] transition-colors"
+          className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-space-sm flex items-center gap-space-sm shadow-xs hover:bg-surface-container-low transition-colors active:scale-98 min-h-[56px]"
         >
-          <div className="w-10 h-10 rounded-full bg-[#aeeecb] text-[#0e5138] flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-[20px]">dialpad</span>
+          <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
+            <span className="material-symbols-outlined text-[22px]">dialpad</span>
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-[10px] font-extrabold text-[#2c694e] uppercase tracking-wide">
+            <span className="font-label-sm text-label-sm font-bold text-secondary uppercase tracking-wide">
               Passerelle USSD
             </span>
-            <span className="font-bold text-sm text-[#171c23] leading-tight">*1515#</span>
-            <span className="text-[10px] text-[#574240] font-medium">Gratuit sans Internet</span>
+            <span className="font-title-md text-title-md font-bold text-on-surface leading-tight">*1515#</span>
+            <span className="text-[10px] text-on-surface-variant font-medium">Gratuit sans Internet</span>
           </div>
         </a>
 
@@ -73,398 +100,401 @@ export default function PregnancyCalculator({ t, lang, onActionTrack, onNavigate
           href="https://wa.me/221770000000?text=Bonjour%20SuturaSante"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-white border border-[#dee2ec] rounded-2xl p-3 flex items-center gap-2.5 shadow-xs hover:bg-[#f0f4fd] transition-colors"
+          className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-space-sm flex items-center gap-space-sm shadow-xs hover:bg-surface-container-low transition-colors active:scale-98 min-h-[56px]"
         >
-          <div className="w-10 h-10 rounded-full bg-[#2c694e] text-white flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-[20px]">forum</span>
+          <div className="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center flex-shrink-0">
+            <span className="material-symbols-outlined text-[22px]">forum</span>
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-[10px] font-extrabold text-[#2c694e] uppercase tracking-wide">
+            <span className="font-label-sm text-label-sm font-bold text-secondary uppercase tracking-wide">
               WhatsApp Audio
             </span>
-            <span className="font-bold text-sm text-[#171c23] leading-tight">Vocaux 24/7</span>
-            <span className="text-[10px] text-[#574240] font-medium">Conseillère santé</span>
+            <span className="font-title-md text-title-md font-bold text-on-surface leading-tight">Vocaux 24/7</span>
+            <span className="text-[10px] text-on-surface-variant font-medium">Conseillère santé</span>
           </div>
         </a>
       </div>
 
-      {/* 3. CARTE ÉTAT GESTATIONNEL ACTUEL (Fond Rose Poudré Doux #ffdad6 / #fdeeed) */}
-      <div className="w-full bg-white rounded-2xl p-4 shadow-xs flex flex-col gap-3.5 border border-[#dee2ec]">
-        {/* Sélecteur DDR / DPA */}
-        <div className="flex flex-col gap-1.5">
-          <div className="flex bg-[#eaeef8] rounded-xl p-1 w-full justify-between" role="tablist">
+      {/* 3. CALCULATEUR GESTATIONNEL & JAUGE SVG STITCH EXACT */}
+      <div className="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+        <div className="flex flex-col gap-space-xs">
+          <div className="flex bg-surface-container rounded-lg p-1 w-full justify-between" role="tablist">
             <button
-              onClick={() => setCalcMode('ddr')}
-              className={`flex-1 min-h-[38px] py-1 px-2 rounded-lg text-xs font-bold transition-all text-center ${
-                calcMode === 'ddr'
-                  ? 'bg-white text-[#902e2a] shadow-xs'
-                  : 'text-[#574240]'
+              onClick={() => setCalcTab('ddr')}
+              className={`flex-1 min-h-[44px] py-2 px-1 rounded font-label-md text-label-md font-bold transition-all text-center ${
+                calcTab === 'ddr'
+                  ? 'bg-surface-container-lowest text-primary shadow-xs'
+                  : 'text-on-surface-variant'
               }`}
+              type="button"
             >
               DDR (Dernières Règles)
             </button>
             <button
-              onClick={() => setCalcMode('dpa')}
-              className={`flex-1 min-h-[38px] py-1 px-2 rounded-lg text-xs font-bold transition-all text-center ${
-                calcMode === 'dpa'
-                  ? 'bg-white text-[#902e2a] shadow-xs'
-                  : 'text-[#574240]'
+              onClick={() => setCalcTab('dpa')}
+              className={`flex-1 min-h-[44px] py-2 px-1 rounded font-label-md text-label-md font-bold transition-all text-center ${
+                calcTab === 'dpa'
+                  ? 'bg-surface-container-lowest text-primary shadow-xs'
+                  : 'text-on-surface-variant'
               }`}
+              type="button"
             >
               DPA (Terme Prévu)
             </button>
           </div>
 
-          <div className="flex items-center justify-between bg-[#f0f4fd] rounded-xl px-3.5 py-2 mt-0.5 border border-[#dee2ec]/60">
-            <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-[#902e2a] text-[22px]">calendar_month</span>
+          <div className="flex items-center justify-between bg-surface-container-low rounded-lg px-space-md py-space-sm mt-1">
+            <div className="flex items-center gap-space-xs">
+              <span className="material-symbols-outlined text-primary text-[22px]">calendar_month</span>
               <div className="flex flex-col">
-                <span className="text-[10px] text-[#574240] font-semibold">
-                  Date enregistrée (DDR)
+                <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold">
+                  Date enregistrée ({calcTab.toUpperCase()})
                 </span>
-                <span className="font-bold text-sm text-[#171c23]">
-                  {new Date(ddrDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                <span className="font-title-md text-title-md text-on-surface font-bold">
+                  15 Octobre 2025
                 </span>
               </div>
             </div>
             <button
-              onClick={() => setShowDatePicker(!showDatePicker)}
-              className="px-3 py-1 rounded-full bg-[#dee2ec] text-[#171c23] text-xs font-bold hover:bg-[#d6dae4] transition-colors"
+              onClick={() => alert("Modification de la date DDR")}
+              className="min-h-[44px] px-4 py-2 rounded-full bg-surface-container-highest text-on-surface font-label-sm text-label-sm font-bold hover:bg-surface-container-high transition-colors"
+              type="button"
             >
-              {showDatePicker ? 'Fermer' : 'Modifier'}
+              Modifier
             </button>
           </div>
-
-          {showDatePicker && (
-            <div className="p-3 bg-[#f0f4fd] rounded-xl border border-[#dee2ec] flex items-center gap-2">
-              <input
-                type="date"
-                value={ddrDate}
-                onChange={handleDateChange}
-                className="flex-1 px-3 py-2 rounded-lg border border-[#dee2ec] text-xs font-bold text-[#171c23]"
-              />
-            </div>
-          )}
         </div>
 
-        {/* Bloc Gestationnel Rose Poudré Chaud #ffdad6 Stitch */}
-        <div className="relative bg-[#ffdad6]/40 rounded-2xl p-4 flex flex-col gap-3 overflow-hidden border border-[#ffb3ac]">
+        {/* Bloc Gestationnel Stitch avec Jauge SVG */}
+        <div className="relative bg-gradient-to-br from-primary-fixed to-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm overflow-hidden">
           <div className="flex items-start justify-between z-10">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#902e2a] uppercase font-extrabold tracking-wider">
-                ÉTAT GESTATIONNEL ACTUEL
+              <span className="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">
+                État gestationnel actuel
               </span>
-              <span className="font-headline text-2xl text-[#410003] font-bold leading-tight mt-0.5">
-                {stats.weeks} SA (Semaines)
+              <span className="font-headline-md-mobile text-headline-md-mobile text-on-primary-fixed font-bold leading-tight mt-0.5">
+                24 SA (Semaines)
               </span>
-              <span className="text-xs text-[#574240] font-semibold">
-                {stats.month}ème mois • 2ème Trimestre
+              <span className="font-body-sm text-body-sm text-on-surface-variant font-semibold">
+                6ème mois • 2ème Trimestre
               </span>
             </div>
-            <div className="px-3 py-1 bg-white text-[#902e2a] rounded-full shadow-xs flex items-center gap-1.5 text-xs font-bold border border-[#ffdad6]">
-              <span className="material-symbols-outlined text-[16px]">schedule</span>
-              <span>J - {stats.daysLeft}</span>
+            <div className="px-3.5 py-1.5 bg-surface-container-lowest text-primary rounded-full shadow-xs flex items-center gap-1.5 font-label-sm text-label-sm font-bold">
+              <span className="material-symbols-outlined text-[18px]">schedule</span>
+              <span>J - 112</span>
             </div>
           </div>
 
-          {/* Jauge circulaire SVG Bordeaux #902e2a */}
-          <div className="flex items-center gap-4 mt-1 z-10">
+          <div className="flex items-center gap-space-md mt-1 z-10">
             <div className="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 72 72">
                 <circle
-                  className="text-[#dee2ec]"
+                  className="text-surface-container-highest"
                   cx="36"
                   cy="36"
                   fill="transparent"
                   r="30"
                   stroke="currentColor"
                   strokeWidth="7"
-                />
+                ></circle>
                 <circle
-                  className="text-[#902e2a]"
+                  className="text-primary"
                   cx="36"
                   cy="36"
                   fill="transparent"
                   r="30"
                   stroke="currentColor"
                   strokeDasharray="188.5"
-                  strokeDashoffset={188.5 - (188.5 * stats.progress) / 100}
+                  strokeDashoffset="75.4"
                   strokeLinecap="round"
                   strokeWidth="7"
-                />
+                ></circle>
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
-                <span className="font-bold text-sm text-[#902e2a]">{stats.progress}%</span>
+                <span className="font-title-md text-title-md font-bold text-primary">60%</span>
               </div>
             </div>
 
             <div className="flex flex-col justify-center min-w-0">
-              <div className="flex items-center gap-1 text-[#724600]">
-                <span className="material-symbols-outlined text-[18px]">hearing</span>
-                <span className="text-[11px] font-bold">Étape Fœtale</span>
+              <div className="flex items-center gap-1 text-tertiary">
+                <span className="material-symbols-outlined text-[20px]">hearing</span>
+                <span className="font-label-sm text-label-sm font-bold">Étape Fœtale</span>
               </div>
-              <p className="text-xs text-[#171c23] line-clamp-2 mt-0.5">
-                Bébé pèse environ <strong className="text-[#902e2a] font-bold">600g</strong>, ses poumons se développent et il perçoit votre voix !
+              <p className="font-body-sm text-body-sm text-on-surface line-clamp-2 mt-0.5">
+                Bébé pèse environ <span className="font-bold text-primary">600g</span>, ses poumons se développent et il perçoit votre voix !
               </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between bg-white rounded-xl px-3 py-2 z-10 text-xs border border-[#ffdad6]">
-            <span className="text-[#574240] font-medium">Terme d'accouchement prévu (DPA) :</span>
-            <span className="text-[#171c23] font-extrabold">{stats.dpaFormatted}</span>
+          <div className="flex items-center justify-between bg-surface-container-lowest/80 rounded-lg px-space-md py-2 mt-1 z-10">
+            <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">
+              Terme d'accouchement prévu (DPA) :
+            </span>
+            <span className="font-label-md text-label-md text-on-surface font-bold">
+              22 Juillet 2026
+            </span>
           </div>
         </div>
 
-        {/* Conseil Sage-Femme avec Photo */}
-        <div className="flex items-center gap-3 p-3 bg-[#f0f4fd] rounded-xl border border-[#dee2ec]">
-          <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-[#ffe2de] flex items-center justify-center">
-            <span className="material-symbols-outlined text-[#902e2a] text-[32px]">pregnant_woman</span>
-          </div>
+        {/* Photo officielle Maman Sénégalaise de Stitch */}
+        <div className="flex items-center gap-space-sm p-space-sm bg-surface-container-low rounded-lg">
+          <img
+            alt="Maman Sénégalaise"
+            className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCeg2rd31C_5hdpqvP-vCBNIid_vP6FlVqjLyx14gqNl52MQHq3qQv_crrjuuOE1e2CEAkR-fYQT-fK5eOWBWPEMWh9axyzn5wnn6hc8R9mICKlmCW-KT6pvwrXOVP6FAwCHoL9z-oNSkLg6b-01jcNx0ne7P9VKsWeMwY_qtKIUsOycm2DN0P-LYYmsf99TGuJIwCz-yDawYUopu3sneOpJYr_c1QV9JRt0BPnuE"
+          />
           <div className="flex flex-col justify-center min-w-0">
-            <span className="text-xs font-bold text-[#902e2a]">Conseil de la Sage-Femme</span>
-            <span className="text-[11px] text-[#574240] leading-snug">
+            <span className="font-label-sm text-label-sm font-bold text-primary">
+              Conseil de la Sage-Femme
+            </span>
+            <span className="font-body-sm text-body-sm text-on-surface-variant">
               Parlez régulièrement au bébé. Les voix douces de la famille renforcent le lien avant l'arrivée.
             </span>
           </div>
         </div>
       </div>
 
-      {/* 4. CONSULTATIONS PRÉNATALES (CPN) STITCH EXACT */}
-      <div className="w-full bg-white rounded-2xl p-4 shadow-xs flex flex-col gap-3.5 border border-[#dee2ec]">
+      {/* 4. CHRONOLOGIE CPN STITCH EXACT */}
+      <div className="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="font-headline text-lg text-[#171c23] font-bold">
+            <span className="font-headline-sm text-headline-sm text-on-surface font-bold">
               Consultations Prénatales (CPN)
             </span>
-            <span className="text-[11px] text-[#574240] font-medium">
+            <span className="font-label-sm text-label-sm text-on-surface-variant">
               Protocole officiel du Ministère de la Santé
             </span>
           </div>
-          <span className="material-symbols-outlined text-[#2c694e] text-[24px]">verified</span>
+          <span className="material-symbols-outlined text-secondary text-[26px]">verified</span>
         </div>
 
-        <div className="flex flex-col gap-3 relative">
-          {/* CPN 1 (Validée - Vert forêt #2c694e + Badge Menthe #aeeecb) */}
-          <div className="flex items-start gap-3 relative">
+        <div className="flex flex-col gap-space-md relative">
+          {/* CPN 1 */}
+          <div className="flex items-start gap-space-sm relative">
             <div className="flex flex-col items-center flex-shrink-0">
-              <div className="w-7 h-7 rounded-full bg-[#2c694e] text-white flex items-center justify-center shadow-xs">
-                <span className="material-symbols-outlined text-[16px]">check</span>
+              <div className="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-xs">
+                <span className="material-symbols-outlined text-[18px]">check</span>
               </div>
-              <div className="w-0.5 h-full bg-[#aeeecb] mt-1"></div>
+              <div className="w-0.5 h-full bg-secondary-container mt-1"></div>
             </div>
-            <div className="flex-1 bg-[#f0f4fd] rounded-xl p-3 flex flex-col gap-1 border border-[#dee2ec]">
+            <div className="flex-1 bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-space-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-xs text-[#171c23]">CPN 1</span>
-                  <span className="text-[10px] text-[#574240]">Avant 12 SA</span>
+                  <span className="font-title-md text-title-md text-on-surface font-bold">CPN 1</span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Avant 12 SA</span>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#aeeecb] text-[#0e5138] text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold">
                   Validée
                 </span>
               </div>
-              <p className="text-[11px] text-[#171c23]">Effectuée avec succès le 18 Novembre 2025.</p>
-              <div className="flex items-center justify-between text-[#574240] bg-[#eaeef8] rounded-lg px-2.5 py-1 text-[10px] mt-1">
+              <p className="font-body-sm text-body-sm text-on-surface">Effectuée avec succès le 18 Novembre 2025.</p>
+              <div className="flex items-center justify-between text-on-surface-variant bg-surface-container rounded-lg p-2 font-label-sm text-label-sm">
                 <span>Bilan sanguin &amp; Échographie T1 conformes</span>
                 <button
                   onClick={() => alert("Bilan CPN 1 : Pas d'anémie. Traitement en cours.")}
-                  className="text-[#2c694e] font-bold inline-flex items-center gap-1"
+                  aria-label="Écouter le résumé CPN 1 en Wolof"
+                  className="text-secondary font-bold inline-flex items-center gap-1 min-h-[44px] px-2"
+                  type="button"
                 >
-                  <span className="material-symbols-outlined text-[14px]">volume_up</span> Audio
+                  <span className="material-symbols-outlined text-[18px]">volume_up</span> Audio
                 </button>
               </div>
             </div>
           </div>
 
-          {/* CPN 2 (À planifier - Bordeaux #902e2a + Fond #ffe2de + Bouton Bordeaux Plein) */}
-          <div className="flex items-start gap-3 relative">
+          {/* CPN 2 (Active) */}
+          <div className="flex items-start gap-space-sm relative">
             <div className="flex flex-col items-center flex-shrink-0">
-              <div className="w-7 h-7 rounded-full bg-[#902e2a] text-white flex items-center justify-center shadow-sm animate-pulse">
-                <span className="material-symbols-outlined text-[16px]">event_note</span>
+              <div className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm animate-pulse">
+                <span className="material-symbols-outlined text-[18px]">event_note</span>
               </div>
-              <div className="w-0.5 h-full bg-[#eaeef8] mt-1"></div>
+              <div className="w-0.5 h-full bg-surface-container mt-1"></div>
             </div>
-            <div className="flex-1 bg-[#ffe2de]/40 rounded-xl p-3.5 flex flex-col gap-2 border border-[#902e2a]/30">
+            <div className="flex-1 bg-primary-fixed/30 rounded-xl p-space-md flex flex-col gap-space-sm border border-primary/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-xs text-[#902e2a]">CPN 2</span>
-                  <span className="text-[10px] text-[#902e2a] font-semibold">20 à 24 SA</span>
+                  <span className="font-title-md text-title-md text-primary font-bold">CPN 2</span>
+                  <span className="font-label-sm text-label-sm text-primary font-semibold">20 à 24 SA</span>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#902e2a] text-white text-[10px] font-bold shadow-xs">
+                <span className="px-2.5 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-xs">
                   À planifier
                 </span>
               </div>
-              <p className="text-xs text-[#171c23] font-medium leading-relaxed">
+              <p className="font-body-sm text-body-sm text-on-surface font-medium leading-relaxed">
                 Recommandée cette semaine. Dépistage diabète, contrôle tension &amp; rappel Fer/Folique.
               </p>
-              <div className="flex items-center gap-2 pt-1">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-xs pt-1">
                 <button
-                  onClick={() => alert("Rappel programmé avec succès !")}
-                  className="flex-1 py-2 px-3 rounded-xl bg-[#902e2a] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-98 transition-transform"
+                  onClick={() => alert("Rappel CPN 2 programmé sur WhatsApp !")}
+                  className="flex-1 min-h-[48px] py-2.5 px-4 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-bold flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform"
+                  type="button"
                 >
-                  <span className="material-symbols-outlined text-[16px]">notifications_active</span>
+                  <span className="material-symbols-outlined text-[18px]">notifications_active</span>
                   <span>Rappel SMS / WhatsApp</span>
                 </button>
                 <button
-                  onClick={() => alert("Audio CPN 2 Wolof")}
-                  className="p-2 rounded-xl bg-white text-[#902e2a] border border-[#902e2a]/30 flex items-center justify-center"
-                  title="Écouter en Wolof"
+                  onClick={() => alert("Audio CPN 2 en Wolof")}
+                  className="min-h-[48px] px-4 rounded-xl bg-surface-container-lowest text-primary font-label-md text-label-md font-bold flex items-center justify-center gap-1.5 shadow-xs border border-primary/20 hover:bg-surface-container-low transition-colors"
+                  title="Écouter CPN 2 en Wolof"
+                  type="button"
                 >
-                  <span className="material-symbols-outlined text-[18px]">volume_up</span>
+                  <span className="material-symbols-outlined text-[20px]">volume_up</span>
+                  <span>Audio Wolof</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* CPN 3 */}
-          <div className="flex items-start gap-3 relative">
+          <div className="flex items-start gap-space-sm relative">
             <div className="flex flex-col items-center flex-shrink-0">
-              <div className="w-7 h-7 rounded-full bg-[#dee2ec] text-[#574240] flex items-center justify-center">
-                <span className="text-[11px] font-bold">3</span>
+              <div className="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+                <span className="font-label-sm text-label-sm font-bold">3</span>
               </div>
-              <div className="w-0.5 h-full bg-[#eaeef8] mt-1"></div>
+              <div className="w-0.5 h-full bg-surface-container mt-1"></div>
             </div>
-            <div className="flex-1 bg-[#f0f4fd] rounded-xl p-3 flex flex-col gap-1 border border-[#dee2ec]">
+            <div className="flex-1 bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-space-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-xs text-[#171c23]">CPN 3</span>
-                  <span className="text-[10px] text-[#574240]">28 à 32 SA</span>
+                  <span className="font-title-md text-title-md text-on-surface font-bold">CPN 3</span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">28 à 32 SA</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-[#eaeef8] text-[#574240] text-[10px] font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
                   À venir
                 </span>
               </div>
-              <span className="text-xs text-[#574240]">Prévue autour du 14 Mai 2026</span>
+              <div className="flex items-center justify-between">
+                <span className="font-body-sm text-body-sm text-on-surface-variant">Prévue autour du 14 Mai 2026</span>
+                <button
+                  onClick={() => alert("Audio CPN 3")}
+                  className="text-on-surface-variant hover:text-primary font-label-sm text-label-sm inline-flex items-center gap-1 min-h-[44px] px-2"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px]">volume_up</span> Audio
+                </button>
+              </div>
             </div>
           </div>
 
           {/* CPN 4 */}
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-space-sm">
             <div className="flex flex-col items-center flex-shrink-0">
-              <div className="w-7 h-7 rounded-full bg-[#dee2ec] text-[#574240] flex items-center justify-center">
-                <span className="text-[11px] font-bold">4</span>
+              <div className="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+                <span className="font-label-sm text-label-sm font-bold">4</span>
               </div>
             </div>
-            <div className="flex-1 bg-[#f0f4fd] rounded-xl p-3 flex flex-col gap-1 border border-[#dee2ec]">
+            <div className="flex-1 bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-space-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-xs text-[#171c23]">CPN 4</span>
-                  <span className="text-[10px] text-[#574240]">36 à 38 SA</span>
+                  <span className="font-title-md text-title-md text-on-surface font-bold">CPN 4</span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">36 à 38 SA</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-[#eaeef8] text-[#574240] text-[10px] font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
                   Dernier mois
                 </span>
               </div>
-              <span className="text-xs text-[#574240]">Préparation accouchement &amp; valise maternité</span>
+              <div className="flex items-center justify-between">
+                <span className="font-body-sm text-body-sm text-on-surface-variant">Préparation accouchement &amp; valise maternité</span>
+                <button
+                  onClick={() => alert("Audio CPN 4")}
+                  className="text-on-surface-variant hover:text-primary font-label-sm text-label-sm inline-flex items-center gap-1 min-h-[44px] px-2"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[18px]">volume_up</span> Audio
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 5. COMPLÉMENTS & NUTRITION LOCALE */}
-      <div className="w-full bg-white rounded-2xl p-4 shadow-xs flex flex-col gap-3 border border-[#dee2ec]">
+      {/* 5. COMPLÉMENTS & PHOTO INGRÉDIENTS LOCAUX STITCH EXACT */}
+      <div className="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#2c694e] text-[22px]">medication</span>
-            <span className="font-bold text-sm text-[#171c23]">Compléments &amp; Nutrition Locale</span>
+          <div className="flex items-center gap-space-xs">
+            <span className="material-symbols-outlined text-secondary text-[24px]">medication</span>
+            <span className="font-title-md text-title-md text-on-surface font-bold">Compléments &amp; Nutrition Locale</span>
           </div>
           <button
-            onClick={() => alert("Moringa ak Bouye : Defal xob-u Neverdie ci ceeb.")}
-            className="text-[#2c694e] text-xs inline-flex items-center gap-1 font-bold"
+            onClick={() => alert("Conseils nutritionnels : Moringa, bissap et bouye.")}
+            aria-label="Conseils nutrition en wolof"
+            className="text-secondary font-label-sm text-label-sm inline-flex items-center gap-1.5 min-h-[44px] px-2 font-bold"
+            type="button"
           >
-            <span className="material-symbols-outlined text-[16px]">volume_up</span> Wolof
+            <span className="material-symbols-outlined text-[18px]">volume_up</span> Wolof
           </button>
         </div>
 
-        {/* Checkbox quotidienne active */}
         <label
-          onClick={() => setFolicTaken(!folicTaken)}
-          className="flex items-center justify-between bg-[#f0f4fd] rounded-xl p-3 cursor-pointer select-none active:bg-[#eaeef8] transition-colors border border-[#dee2ec]"
+          onClick={() => setFolicChecked(!folicChecked)}
+          className="flex items-center justify-between bg-surface-container-low rounded-xl p-space-md cursor-pointer select-none active:bg-surface-container transition-colors min-h-[56px]"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-space-sm">
             <input
-              type="checkbox"
-              checked={folicTaken}
+              checked={folicChecked}
               onChange={() => {}}
-              className="w-5 h-5 rounded text-[#2c694e] focus:ring-0 accent-[#2c694e] cursor-pointer"
+              className="w-6 h-6 rounded text-secondary focus:ring-0 accent-secondary"
+              type="checkbox"
             />
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-[#171c23] leading-tight">
+              <span className="font-label-lg text-label-lg text-on-surface font-bold leading-tight">
                 Fer &amp; Acide Folique pris aujourd'hui ?
               </span>
-              <span className="text-[10px] text-[#574240] mt-0.5">
+              <span className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
                 Indispensable pour prévenir l'anémie maternelle
               </span>
             </div>
           </div>
           <span
-            className={`material-symbols-outlined text-[22px] ${folicTaken ? 'text-[#2c694e]' : 'text-[#dee2ec]'}`}
+            className={`material-symbols-outlined text-[24px] ${folicChecked ? 'text-secondary' : 'text-slate-300'}`}
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
             check_circle
           </span>
         </label>
 
-        {/* Moringa & Bouye */}
-        <div className="flex items-center gap-3 bg-[#f0f4fd] rounded-xl p-3 border border-[#dee2ec]">
-          <div className="w-12 h-12 rounded-xl bg-[#ffe3c7] text-[#724600] flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-[24px]">nutrition</span>
-          </div>
+        {/* Photo officielle Ingrédients Stitch */}
+        <div className="flex items-center gap-space-sm bg-surface-container-low rounded-xl p-space-sm">
+          <img
+            alt="Ingrédients Sénégalais"
+            className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHCoABKs967FWzDGsYxNhzIPUuo7vX4EHkZx9ZmkpF61Y1pqqFwXdZDcpa5Ces2_VV9M2lIMZnONbSlGCQFqfPRwbfBg1bq2oK56w-Zh2kRsgc79n6OV6mpHDObe2Xfuu0EbxJlXpL-LKzyDfFIk2A_vaVav3MD0fL971JsUy1GCpkVz0HqbvQtLtvkHqSbd9Z_okvp1x_F5tYJcLrJ440Qr0VoCiPDbHAlHH6Dig"
+          />
           <div className="flex flex-col min-w-0">
-            <span className="text-xs font-bold text-[#724600]">Alliés naturels : Moringa &amp; Bissap doux</span>
-            <span className="text-[11px] text-[#574240] line-clamp-2">
-              Ajoutez des feuilles de moringa (Nebeday) à votre tiéboudienne et consommez du pain de singe (bouye).
+            <span className="font-label-sm text-label-sm font-bold text-tertiary">
+              Alliés naturels : Moringa &amp; Bissap doux
+            </span>
+            <span className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+              Ajoutez des feuilles de moringa (Nebeday) à votre tiéboudienne et buvez du jus de bouye pour l'énergie.
             </span>
           </div>
         </div>
       </div>
 
-      {/* 6. CARTE TEST DE DANGER (Pastille Rose #ffdad6) */}
-      <button
-        onClick={onNavigateToTriage}
-        className="w-full bg-[#f0f4fd] text-[#171c23] rounded-2xl p-4 flex items-center justify-between shadow-xs hover:bg-[#eaeef8] transition-colors group text-left border border-[#dee2ec]"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-[22px]">health_and_safety</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-[#171c23] group-hover:text-[#902e2a] transition-colors">
-              Un doute, des vertiges ou une douleur ?
-            </span>
-            <span className="text-[11px] text-[#574240]">
-              Faire le test d'auto-évaluation rapide en 1 min
-            </span>
-          </div>
-        </div>
-        <span className="material-symbols-outlined text-[#574240] text-[20px] flex-shrink-0">
-          arrow_forward
-        </span>
-      </button>
-
-      {/* 7. BOUTON ROUGE SAMU SÉNÉGAL 1515 EN BAS (Exact Stitch) */}
-      <div className="w-full pt-1 pb-4">
-        <a
-          href="tel:1515"
-          className="w-full min-h-[48px] px-4 py-2.5 rounded-full bg-[#ba1a1a] text-white flex items-center justify-between shadow-[0_4px_16px_rgba(186,26,26,0.3)] hover:bg-[#902e2a] transition-all active:scale-[0.98]"
+      {/* 6. CARTE TEST DE DANGER STITCH EXACT */}
+      <div className="w-full mb-space-sm">
+        <button
+          onClick={onNavigateToTriage}
+          className="w-full bg-surface-container-low text-on-surface rounded-xl p-space-md flex items-center justify-between shadow-xs hover:bg-surface-container transition-colors group min-h-[60px] text-left"
+          type="button"
         >
-          <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-[22px] animate-bounce">
-              e911_emergency
-            </span>
-            <div className="flex flex-col text-left leading-tight">
-              <span className="text-xs font-extrabold tracking-wide uppercase">
-                SAMU SÉNÉGAL 1515
+          <div className="flex items-center gap-space-sm">
+            <div className="w-12 h-12 rounded-full bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-[24px]">health_and_safety</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-label-lg text-label-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                Un doute, des vertiges ou une douleur ?
               </span>
-              <span className="text-[10px] text-white/90">
-                Appel gratuit d'urgence obstétricale
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Faire le test d'auto-évaluation rapide en 1 min
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
-            <span className="material-symbols-outlined text-[15px]">call</span>
-            <span className="text-xs font-extrabold">1515</span>
-          </div>
-        </a>
+          <span className="material-symbols-outlined text-on-surface-variant text-[22px] flex-shrink-0">
+            arrow_forward
+          </span>
+        </button>
       </div>
     </div>
   );

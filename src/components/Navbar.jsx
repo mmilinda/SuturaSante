@@ -1,150 +1,244 @@
 import React from 'react';
 
 export default function Navbar({ lang, setLang, activeTab, setActiveTab }) {
-  const navItems = [
-    { id: 'pregnancy', labelFr: 'Grossesse & CPN', labelWo: 'Grossesse & CPN', icon: 'pregnant_woman' },
-    { id: 'triage', labelFr: 'Signes Danger', labelWo: 'Signes Danger', icon: 'health_and_safety' },
-    { id: 'guide', labelFr: 'Conseils', labelWo: 'Conseils', icon: 'menu_book' },
-    { id: 'emergency', labelFr: 'Urgences 1515', labelWo: 'Urgences 1515', icon: 'emergency', isRed: true },
-    { id: 'metrics', labelFr: 'Impact UNICEF', labelWo: 'Impact UNICEF', icon: 'analytics', isGreen: true },
-  ];
+  const getTabLabel = () => {
+    switch (activeTab) {
+      case 'pregnancy':
+        return 'Grossesse & Cpn';
+      case 'triage':
+        return 'Signes Danger';
+      case 'guide':
+        return 'Conseils';
+      case 'emergency':
+        return 'Urgences 1515';
+      case 'metrics':
+        return 'Impact UNICEF';
+      default:
+        return 'Grossesse & Cpn';
+    }
+  };
 
   return (
     <>
-      {/* HEADER SUPÉRIEUR STITCH EXACT */}
-      <header className="sticky top-0 w-full z-50 bg-[#f8f9ff]/95 backdrop-blur-md border-b border-[#ddc0bd]/40">
-        <div className="max-w-md md:max-w-4xl mx-auto px-4 py-3 flex flex-col gap-2">
-          {/* Ligne 1 : Logo & Slogan + Switch WO/FR bordeaux + Avatar */}
+      {/* HEADER FIXE SUPÉRIEUR STITCH EXACT */}
+      <header className="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+        <div className="h-28 px-margin flex flex-col justify-center gap-space-xs max-w-md mx-auto md:max-w-4xl">
           <div className="flex items-center justify-between w-full">
-            {/* Logo */}
+            {/* Logo officiel Stitch */}
             <div
-              className="flex items-center gap-2.5 cursor-pointer"
+              className="flex items-center gap-space-sm cursor-pointer"
               onClick={() => setActiveTab('pregnancy')}
             >
-              <div className="w-8 h-8 rounded-xl bg-[#902e2a] text-white flex items-center justify-center shadow-xs">
-                <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  favorite
-                </span>
-              </div>
+              <img
+                alt="SuturaSanté Logo"
+                className="h-8 w-auto object-contain"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFPtd8KqY2-xQrGB8_kv1mgbSJ0mzPAsPY7N5x_Gx1-fDLQd1sZglBKQEHaUPR3IjIJr85nDj1MPQZgcmPKmmkoMp-WKE8l18IjXtrGlrcFBkgEXBj4qI0vpadZruDfmXAHu0KIA_BVJoFbwKUxJttg9jPdcrlD1DApddWYryCvCNh6jjl1X5S1Ib0j4VWfk6iO81fWSl5ztPdlVlQn8FMqWhbwmkOIwlx3wVAS7A"
+              />
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-headline text-xl text-[#902e2a] font-bold tracking-tight leading-none">
+                <div className="flex items-center gap-space-xs">
+                  <span className="font-headline-sm text-headline-sm text-primary font-semibold tracking-tight">
                     SuturaSanté
                   </span>
                 </div>
-                <span className="text-[11px] text-[#574240] font-medium leading-tight">
+                <span className="font-label-sm text-label-sm text-on-surface-variant font-medium">
                   Santé &amp; Dignité Maternelle
                 </span>
               </div>
             </div>
 
             {/* Menu Desktop */}
-            <nav className="hidden md:flex items-center gap-1 bg-[#eaeef8] p-1 rounded-2xl">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                    activeTab === item.id
-                      ? 'bg-[#902e2a] text-white shadow-xs'
-                      : item.isRed
-                      ? 'text-[#ba1a1a] hover:bg-[#ffdad6]/40'
-                      : 'text-[#171c23] hover:bg-[#dee2ec]'
-                  }`}
-                >
-                  <span
-                    className="material-symbols-outlined text-[17px]"
-                    style={{ fontVariationSettings: activeTab === item.id ? "'FILL' 1" : "'FILL' 0" }}
-                  >
-                    {item.icon}
-                  </span>
-                  <span>{item.labelFr}</span>
-                </button>
-              ))}
+            <nav className="hidden md:flex items-center gap-2">
+              <button
+                onClick={() => setActiveTab('pregnancy')}
+                className={`px-3 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all ${
+                  activeTab === 'pregnancy' ? 'bg-primary text-on-primary' : 'text-on-surface hover:text-primary'
+                }`}
+              >
+                Grossesse &amp; CPN
+              </button>
+              <button
+                onClick={() => setActiveTab('triage')}
+                className={`px-3 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all ${
+                  activeTab === 'triage' ? 'bg-primary text-on-primary' : 'text-on-surface hover:text-primary'
+                }`}
+              >
+                Signes Danger
+              </button>
+              <button
+                onClick={() => setActiveTab('guide')}
+                className={`px-3 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all ${
+                  activeTab === 'guide' ? 'bg-primary text-on-primary' : 'text-on-surface hover:text-primary'
+                }`}
+              >
+                Conseils
+              </button>
+              <button
+                onClick={() => setActiveTab('emergency')}
+                className={`px-3 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all ${
+                  activeTab === 'emergency' ? 'bg-error text-on-error' : 'text-error'
+                }`}
+              >
+                Urgences 1515
+              </button>
+              <button
+                onClick={() => setActiveTab('metrics')}
+                className={`px-3 py-1.5 rounded-full font-label-md text-label-md font-bold transition-all ${
+                  activeTab === 'metrics' ? 'bg-secondary text-on-secondary' : 'text-secondary'
+                }`}
+              >
+                Impact UNICEF
+              </button>
             </nav>
 
-            {/* Switch Langue Pilule Bordeaux Stitch (Bouton WO bordeaux foncé + FR gris) */}
-            <div className="flex items-center gap-2">
-              <div className="inline-flex items-center bg-[#eaeef8] rounded-full p-1 border border-[#ddc0bd]/40">
+            {/* Switch Langue & Avatar Stitch Exact */}
+            <div className="flex items-center gap-space-sm">
+              <div
+                aria-label="Choix de langue"
+                className="inline-flex items-center bg-surface-container-high rounded-full p-1 shadow-xs border border-outline-variant/30"
+                role="group"
+              >
                 <button
                   type="button"
                   onClick={() => setLang('wo')}
-                  className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1 transition-all ${
-                    lang === 'wo'
-                      ? 'bg-[#902e2a] text-white shadow-xs'
-                      : 'text-[#574240] hover:text-[#171c23]'
+                  className={`min-h-[44px] px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-transform ${
+                    lang === 'wo' ? 'bg-primary text-on-primary' : 'text-on-surface'
                   }`}
+                  title="Langue Wolof avec guidage audio"
                 >
-                  <span className="material-symbols-outlined text-[15px]">record_voice_over</span>
-                  <span>WO</span>
+                  <span className="material-symbols-outlined text-[18px]">record_voice_over</span>
+                  <span className="font-bold">WO</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setLang('fr')}
-                  className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1 transition-all ${
-                    lang === 'fr'
-                      ? 'bg-[#902e2a] text-white shadow-xs'
-                      : 'text-[#574240] hover:text-[#171c23]'
+                  className={`min-h-[44px] px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center justify-center gap-1 transition-colors ${
+                    lang === 'fr' ? 'bg-primary text-on-primary' : 'text-on-surface hover:text-primary'
                   }`}
+                  title="Langue Française"
                 >
-                  <span>FR</span>
+                  <span className="material-symbols-outlined text-[18px] text-on-surface-variant">translate</span>
+                  <span className="font-semibold">FR</span>
                 </button>
               </div>
 
-              {/* Avatar rond */}
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-[#ddc0bd] bg-[#ffe3c7] flex items-center justify-center">
-                <span className="material-symbols-outlined text-[#724600] text-[18px]">person</span>
-              </div>
+              {/* Photo de Profil officielle Stitch */}
+              <button
+                aria-label="Profil utilisatrice"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none"
+                type="button"
+              >
+                <img
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvavF8-Jf-IsqnS9F4cy8uZvFCqs34hbFzdsbQwmsm5nJWts7NQO10gzM-EW8-kC0cxXmEtC6POZi8SwxbOP90ardcI8n0H7VyqcQxX5w9HjQll-p_vsCMedW6SgYTqSg6j3Jz0tk671vb4LwBrZ4zl1Y5IPXwjmmA3Nwmsx8dmPtDTpxm7udAi3zoPD0Qj1V8TUyjBiyPD1REXhdv3b-GdC4_33O4c1JtRulAKSQ"
+                />
+              </button>
             </div>
           </div>
 
-          {/* Ligne 2 : Badge Vert Menthe "Mode hors-ligne disponible (Offline)" */}
+          {/* Ligne 2 : Mode Hors-ligne & Titre d'écran */}
           <div className="flex items-center justify-between w-full pt-0.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#aeeecb] text-[#0e5138] text-[11px] font-bold">
-              <span className="w-2 h-2 rounded-full bg-[#2c694e] animate-pulse"></span>
-              <span>Mode hors-ligne disponible (Offline)</span>
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+              <span className="font-label-sm text-label-sm font-semibold">
+                Mode hors-ligne disponible (Offline)
+              </span>
             </div>
-            <span className="text-xs font-bold text-[#171c23]">
-              {activeTab === 'pregnancy' ? 'Grossesse & CPN' : activeTab === 'triage' ? 'Signes Danger' : 'SuturaSanté'}
-            </span>
+            <div className="font-title-md text-title-md text-on-surface truncate font-semibold">
+              {getTabLabel()}
+            </div>
           </div>
         </div>
       </header>
 
-      {/* BARRE INFÉRIEURE MOBILE PWA (Exactement comme dans Stitch) */}
-      <nav className="md:hidden fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.06)] border-t border-[#ddc0bd]/30">
-        <div className="max-w-md mx-auto flex justify-around items-center h-16 px-1">
-          {navItems.slice(0, 4).map((item) => {
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`flex flex-col items-center justify-center gap-0.5 min-w-[54px] min-h-[44px] transition-colors ${
-                  item.isRed
-                    ? 'text-[#ba1a1a] font-bold'
-                    : isActive
-                    ? 'text-[#171c23] font-bold'
-                    : 'text-[#574240]'
-                }`}
-              >
-                <div className="relative">
-                  <span
-                    className="material-symbols-outlined text-[24px]"
-                    style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
-                  >
-                    {item.icon}
-                  </span>
-                  {item.isRed && (
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
-                  )}
-                </div>
-                <span className="text-[10px] text-center leading-none tracking-tight">
-                  {item.labelFr}
+      {/* BOUTON FLOTTANT SAMU 1515 STITCH EXACT */}
+      <div className="fixed bottom-20 inset-x-0 z-40 px-margin pointer-events-none">
+        <div className="max-w-md mx-auto pointer-events-auto">
+          <a
+            className="w-full min-h-[44px] px-3.5 py-2 rounded-full bg-error text-on-error flex items-center justify-between shadow-[0_4px_16px_rgba(186,26,26,0.28)] hover:bg-primary transition-colors"
+            href="tel:1515"
+          >
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px] animate-bounce">
+                e911_emergency
+              </span>
+              <div className="flex flex-col text-left leading-none">
+                <span className="font-label-sm text-label-sm font-bold tracking-wide uppercase">
+                  SAMU Sénégal 1515
                 </span>
-              </button>
-            );
-          })}
+                <span className="text-[10px] text-on-error/85">
+                  Appel gratuit d'urgence obstétricale
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 bg-white/20 px-2 py-1 rounded-full">
+              <span className="material-symbols-outlined text-[16px]">call</span>
+              <span className="font-label-sm text-label-sm font-bold">1515</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      {/* BARRE INFÉRIEURE DE NAVIGATION STITCH EXACT */}
+      <nav className="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.06)]">
+        <div className="flex justify-around items-center h-20 px-space-xs max-w-md mx-auto">
+          <button
+            onClick={() => setActiveTab('pregnancy')}
+            className={`flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2 transition-colors ${
+              activeTab === 'pregnancy' ? 'text-primary font-bold' : 'text-on-surface-variant'
+            }`}
+          >
+            <span
+              className="material-symbols-outlined text-[22px]"
+              style={{ fontVariationSettings: activeTab === 'pregnancy' ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              pregnant_woman
+            </span>
+            <span className="font-label-sm text-label-sm text-center">Grossesse &amp; CPN</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('triage')}
+            className={`flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2 transition-colors ${
+              activeTab === 'triage' ? 'text-primary font-bold' : 'text-on-surface-variant'
+            }`}
+          >
+            <span
+              className="material-symbols-outlined text-[22px]"
+              style={{ fontVariationSettings: activeTab === 'triage' ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              health_and_safety
+            </span>
+            <span className="font-label-sm text-label-sm text-center">Signes Danger</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('guide')}
+            className={`flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2 transition-colors ${
+              activeTab === 'guide' ? 'text-primary font-bold' : 'text-on-surface-variant'
+            }`}
+          >
+            <span
+              className="material-symbols-outlined text-[22px]"
+              style={{ fontVariationSettings: activeTab === 'guide' ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              menu_book
+            </span>
+            <span className="font-label-sm text-label-sm text-center">Conseils</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('emergency')}
+            className={`flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-2 transition-colors ${
+              activeTab === 'emergency' ? 'text-error font-bold' : 'text-error'
+            }`}
+          >
+            <div className="relative flex items-center justify-center">
+              <span className="material-symbols-outlined text-[22px]">emergency</span>
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error"></span>
+            </div>
+            <span className="font-label-sm text-label-sm text-center font-bold">Urgences 1515</span>
+          </button>
         </div>
       </nav>
     </>
