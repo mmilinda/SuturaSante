@@ -51,35 +51,44 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
 
             {/* Switch Langue & Avatar Stitch Exact */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Sélecteur de Langue Mobile Segmenté */}
               <div
                 aria-label="Choix de langue"
-                className="inline-flex items-center bg-[#eaeef8] rounded-full p-0.5 border border-[#ddc0bd]/40"
+                className="inline-flex items-center bg-[#eaeef8] p-0.5 rounded-full border border-[#ddc0bd]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]"
                 role="group"
               >
                 <button
                   type="button"
                   onClick={() => setLang('wo')}
-                  className={`min-h-[32px] sm:min-h-[36px] px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-all ${
+                  className={`min-h-[30px] sm:min-h-[32px] px-2.5 py-1 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 ${
                     lang === 'wo'
-                      ? 'bg-[#902e2a] text-white font-bold'
-                      : 'text-[#171c23] hover:text-[#902e2a] font-medium'
+                      ? 'bg-[#902e2a] text-white shadow-xs'
+                      : 'text-[#574240] hover:text-[#902e2a] hover:bg-white/70'
                   }`}
-                  title="Langue Wolof avec guidage audio"
+                  title="Wolof - Guidage audio"
                 >
-                  <span className="material-symbols-outlined text-[14px] sm:text-[16px]">record_voice_over</span>
-                  <span>WO</span>
+                  <span
+                    className="material-symbols-outlined text-[15px]"
+                    style={{ fontVariationSettings: lang === 'wo' ? "'FILL' 1" : "'FILL' 0" }}
+                  >
+                    record_voice_over
+                  </span>
+                  <span>Wolof</span>
+                  {lang === 'wo' && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#aeeecb] animate-pulse"></span>
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={() => setLang('fr')}
-                  className={`min-h-[32px] sm:min-h-[36px] px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs flex items-center justify-center gap-1 transition-all ${
+                  className={`min-h-[30px] sm:min-h-[32px] px-2.5 py-1 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 ${
                     lang === 'fr'
-                      ? 'bg-[#902e2a] text-white font-bold'
-                      : 'text-[#574240] hover:text-[#902e2a] font-medium'
+                      ? 'bg-[#902e2a] text-white shadow-xs'
+                      : 'text-[#574240] hover:text-[#902e2a] hover:bg-white/70'
                   }`}
-                  title="Langue Française"
+                  title="Français"
                 >
-                  <span className="material-symbols-outlined text-[14px] sm:text-[16px]">translate</span>
+                  <span className="material-symbols-outlined text-[15px]">translate</span>
                   <span>FR</span>
                 </button>
               </div>
