@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
   const [activeEvacModal, setActiveEvacModal] = useState(false);
-  const [filterPriority, setFilterPriority] = useState('all');
 
   const redAlerts = [
     {
@@ -15,6 +14,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       relais: 'Khadija Diop (Badien Gox Pikine Ouest) sur les lieux',
       samuStatus: 'Ambulance SAMU 1515 en route (ETA 6 min)',
       destination: 'Hôpital Dalal Jamm',
+      image: 'https://lh3.googleusercontent.com/aida/AEtjO1X9nvGhe7l00FkRBSoTXbBGFBVlUqu0lR-vmjB95DORDNQc8KslYG3P8XA7ilAs4XqJc5_Xe-vcPkZMfHNFNxKKYLaHaOwIfTW1bmMwtvLSjL3neGP2peuab2LFhdnMwiiYgrlZOoGBTJpkCDK6YGIFtn47-X1wgxOiztOUd-4ioyFo6_8oPcWjwV2HvYkwVZtl35fuOlBWnnJ5SB6Xg3lrJIWv1JolijJXRWUvl9Ub_qoZ_gEcOm22Oho',
     },
     {
       id: 'SN-PIK-8419',
@@ -27,6 +27,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       samuStatus: 'Alerte Pompiers 18 envoyée',
       destination: 'Centre Dominique',
       urgentAction: true,
+      image: 'https://lh3.googleusercontent.com/aida/AEtjO1X7qJAdQvT5N-yV7MrDC73MOjs_2LNuE1r_Hl-8bYXmYx7zEejE76ImMI56Z4P_gxUwb899KkpFIfEyq7zbDkJBR78WGMpsYngOMLic02GnXDw7vMy7ifTDvCra01SBqFsMQRULAiDCYFBXLsmhLe6YzwP_SUUJkuEwAuh80AQZg7Xq2GsxwyguJTEz_-RNUkxdy60O7cCAwsFuGbk6hAU2T-rFQzuq2EPw15Z3hEEh9ROdca4051tem9qu',
     },
     {
       id: 'SN-PIK-3382',
@@ -38,6 +39,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       relais: 'Acceptation Réanimation Néonatale : Hôpital Dalal Jamm validée',
       samuStatus: 'Attente départ convoi médicalisé',
       destination: 'Hôpital Dalal Jamm',
+      image: 'https://lh3.googleusercontent.com/aida/AEtjO1WT83Ar2fEMLs-SRqhsy04F_oUQI8P2OB6ce_N8EI_oC8PDV3TJS4qy5pp9fi2Z2wGo5WnI4-V8b26p736bZ5e3hWWSb4kMFjndT-l9pVFHgSSr0cwI91dl5lzSqGrljxC01LL6xtUlHFfffTPohvmHsp_CpZU9XUfLfX8teCLlf9sGOdf_XHJ50KH5pmlmhlmQwifNJXEqYtbBaPWhPHnMeEQ-h2H7u-J6GGUUXKPva05TntubwhUgpBcu',
     },
   ];
 
@@ -48,6 +50,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       title: 'Diminution nette des mouvements fœtaux (> 12h)',
       desc: 'Monitoring Cardiotocographe (CTG) en cours. Bruits du cœur présents mais réactivité modérée. Reprise sucre effectuée.',
       badien: 'Badien Gox : Aminata Sow',
+      image: 'https://lh3.googleusercontent.com/aida/AEtjO1W4FnW1sa6iy-30-lchMql_iFK665vOxf-0zYCqfCGh4PDWlug_590Ji9Gzk8K_w8ff4Ts1ir1W78jrYRdpy-gnl9W2NkLdiUhxBElC7LE5ODysaeXOubadnfAjKn3uwYxBsj4KZ2iBHbyjeDhNuh_4ant7g_Gg7YgRZxZw_9mFXoJAmD1TCdSsGvCdYXBeYU0X3J3t6uYG10BllVeNnozUPVwG4znvqmu0Pmpg3Du7',
     },
     {
       id: 'SN-PIK-6211',
@@ -55,6 +58,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       title: 'Anémie Clinique Décompensée (Hb < 7.1 g/dL)',
       desc: 'Dyspnée d\'effort, conjonctives décolorées, vertiges persistants. Hémocue confirmé 6.8 g/dL. Recherche sang O+ compatible.',
       badien: 'Réserve Sang CNTS Pikine : 2 Culots Dispo',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAHCoABKs967FWzDGsYxNhzIPUuo7vX4EHkZx9ZmkpF61Y1pqqFwXdZDcpa5Ces2_VV9M2lIMZnONbSlGCQFqfPRwbfBg1bq2oK56w-Zh2kRsgc79n6OV6mpHDObe2Xfuu0EbxJlXpL-LKzyDfFIk2A_vaVav3MD0fL971JsUy1GCpkVz0HqbvQtLtvkHqSbd9Z_okvp1x_F5tYJcLrJ440Qr0VoCiPDbHAlHH6Dig',
     },
   ];
 
@@ -200,11 +204,20 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#ba1a1a]"></div>
 
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pl-1">
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-[26px]">bloodtype</span>
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pl-1">
+                    <div className="flex items-start gap-4">
+                      {/* Image Explicite d'Alerte Médicale */}
+                      <div className="relative shrink-0">
+                        <img
+                          src={alertItem.image}
+                          alt={alertItem.title}
+                          className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-[#ffdad6] shadow-xs"
+                        />
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#ba1a1a] text-white flex items-center justify-center text-[12px] shadow-xs">
+                          <span className="material-symbols-outlined text-[14px]">warning</span>
+                        </div>
                       </div>
+
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-serif text-base font-bold text-[#171c23]">{alertItem.id}</span>
@@ -280,18 +293,28 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
               {orangeAlerts.map((orange) => (
                 <div
                   key={orange.id}
-                  className="p-4 rounded-xl bg-[#f0f4fd] border-l-4 border-[#724600] flex flex-col gap-2.5 justify-between"
+                  className="p-4 rounded-xl bg-[#f0f4fd] border-l-4 border-[#724600] flex flex-col gap-3 justify-between"
                 >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="font-serif text-sm font-bold text-[#171c23]">{orange.id}</span>
-                      <span className="block text-[10px] text-[#574240]">{orange.profile}</span>
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={orange.image}
+                      alt={orange.title}
+                      className="w-14 h-14 rounded-xl object-cover border border-[#ddc0bd]/40 shrink-0 shadow-xs"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-serif text-sm font-bold text-[#171c23]">{orange.id}</span>
+                          <span className="block text-[10px] text-[#574240]">{orange.profile}</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded bg-[#ffddb8] text-[#724600] text-[10px] font-bold">
+                          Orange
+                        </span>
+                      </div>
+                      <h5 className="font-serif text-xs font-bold text-[#724600] mt-1">{orange.title}</h5>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-[#ffddb8] text-[#724600] text-[10px] font-bold">
-                      Orange
-                    </span>
                   </div>
-                  <h5 className="font-serif text-xs font-bold text-[#724600]">{orange.title}</h5>
+
                   <p className="text-xs text-[#574240] leading-relaxed">{orange.desc}</p>
                   <div className="pt-2 flex items-center justify-between text-[11px] text-[#574240] border-t border-[#ddc0bd]/30">
                     <span>{orange.badien}</span>
@@ -397,18 +420,29 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
             </div>
           </div>
 
-          {/* Quick Corridor Card */}
-          <div className="p-5 rounded-2xl bg-[#ffddb8]/30 border border-[#fcba67]/40 flex flex-col gap-2.5">
-            <div className="flex items-center justify-between">
-              <h3 className="font-serif text-sm font-bold text-[#171c23]">Corridor Ambulancier Pikine</h3>
-              <span className="material-symbols-outlined text-[#902e2a] text-[18px]">map</span>
+          {/* Quick Corridor Card with Image */}
+          <div className="rounded-2xl bg-white border border-[#ddc0bd]/40 overflow-hidden shadow-xs flex flex-col">
+            <div
+              className="h-32 w-full bg-cover bg-center relative p-3 flex items-end"
+              style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCruQpATMyjWlC1DxJJxWWeWJpU759S8qqYeJjhZD0BS2XTka29wsdz9EmYvJ6NQEeQn9mZ3JNoAlyFfYI1D-Yodorpz-TYupl4kBAKq36Ak54iflKxDT8VrgYrvP95cYe5t6VAPWd5WFtvB7ub2bV5RjVHCykUJ5SznTZ5du7309j9vBgF1kETMSrxKOCw57RiBNGYPOD-sYzTYX3pYKXWQW8EO_LCPiIsmF3AWy8')` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              <div className="relative z-10 text-white flex items-center justify-between w-full">
+                <span className="text-xs font-bold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#aeeecb]"></span>
+                  Corridor Ambulancier Pikine
+                </span>
+                <span className="text-[10px] bg-white/20 backdrop-blur-xs px-2 py-0.5 rounded">GPS Actif</span>
+              </div>
             </div>
-            <p className="text-xs text-[#574240]">
-              Feux prioritaires actifs sur Route des Niayes en coordination avec la Brigade Routière.
-            </p>
-            <div className="flex items-center gap-2 text-xs font-bold text-[#2c694e]">
-              <span className="w-2 h-2 rounded-full bg-[#2c694e]"></span>
-              <span>Circulation fluide vers Dalal Jamm</span>
+            <div className="p-4 flex flex-col gap-1.5">
+              <p className="text-xs text-[#574240]">
+                Feux prioritaires actifs sur la Route des Niayes vers les maternités de Dalal Jamm et Dominique.
+              </p>
+              <span className="text-[11px] font-bold text-[#2c694e] flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2c694e]"></span>
+                Circulation fluide certifiée
+              </span>
             </div>
           </div>
         </div>

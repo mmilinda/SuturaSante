@@ -115,14 +115,13 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
           {/* Symptôme 1 : Saignements (Dérét) */}
           <article className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-[#ddc0bd]/40 flex flex-col justify-between gap-3.5 hover:border-[#ba1a1a]/50 transition-all">
             <div className="flex items-start gap-3.5">
-              <div
-                className="w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0"
-                style={{ backgroundColor: '#ffdad6', color: '#93000a' }}
-              >
-                <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  water_drop
-                </span>
-                <span className="text-[10px] text-center leading-none mt-0.5 font-bold">
+              <div className="relative shrink-0">
+                <img
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1X9nvGhe7l00FkRBSoTXbBGFBVlUqu0lR-vmjB95DORDNQc8KslYG3P8XA7ilAs4XqJc5_Xe-vcPkZMfHNFNxKKYLaHaOwIfTW1bmMwtvLSjL3neGP2peuab2LFhdnMwiiYgrlZOoGBTJpkCDK6YGIFtn47-X1wgxOiztOUd-4ioyFo6_8oPcWjwV2HvYkwVZtl35fuOlBWnnJ5SB6Xg3lrJIWv1JolijJXRWUvl9Ub_qoZ_gEcOm22Oho"
+                  alt="Saignements"
+                  className="w-14 h-14 rounded-xl object-cover border border-[#ffdad6] shadow-xs"
+                />
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-[#ba1a1a] text-white text-[9px] font-bold">
                   Dérét
                 </span>
               </div>
@@ -168,9 +167,13 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
           {/* Symptôme 2 : Maux de tête / Vue trouble (Bop métit) */}
           <article className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-[#ddc0bd]/40 flex flex-col justify-between gap-3.5 hover:border-[#902e2a]/50 transition-all">
             <div className="flex items-start gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-[#dee2ec] text-[#902e2a] flex flex-col items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[24px]">bolt</span>
-                <span className="text-[10px] text-center leading-none mt-0.5 font-bold">
+              <div className="relative shrink-0">
+                <img
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1X7qJAdQvT5N-yV7MrDC73MOjs_2LNuE1r_Hl-8bYXmYx7zEejE76ImMI56Z4P_gxUwb899KkpFIfEyq7zbDkJBR78WGMpsYngOMLic02GnXDw7vMy7ifTDvCra01SBqFsMQRULAiDCYFBXLsmhLe6YzwP_SUUJkuEwAuh80AQZg7Xq2GsxwyguJTEz_-RNUkxdy60O7cCAwsFuGbk6hAU2T-rFQzuq2EPw15Z3hEEh9ROdca4051tem9qu"
+                  alt="Maux de tête"
+                  className="w-14 h-14 rounded-xl object-cover border border-[#ddc0bd]/40 shadow-xs"
+                />
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-[#902e2a] text-white text-[9px] font-bold">
                   Bop métit
                 </span>
               </div>
@@ -216,12 +219,13 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
           {/* Symptôme 3 : Fièvre / Frissons (Tangoor) */}
           <article className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-[#ddc0bd]/40 flex flex-col justify-between gap-3.5 hover:border-[#fcba67]/60 transition-all">
             <div className="flex items-start gap-3.5">
-              <div
-                className="w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0"
-                style={{ backgroundColor: '#fcba67', color: '#2a1700' }}
-              >
-                <span className="material-symbols-outlined text-[24px]">device_thermostat</span>
-                <span className="text-[10px] text-center leading-none mt-0.5 font-bold">
+              <div className="relative shrink-0">
+                <img
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1WT83Ar2fEMLs-SRqhsy04F_oUQI8P2OB6ce_N8EI_oC8PDV3TJS4qy5pp9fi2Z2wGo5WnI4-V8b26p736bZ5e3hWWSb4kMFjndT-l9pVFHgSSr0cwI91dl5lzSqGrljxC01LL6xtUlHFfffTPohvmHsp_CpZU9XUfLfX8teCLlf9sGOdf_XHJ50KH5pmlmhlmQwifNJXEqYtbBaPWhPHnMeEQ-h2H7u-J6GGUUXKPva05TntubwhUgpBcu"
+                  alt="Fièvre"
+                  className="w-14 h-14 rounded-xl object-cover border border-[#fcba67]/40 shadow-xs"
+                />
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-[#724600] text-white text-[9px] font-bold">
                   Tangoor
                 </span>
               </div>
@@ -267,12 +271,13 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
           {/* Symptôme 4 : Mouvements réduits (Liir bi) */}
           <article className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-[#ddc0bd]/40 flex flex-col justify-between gap-3.5 hover:border-[#aeeecb]/60 transition-all">
             <div className="flex items-start gap-3.5">
-              <div
-                className="w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0"
-                style={{ backgroundColor: '#aeeecb', color: '#316e52' }}
-              >
-                <span className="material-symbols-outlined text-[24px]">child_care</span>
-                <span className="text-[10px] text-center leading-none mt-0.5 font-bold">
+              <div className="relative shrink-0">
+                <img
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1W4FnW1sa6iy-30-lchMql_iFK665vOxf-0zYCqfCGh4PDWlug_590Ji9Gzk8K_w8ff4Ts1ir1W78jrYRdpy-gnl9W2NkLdiUhxBElC7LE5ODysaeXOubadnfAjKn3uwYxBsj4KZ2iBHbyjeDhNuh_4ant7g_Gg7YgRZxZw_9mFXoJAmD1TCdSsGvCdYXBeYU0X3J3t6uYG10BllVeNnozUPVwG4znvqmu0Pmpg3Du7"
+                  alt="Bébé ne bouge plus"
+                  className="w-14 h-14 rounded-xl object-cover border border-[#aeeecb] shadow-xs"
+                />
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-[#2c694e] text-white text-[9px] font-bold">
                   Liir bi
                 </span>
               </div>
