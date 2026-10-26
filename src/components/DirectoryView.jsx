@@ -32,8 +32,8 @@ export default function DirectoryView({ lang, onActionTrack }) {
       location: 'Avenue Cheikh Anta Diop, Dakar',
       distance: '2.1 km',
       tel: '338691818',
-      status: 'Maternité de garde 24/7',
-      features: ['Bloc Césarienne', 'Réanimation Néonatale', 'Badien Gox sur place']
+      status: 'Garde 24/7',
+      features: ['Bloc Césarienne', 'Réanimation Néonatale', 'Badien Gox']
     },
     {
       region: 'dakar',
@@ -41,17 +41,8 @@ export default function DirectoryView({ lang, onActionTrack }) {
       location: 'Grand Yoff, Dakar',
       distance: '4.8 km',
       tel: '338694050',
-      status: 'Maternité de garde 24/7',
+      status: 'Garde 24/7',
       features: ['Urgences Obstétricales', 'Banque de Sang']
-    },
-    {
-      region: 'dakar',
-      name: 'Hôpital Principal de Dakar',
-      location: '1 Avenue Nelson Mandela, Dakar Plateau',
-      distance: '5.4 km',
-      tel: '338395050',
-      status: 'Niveau 3 • Référence',
-      features: ['Plateau technique complet', 'SAMU Base']
     },
     {
       region: 'thies',
@@ -70,15 +61,6 @@ export default function DirectoryView({ lang, onActionTrack }) {
       tel: '339411050',
       status: 'Garde 24/7',
       features: ['Maternité Sonatrach', 'Couvaison kangourou']
-    },
-    {
-      region: 'saint-louis',
-      name: 'Hôpital Régional de Saint-Louis',
-      location: 'Pointe Sud, Saint-Louis',
-      distance: 'Centre Régional',
-      tel: '339611050',
-      status: 'Garde 24/7',
-      features: ['Soins intensifs mère-enfant']
     }
   ];
 
@@ -87,53 +69,34 @@ export default function DirectoryView({ lang, onActionTrack }) {
   );
 
   return (
-    <div className="w-full flex flex-col gap-4 sm:gap-6">
-      {/* 1. EN-TÊTE URGENCE NATIONALE */}
-      <div className="bg-[#f0f4fd] rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border border-[#ddc0bd]/30">
-        <div className="flex flex-col gap-1 max-w-2xl">
+    <div className="w-full flex flex-col gap-2 lg:gap-2.5">
+      {/* =========================================================================
+          1. EN-TÊTE URGENCE NATIONALE (ULTRA-COMPACT)
+          ========================================================================= */}
+      <div className="bg-[#f0f4fd] rounded-xl p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-[#ddc0bd]/30">
+        <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5" style={{ color: '#902e2a' }}>
-            <span
-              className="material-symbols-outlined text-[18px] sm:text-[20px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
+            <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
               shield_with_heart
             </span>
-            <span className="text-[10px] sm:text-xs uppercase tracking-wider font-bold">
+            <span className="text-[10px] uppercase tracking-wider font-bold">
               Sécurité &amp; Assistance Rapide au Sénégal
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-[#171c23] leading-tight">
+          <h1 className="text-base sm:text-lg lg:text-xl font-serif font-bold text-[#171c23] leading-tight">
             Urgences &amp; Annuaire National Obstétrical
           </h1>
-          <p className="text-xs sm:text-sm text-[#574240]">
-            Numéros gratuits d'urgence 24h/24, orientation immédiate par région et maternités de référence.
-          </p>
         </div>
 
         {/* Consigne Vocale Wolof */}
-        <div className="bg-white rounded-xl p-3 shadow-xs flex items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0"
-              style={{ backgroundColor: '#ffddb8', color: '#724600' }}
-            >
-              <span className="material-symbols-outlined text-[18px] sm:text-[20px]">volume_up</span>
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold text-[#171c23] truncate">
-                Déglul : Naka ngay woo 1515
-              </span>
-              <span className="text-[10px] sm:text-[11px] text-[#574240] truncate">
-                Consigne audio régulateur
-              </span>
-            </div>
-          </div>
+        <div className="bg-white rounded-lg px-2.5 py-1 shadow-xs flex items-center justify-between gap-2 shrink-0">
+          <span className="text-xs font-bold text-[#171c23]">Déglul : Naka ngay woo 1515</span>
           <button
             type="button"
             onClick={toggleAudio}
-            className="min-h-[34px] sm:min-h-[36px] px-3 sm:px-3.5 rounded-full bg-[#902e2a] text-white text-xs font-bold flex items-center gap-1 shadow-xs hover:bg-[#72201d] transition-colors shrink-0"
+            className="min-h-[26px] px-2.5 rounded-full bg-[#902e2a] text-white text-[10px] font-bold flex items-center gap-1 shadow-xs hover:bg-[#72201d]"
           >
-            <span className="material-symbols-outlined text-[15px] sm:text-[16px]">
+            <span className="material-symbols-outlined text-[13px]">
               {isPlaying ? 'pause' : 'play_arrow'}
             </span>
             <span>{isPlaying ? 'Stop' : 'Écouter'}</span>
@@ -141,165 +104,113 @@ export default function DirectoryView({ lang, onActionTrack }) {
         </div>
       </div>
 
-      {/* 2. NUMÉROS D'URGENCE EN 3 COLONNES SUR ORDINATEUR / TABLETTE */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-1.5">
-            <span
-              className="material-symbols-outlined text-[18px] sm:text-[20px]"
-              style={{ color: '#ba1a1a', fontVariationSettings: "'FILL' 1" }}
+      {/* =========================================================================
+          2. NUMÉROS D'URGENCE EN 3 COLONNES
+          ========================================================================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {/* SAMU 1515 */}
+        <div
+          className="rounded-xl p-2.5 shadow-xs flex flex-col justify-between gap-2 border"
+          style={{ backgroundColor: '#ffffff', borderColor: '#ba1a1a' }}
+        >
+          <div className="flex items-start gap-2">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: '#ba1a1a', color: '#ffffff' }}
             >
-              phone_in_talk
-            </span>
-            <h2 className="text-lg sm:text-xl font-serif font-bold text-[#171c23]">
-              Numéros d'Urgence Immédiats (Appel Gratuit)
-            </h2>
+              <span className="material-symbols-outlined text-[20px]">emergency</span>
+            </div>
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold font-serif text-[#ba1a1a] truncate">SAMU National</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold text-white bg-[#ba1a1a]">1515</span>
+              </div>
+              <span className="text-[10px] text-[#574240] truncate">Régulation médicale 24/7</span>
+            </div>
           </div>
-          <span
-            className="text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold"
-            style={{ backgroundColor: '#ffdad6', color: '#93000a' }}
+          <a
+            href="tel:1515"
+            className="w-full py-1.5 rounded-lg text-white font-bold text-xs flex items-center justify-center gap-1 shadow-xs bg-[#ba1a1a] hover:bg-[#902e2a] active:scale-95 transition-all"
           >
-            Gratuit sans forfait
-          </span>
+            <span className="material-symbols-outlined text-[15px]">call</span>
+            <span>APPELER LE 1515</span>
+          </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-          {/* SAMU 1515 */}
-          <div
-            className="rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between gap-3 border"
-            style={{
-              backgroundColor: '#ffffff',
-              borderColor: 'rgba(186, 26, 26, 0.4)',
-            }}
+        {/* Pompiers 18 */}
+        <div className="bg-white rounded-xl p-2.5 shadow-xs flex flex-col justify-between gap-2 border border-[#ddc0bd]/30">
+          <div className="flex items-start gap-2">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: '#ffdad6', color: '#ba1a1a' }}
+            >
+              <span className="material-symbols-outlined text-[18px]">fire_truck</span>
+            </div>
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold font-serif text-[#171c23] truncate">Sapeurs-Pompiers</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#eaeef8] text-[#171c23]">18</span>
+              </div>
+              <span className="text-[10px] text-[#574240] truncate">Évacuation d'urgence</span>
+            </div>
+          </div>
+          <a
+            href="tel:18"
+            className="w-full py-1.5 rounded-lg bg-[#eaeef8] text-[#171c23] hover:bg-[#ba1a1a] hover:text-white font-bold text-xs flex items-center justify-center gap-1 transition-colors"
           >
-            <div className="flex items-start gap-3">
-              <div
-                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: '#ba1a1a', color: '#ffffff' }}
-              >
-                <span className="material-symbols-outlined text-[24px] sm:text-[26px]">emergency</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base sm:text-lg font-bold font-serif text-[#ba1a1a] truncate">
-                    SAMU National
-                  </span>
-                  <span
-                    className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold text-white shrink-0"
-                    style={{ backgroundColor: '#ba1a1a' }}
-                  >
-                    1515
-                  </span>
-                </div>
-                <span className="text-xs text-[#574240] mt-0.5 leading-snug">
-                  Régulation obstétricale médicale 24/7
-                </span>
-              </div>
-            </div>
-            <a
-              href="tel:1515"
-              className="w-full min-h-[42px] sm:min-h-[44px] rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs hover:bg-[#902e2a] transition-all"
-              style={{ backgroundColor: '#ba1a1a' }}
-            >
-              <span className="material-symbols-outlined text-[17px] sm:text-[18px]">call</span>
-              <span>APPELER LE 1515</span>
-            </a>
-          </div>
+            <span className="material-symbols-outlined text-[15px]">call</span>
+            <span>APPELER LE 18</span>
+          </a>
+        </div>
 
-          {/* Sapeurs-Pompiers 18 */}
-          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between gap-3 border border-[#ddc0bd]/30">
-            <div className="flex items-start gap-3">
-              <div
-                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: '#ffdad6', color: '#ba1a1a' }}
-              >
-                <span className="material-symbols-outlined text-[22px] sm:text-[24px]">fire_truck</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base sm:text-lg font-bold font-serif text-[#171c23] truncate">
-                    Sapeurs-Pompiers
-                  </span>
-                  <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold bg-[#eaeef8] text-[#171c23] shrink-0">
-                    18
-                  </span>
-                </div>
-                <span className="text-xs text-[#574240] mt-0.5 leading-snug">
-                  Évacuation rapide &amp; secours de proximité
-                </span>
-              </div>
-            </div>
-            <a
-              href="tel:18"
-              className="w-full min-h-[42px] sm:min-h-[44px] rounded-xl bg-[#eaeef8] text-[#171c23] hover:bg-[#ba1a1a] hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+        {/* Ligne 116 */}
+        <div className="bg-white rounded-xl p-2.5 shadow-xs flex flex-col justify-between gap-2 border border-[#ddc0bd]/30">
+          <div className="flex items-start gap-2">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: '#aeeecb', color: '#2c694e' }}
             >
-              <span className="material-symbols-outlined text-[17px] sm:text-[18px]">call</span>
-              <span>APPELER LE 18</span>
-            </a>
-          </div>
-
-          {/* Ligne 116 */}
-          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col justify-between gap-3 border border-[#ddc0bd]/30">
-            <div className="flex items-start gap-3">
-              <div
-                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: '#aeeecb', color: '#2c694e' }}
-              >
-                <span className="material-symbols-outlined text-[22px] sm:text-[24px]">support_agent</span>
-              </div>
-              <div className="flex flex-col min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base sm:text-lg font-bold font-serif text-[#171c23] truncate">
-                    Ligne Dignité Femme
-                  </span>
-                  <span
-                    className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full font-bold shrink-0"
-                    style={{ backgroundColor: '#aeeecb', color: '#316e52' }}
-                  >
-                    116
-                  </span>
-                </div>
-                <span className="text-xs text-[#574240] mt-0.5 leading-snug">
-                  Écoute anonyme &amp; soutien 24/7
-                </span>
-              </div>
+              <span className="material-symbols-outlined text-[18px]">support_agent</span>
             </div>
-            <a
-              href="tel:116"
-              className="w-full min-h-[42px] sm:min-h-[44px] rounded-xl bg-[#eaeef8] text-[#171c23] hover:bg-[#2c694e] hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
-            >
-              <span className="material-symbols-outlined text-[17px] sm:text-[18px]">call</span>
-              <span>APPELER LE 116</span>
-            </a>
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold font-serif text-[#171c23] truncate">Ligne Dignité</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-[#aeeecb] text-[#316e52]">116</span>
+              </div>
+              <span className="text-[10px] text-[#574240] truncate">Écoute anonyme 24/7</span>
+            </div>
           </div>
+          <a
+            href="tel:116"
+            className="w-full py-1.5 rounded-lg bg-[#eaeef8] text-[#171c23] hover:bg-[#2c694e] hover:text-white font-bold text-xs flex items-center justify-center gap-1 transition-colors"
+          >
+            <span className="material-symbols-outlined text-[15px]">call</span>
+            <span>APPELER LE 116</span>
+          </a>
         </div>
       </div>
 
-      {/* 3. MATERNITÉS DE GARDE EN 2 COLONNES SUR TABLETTE & ORDINATEUR */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#2c694e] text-[20px] sm:text-[22px]">
-              local_hospital
-            </span>
-            <h2 className="text-lg sm:text-xl font-serif font-bold text-[#171c23]">
-              Maternités de Garde 24/7 au Sénégal
-            </h2>
-          </div>
+      {/* =========================================================================
+          3. MATERNITÉS DE GARDE 24/7 EN GRILLE COMPACTE
+          ========================================================================= */}
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-serif font-bold text-[#171c23]">
+            Maternités de Garde 24/7 par Région
+          </span>
 
           {/* Filtres régionaux */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+          <div className="flex items-center gap-1 overflow-x-auto">
             {[
               { id: 'dakar', label: 'Dakar' },
               { id: 'thies', label: 'Thiès' },
               { id: 'kaolack', label: 'Kaolack' },
-              { id: 'saint-louis', label: 'Saint-Louis' },
               { id: 'all', label: 'Toutes' }
             ].map((r) => (
               <button
                 key={r.id}
                 onClick={() => setSelectedRegion(r.id)}
-                className={`min-h-[34px] sm:min-h-[36px] px-3 sm:px-3.5 py-1 rounded-full text-xs font-bold shrink-0 transition-all ${
+                className={`min-h-[24px] px-2.5 rounded-full text-[10px] font-bold shrink-0 transition-all ${
                   selectedRegion === r.id
                     ? 'bg-[#2c694e] text-white shadow-xs'
                     : 'bg-white border border-[#ddc0bd]/40 text-[#574240] hover:bg-[#eaeef8]'
@@ -312,48 +223,45 @@ export default function DirectoryView({ lang, onActionTrack }) {
         </div>
 
         {/* Grille 2 Colonnes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {filteredHospitals.map((h, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-[#ddc0bd]/30 flex flex-col justify-between gap-3 hover:border-[#2c694e]/40 transition-colors"
+              className="bg-white rounded-xl p-2.5 shadow-xs border border-[#ddc0bd]/30 flex flex-col justify-between gap-1.5 hover:border-[#2c694e]/40 transition-colors"
             >
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start justify-between gap-1.5">
                 <div className="flex flex-col min-w-0">
-                  <span className="text-sm sm:text-base font-bold font-serif text-[#171c23] truncate">
+                  <span className="text-xs font-bold font-serif text-[#171c23] truncate">
                     {h.name}
                   </span>
-                  <span className="text-xs text-[#574240] flex items-center gap-1 mt-1 truncate">
-                    <span className="material-symbols-outlined text-[14px] shrink-0">location_on</span>
+                  <span className="text-[10px] text-[#574240] flex items-center gap-0.5 truncate">
+                    <span className="material-symbols-outlined text-[12px] shrink-0">location_on</span>
                     <span className="truncate">{h.location}</span>
                   </span>
                 </div>
-                <span
-                  className="px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold shrink-0"
-                  style={{ backgroundColor: '#aeeecb', color: '#316e52' }}
-                >
+                <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold shrink-0 bg-[#aeeecb] text-[#316e52]">
                   {h.status}
                 </span>
               </div>
 
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {h.features.map((f, j) => (
                   <span
                     key={j}
-                    className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full bg-[#f0f4fd] text-[#574240] font-medium"
+                    className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#f0f4fd] text-[#574240] font-medium"
                   >
                     ✓ {f}
                   </span>
                 ))}
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#f0f4fd] gap-2">
-                <span className="text-xs text-[#574240] truncate">Distance : {h.distance}</span>
+              <div className="flex items-center justify-between pt-1 border-t border-[#f0f4fd] gap-1">
+                <span className="text-[10px] text-[#574240]">Distance : {h.distance}</span>
                 <a
                   href={`tel:${h.tel}`}
-                  className="min-h-[36px] px-3.5 sm:px-4 rounded-full bg-[#902e2a] hover:bg-[#72201d] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors shrink-0"
+                  className="min-h-[26px] px-3 rounded-full bg-[#902e2a] hover:bg-[#72201d] text-white font-bold text-[10px] flex items-center gap-1 shadow-xs"
                 >
-                  <span className="material-symbols-outlined text-[15px] sm:text-[16px]">call</span>
+                  <span className="material-symbols-outlined text-[13px]">call</span>
                   <span>Appeler</span>
                 </a>
               </div>
