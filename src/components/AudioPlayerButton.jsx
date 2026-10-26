@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 export default function AudioPlayerButton({
   textToSpeak,
   lang = 'wo',
-  label,
-  subtitle,
-  variant = 'banner', // 'banner' (grand format Stitch) ou 'chip' (format compact)
+  label = 'Déglul ci Wolof',
+  subtitle = 'Explications du calendrier et de votre stade',
+  variant = 'banner',
   onPlayRecord
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -35,37 +35,39 @@ export default function AudioPlayerButton({
 
       window.speechSynthesis.speak(utterance);
     } else {
-      alert("Votre navigateur ne supporte pas l'audio automatique.");
+      alert("Votre navigateur ne supporte pas la synthèse vocale.");
     }
   };
 
   if (variant === 'banner') {
     return (
-      <div className="w-full bg-tertiary-fixed text-on-tertiary-fixed rounded-2xl p-4 shadow-sm relative overflow-hidden flex flex-col gap-2">
+      <div className="w-full bg-[#ffe3c7] text-[#2a1700] rounded-2xl p-4 shadow-sm relative overflow-hidden flex flex-col gap-2 border border-[#fcba67]/40">
+        {/* En-tête de la bannière vocale */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span
-              className="material-symbols-outlined text-[20px] text-tertiary"
+              className="material-symbols-outlined text-[18px] text-[#724600]"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               volume_up
             </span>
-            <span className="text-[11px] uppercase tracking-wider text-tertiary font-extrabold">
-              Assistance Vocale Guidée
+            <span className="text-[10px] uppercase tracking-wider text-[#724600] font-extrabold">
+              ASSISTANCE VOCALE GUIDÉE
             </span>
           </div>
-          <span className="text-[10px] bg-surface-container-lowest/90 text-on-tertiary-fixed px-2.5 py-0.5 rounded-full font-bold shadow-xs">
-            {lang === 'wo' ? 'Wolof (Wolofal)' : 'Français'}
+          <span className="text-[10px] bg-white/90 text-[#724600] px-2.5 py-0.5 rounded-full font-bold shadow-xs">
+            Wolof / FR
           </span>
         </div>
 
-        <div className="flex items-center justify-between gap-3 pt-1">
+        {/* Ligne principale : Gros bouton Play Brun Chocolat + Titre + Égaliseur */}
+        <div className="flex items-center justify-between gap-3 pt-0.5">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={handleSpeak}
               type="button"
               className={`w-12 h-12 rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform flex-shrink-0 ${
-                isPlaying ? 'bg-primary text-on-primary animate-pulse' : 'bg-tertiary text-on-tertiary'
+                isPlaying ? 'bg-[#902e2a] text-white animate-pulse' : 'bg-[#724600] text-white'
               }`}
               title="Lancer la lecture audio"
             >
@@ -74,21 +76,21 @@ export default function AudioPlayerButton({
               </span>
             </button>
             <div className="flex flex-col min-w-0">
-              <span className="font-bold text-sm truncate leading-tight text-on-tertiary-fixed">
-                {label || (lang === 'wo' ? 'Déglul ci Wolof' : 'Écouter en Français')}
+              <span className="font-bold text-sm truncate leading-tight text-[#2a1700]">
+                {label}
               </span>
-              <span className="text-xs text-on-tertiary-fixed/80 truncate">
-                {subtitle || (lang === 'wo' ? 'Saytu sa birr ak waxtu CPN' : 'Explications détaillées à la voix')}
+              <span className="text-xs text-[#2a1700]/75 truncate mt-0.5">
+                {subtitle}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1 h-7 px-2.5 flex-shrink-0 bg-surface-container-lowest/60 rounded-full">
-            <span className={`w-1 h-3 bg-tertiary rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
-            <span className={`w-1 h-4 bg-tertiary rounded-full ${isPlaying ? 'animate-bounce' : ''}`}></span>
-            <span className={`w-1 h-2 bg-tertiary rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
-            <span className="text-[10px] ml-1 text-on-tertiary-fixed font-bold">
-              {isPlaying ? 'Audio ON' : '01:45'}
+          <div className="flex items-center gap-1 h-7 px-2.5 flex-shrink-0 bg-white/75 rounded-full border border-[#fcba67]/30">
+            <span className={`w-1 h-3 bg-[#724600] rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
+            <span className={`w-1 h-4 bg-[#724600] rounded-full ${isPlaying ? 'animate-bounce' : ''}`}></span>
+            <span className={`w-1 h-2 bg-[#724600] rounded-full ${isPlaying ? 'animate-pulse' : ''}`}></span>
+            <span className="text-[10px] ml-1 text-[#2a1700] font-bold">
+              {isPlaying ? 'Audio' : '01:45'}
             </span>
           </div>
         </div>
@@ -96,22 +98,21 @@ export default function AudioPlayerButton({
     );
   }
 
-  // Format compact (pour cartes et éléments de liste)
+  // Format compact
   return (
     <button
       onClick={handleSpeak}
       type="button"
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all ${
         isPlaying
-          ? 'bg-primary text-on-primary animate-pulse shadow-sm'
-          : 'bg-tertiary-fixed text-on-tertiary-fixed hover:bg-tertiary hover:text-on-tertiary'
+          ? 'bg-[#902e2a] text-white shadow-xs'
+          : 'bg-[#ffe3c7] text-[#724600] hover:bg-[#724600] hover:text-white'
       }`}
-      title="Écouter ce passage en Wolof"
     >
-      <span className="material-symbols-outlined text-[16px]">
+      <span className="material-symbols-outlined text-[15px]">
         {isPlaying ? 'volume_off' : 'volume_up'}
       </span>
-      <span>{label || (lang === 'wo' ? 'Déglul' : 'Écouter')}</span>
+      <span>{label}</span>
     </button>
   );
 }
