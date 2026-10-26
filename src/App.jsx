@@ -8,7 +8,7 @@ import PublicImpactMetrics from './components/PublicImpactMetrics';
 import { translations } from './data/translations';
 
 export default function App() {
-  const [lang, setLang] = useState('wo'); // Par défaut en Wolof selon la consigne d'accessibilité orale
+  const [lang, setLang] = useState('wo'); // Par défaut Wolof
   const [activeTab, setActiveTab] = useState('pregnancy');
 
   // Métriques d'impact locales persistées
@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <div className="bg-surface font-body text-body text-on-surface antialiased flex flex-col min-h-screen">
-      {/* Header & Bottom Nav & Floating Emergency Button */}
+      {/* Header Responsive */}
       <Navbar
         lang={lang}
         setLang={setLang}
@@ -64,52 +64,69 @@ export default function App() {
         t={t}
       />
 
-      {/* Contenu principal calé pour le format PWA Stitch */}
-      <main className="flex flex-col relative w-full pt-28 pb-36 bg-surface min-h-screen">
-        <div className="flex flex-col w-full max-w-md mx-auto px-4 gap-4">
-          {activeTab === 'pregnancy' && (
-            <PregnancyCalculator
-              t={t}
-              lang={lang}
-              onActionTrack={trackAction}
-              onNavigateToTriage={() => setActiveTab('triage')}
-            />
-          )}
+      {/* Contenu principal : Responsive Mobile (<768px) & Largeur Confortable sur Desktop (max-w-5xl) */}
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-4 md:py-8 pb-32 md:pb-12">
+        {activeTab === 'pregnancy' && (
+          <PregnancyCalculator
+            t={t}
+            lang={lang}
+            onActionTrack={trackAction}
+            onNavigateToTriage={() => setActiveTab('triage')}
+          />
+        )}
 
-          {activeTab === 'triage' && (
-            <DangerSignsTriage
-              t={t}
-              lang={lang}
-              onActionTrack={trackAction}
-              onNavigateToEmergency={() => setActiveTab('emergency')}
-            />
-          )}
+        {activeTab === 'triage' && (
+          <DangerSignsTriage
+            t={t}
+            lang={lang}
+            onActionTrack={trackAction}
+            onNavigateToEmergency={() => setActiveTab('emergency')}
+          />
+        )}
 
-          {activeTab === 'guide' && (
-            <ReproductiveHealthGuide
-              t={t}
-              lang={lang}
-              onActionTrack={trackAction}
-            />
-          )}
+        {activeTab === 'guide' && (
+          <ReproductiveHealthGuide
+            t={t}
+            lang={lang}
+            onActionTrack={trackAction}
+          />
+        )}
 
-          {activeTab === 'emergency' && (
-            <DirectoryView
-              t={t}
-              lang={lang}
-              onActionTrack={trackAction}
-            />
-          )}
+        {activeTab === 'emergency' && (
+          <DirectoryView
+            t={t}
+            lang={lang}
+            onActionTrack={trackAction}
+          />
+        )}
 
-          {activeTab === 'metrics' && (
-            <PublicImpactMetrics
-              t={t}
-              metricsData={metrics}
-              lang={lang}
-            />
-          )}
-        </div>
+        {activeTab === 'metrics' && (
+          <PublicImpactMetrics
+            t={t}
+            metricsData={metrics}
+            lang={lang}
+          />
+        )}
       </main>
+
+      {/* Footer desktop informatif */}
+      <footer className="hidden md:block bg-white border-t border-outline-variant/20 py-6 px-4 mt-auto">
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-xs text-on-surface-variant">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-primary">SuturaSanté Sénégal</span>
+            <span>• Open Source MIT (Digital Public Good)</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>Candidature UNICEF / Suède Femtech 2026</span>
+            <button
+              onClick={() => setActiveTab('metrics')}
+              className="text-secondary font-bold hover:underline"
+            >
+              Tableau de bord public (/metrics)
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
