@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe" />
+      <stop offset="50%" stop-color="#bae6fd" />
+      <stop offset="100%" stop-color="#7dd3fc" />
+    </linearGradient>
+    <linearGradient id="jarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.95" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#skyGrad)" />
+  
+  <!-- Warm table surface -->
+  <path d="M0,360 Q400,340 800,360 L800,500 L0,500 Z" fill="#f5ede3" />
+  <line x1="0" y1="360" x2="800" y2="360" stroke="#ddc0bd" stroke-width="2" />
+
+  <!-- Traditional Terracotta Canari (Water Jar) -->
+  <ellipse cx="320" cy="370" rx="90" ry="18" fill="#78350f" opacity="0.2" />
+  <path d="M250,220 C220,260 210,340 320,355 C430,340 420,260 390,220 C375,200 365,170 360,150 L280,150 C275,170 265,200 250,220 Z" fill="url(#jarGrad)" stroke="#78350f" stroke-width="3" />
+  <ellipse cx="320" cy="150" rx="40" ry="12" fill="#b45309" stroke="#78350f" stroke-width="2" />
+  <ellipse cx="320" cy="148" rx="32" ry="8" fill="#451a03" />
+  <!-- Traditional geometric Senegalese pattern on canari -->
+  <path d="M245,260 Q320,285 395,260" stroke="#fef3c7" stroke-width="3" fill="none" stroke-dasharray="6,4" />
+  <path d="M240,280 Q320,305 400,280" stroke="#fef3c7" stroke-width="2" fill="none" />
+
+  <!-- Fresh Pure Water Glass -->
+  <ellipse cx="490" cy="375" rx="45" ry="12" fill="#0369a1" opacity="0.15" />
+  <path d="M460,250 L470,365 Q490,375 510,365 L520,250 Z" fill="rgba(255,255,255,0.7)" stroke="#38bdf8" stroke-width="2" />
+  <!-- Water inside glass -->
+  <path d="M463,275 L471,360 Q490,370 509,360 L517,275 Q490,285 463,275 Z" fill="url(#waterGrad)" />
+  <ellipse cx="490" cy="275" rx="27" ry="6" fill="#7dd3fc" opacity="0.8" />
+
+  <!-- Water drops & freshness ripples -->
+  <circle cx="490" cy="220" r="8" fill="#0284c7" opacity="0.6" />
+  <path d="M490,205 Q498,220 490,228 Q482,220 490,205 Z" fill="#38bdf8" />
+  
+  <!-- Badge Label -->
+  <g transform="translate(420, 80)">
+    <rect width="260" height="50" rx="25" fill="#ffffff" opacity="0.92" stroke="#bae6fd" stroke-width="1.5" />
+    <text x="130" y="31" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" fill="#0369a1" text-anchor="middle">
+      💧 2,5 Litres d'Eau Saine / Jour
+    </text>
+  </g>
+</svg>

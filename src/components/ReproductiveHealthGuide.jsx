@@ -104,7 +104,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Feuilles de Moringa Nebeday"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHCoABKs967FWzDGsYxNhzIPUuo7vX4EHkZx9ZmkpF61Y1pqqFwXdZDcpa5Ces2_VV9M2lIMZnONbSlGCQFqfPRwbfBg1bq2oK56w-Zh2kRsgc79n6OV6mpHDObe2Xfuu0EbxJlXpL-LKzyDfFIk2A_vaVav3MD0fL971JsUy1GCpkVz0HqbvQtLtvkHqSbd9Z_okvp1x_F5tYJcLrJ440Qr0VoCiPDbHAlHH6Dig"
+                  src="/images/advice/moringa.jpg"
                 />
                 <div className="absolute top-3 left-3 bg-[#aeeecb] text-[#316e52] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Fer & Vitalité
@@ -144,7 +144,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Pain de Singe Bouye"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1WiSLIGt4B65l6lzHQFDkAZkaAYiQj6cigfi9cA4cgoTn1NxpVT_0pM5CLh8omSw1NHdOn7eySbVh7IfdeCtnLedm73vyFIw5WuDxcmxf_jCoFj-ybF2_cCA4Hu3OGUaOOF1D1TlKHRL_JMX7_tpN0tHbOvWtc_joS2CAkolWHdZbMHSRouExIXcpBsV34A0_41hJ7qSPxj2J_f3uYfJhJTvkbNSNTBdt0_AJdaRRGEyBDGK5ijiHRe1-8"
+                  src="/images/advice/bouye.jpg"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffddb8] text-[#724600] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Vitamine C
@@ -184,7 +184,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Fleurs d'hibiscus Bissap"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1X3EScIXiMcE83vPJBcfCzqNeehTXq7sfDZgsN-gO7f33vm298g13yFpPVMtpjoHDVEJFTalyeUkvuxU8LjS3HQikLnDgGNEvvX3uI1A3QlcvEyFlgFoZW8OcBagZDt15T20xwGEC10FsKat62nFGI8F6THIexOW1W-R_fYAil6QAHmHK06toPkcRxGKkLHzg2W2xny7Pq8INkqPwQMBnSTPSZpxh6ohztxOIj43v9N"
+                  src="/images/advice/bissap.jpg"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffdad6] text-[#ba1a1a] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Hydratation Active
@@ -225,7 +225,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Posture de repos maternel"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1XAAOIM3zQrJlavtNmtcKkWaJ9a_Q4BwAgBCwNsxlZOQkJrVTLfQNsI6_M2yUome071T3C2-aYGeWm-ABcWOtJbeGUvV1UT793XmeyuN6ZEgUwmiI7I1GxDSXsw_FZ2thUrImVhf2Ojrkm6GYOfRd4JH0CwAjEbErv0wqEK_fr_U38Sw0jfCACpy_d4mgs0VbyJoUfYl2L3hFkvV2_WpI1DsNFW1b5VcNERFZHxzSE_zqmBofJDB_ZZ1U4"
+                  src="/images/advice/sleep.jpg"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffdad6] text-[#ba1a1a] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Indispensable
@@ -262,7 +262,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Eau saine et hydratation"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1USsREUByGTvOOqRIuwagoMCm-MyBE-VUpNs-MTm32EbK-VsKVXpSVBGSEqyLbHFit7Tdls2beOWgjXNGLa8qg_KJTBzajSSGCtt5O494TcJdat9S4X-XrkGuCaEXWOQSLpgj1PdcvRLafXSPojLkseCgEGSqPx7zRKgZIxXHLy0-79HsZXLOwJgvnZlNCKX2Q2G6wH2Qjf-y50URimrk3LfxgJz5qe18GHH3adaaEVuPPuk8aq3NrdxdKU"
+                  src="/images/advice/water.svg"
                 />
                 <div className="absolute top-3 left-3 bg-[#aeeecb] text-[#316e52] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   2.5 Litres / Jour
@@ -302,7 +302,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
               <img
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 alt="Allaitement maternel exclusif"
-                src="https://lh3.googleusercontent.com/aida/AEtjO1WzoQsv-1qi6NT5Nb-6kY3Y8wx5ciA5EdC6XF3p4Bpz6VRVpHitn0KUsIbJopSWl1Tx6fKI2ECxzCkZWAEJXG9ExFJNPBWkbGSOL_suV-Edrs6ObPWWpEh8U4b3tl7tRsXRXezruaqx2cLPrkAu9cLPJ6O0KdDJCkQhQMxhsyiOkFmXHiHqziCT8UqPu-3i4smK4F2HRR4OabcaIMiobmMoy-05N6ZvDv62yhvMFwegImrArMm7e1mSPV4"
+                src="/images/advice/breastfeeding.jpg"
               />
               <div className="absolute top-3 left-3 bg-[#aeeecb] text-[#316e52] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                 Norme OMS 6 Mois

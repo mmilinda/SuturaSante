@@ -488,7 +488,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
               <img
                 className="w-full h-full object-cover object-center"
                 alt="Mère sénégalaise épanouie à Dakar"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCeg2rd31C_5hdpqvP-vCBNIid_vP6FlVqjLyx14gqNl52MQHq3qQv_crrjuuOE1e2CEAkR-fYQT-fK5eOWBWPEMWh9axyzn5wnn6hc8R9mICKlmCW-KT6pvwrXOVP6FAwCHoL9z-oNSkLg6b-01jcNx0ne7P9VKsWeMwY_qtKIUsOycm2DN0P-LYYmsf99TGuJIwCz-yDawYUopu3sneOpJYr_c1QV9JRt0BPnuE"
+                src="/images/advice/breastfeeding.jpg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-3 left-4 right-4">
@@ -563,7 +563,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
               <img
                 className="w-14 h-14 rounded-xl object-cover shrink-0 shadow-xs"
                 alt="Moringa et Bissap sénégalais"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHCoABKs967FWzDGsYxNhzIPUuo7vX4EHkZx9ZmkpF61Y1pqqFwXdZDcpa5Ces2_VV9M2lIMZnONbSlGCQFqfPRwbfBg1bq2oK56w-Zh2kRsgc79n6OV6mpHDObe2Xfuu0EbxJlXpL-LKzyDfFIk2A_vaVav3MD0fL971JsUy1GCpkVz0HqbvQtLtvkHqSbd9Z_okvp1x_F5tYJcLrJ440Qr0VoCiPDbHAlHH6Dig"
+                src="/images/advice/moringa.jpg"
               />
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-[#724600]">
