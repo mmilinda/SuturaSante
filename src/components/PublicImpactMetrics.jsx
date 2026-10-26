@@ -1,112 +1,137 @@
 import React from 'react';
-import { BarChart3, Users, Volume2, ShieldAlert, Award, Globe2, CheckCircle2 } from 'lucide-react';
 
 export default function PublicImpactMetrics({ t, metricsData, lang }) {
   return (
-    <div className="space-y-6">
-      {/* En-tête */}
-      <div className="bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700 rounded-3xl p-6 text-white shadow-xl shadow-indigo-200">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-xs font-semibold backdrop-blur-md mb-2">
-          <Globe2 className="w-3.5 h-3.5 text-indigo-200" />
-          <span>{t.metrics.badge}</span>
+    <div className="flex flex-col w-full gap-4">
+      {/* 1. EN-TÊTE UNICEF INNOVATION FUND */}
+      <div className="bg-gradient-to-br from-secondary to-[#1e4635] rounded-2xl p-4 text-on-secondary shadow-sm flex flex-col gap-1.5">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-white/20 rounded-full text-[10px] font-extrabold backdrop-blur-md w-fit">
+          <span className="material-symbols-outlined text-[14px]">public</span>
+          <span>Transparence &amp; Open Data UNICEF</span>
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold">{t.metrics.title}</h2>
-        <p className="text-indigo-100 text-sm mt-1 max-w-xl leading-relaxed">{t.metrics.subtitle}</p>
+        <h2 className="font-headline text-xl font-bold leading-tight">
+          {lang === 'wo' ? 'Njariñu SuturaSanté ci Réew mi' : "Tableau de Bord Public d'Impact"}
+        </h2>
+        <p className="text-xs text-on-secondary/90 leading-relaxed">
+          Données d'utilisation en temps réel, 100% anonymisées, collectées pour mesurer l'impact sur la santé maternelle et néonatale au Sénégal.
+        </p>
       </div>
 
-      {/* Cartes Métriques Clés */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-2">
-            <Users className="w-4 h-4" />
+      {/* 2. CARTES STATISTIQUES CLÉS */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-outline-variant/20 shadow-xs flex flex-col">
+          <div className="w-8 h-8 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center mb-1.5">
+            <span className="material-symbols-outlined text-[18px]">group</span>
           </div>
-          <span className="text-2xl font-extrabold text-slate-900">{metricsData.totalUsers}</span>
-          <p className="text-xs text-slate-500 font-medium mt-1">{t.metrics.stats.users}</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-2">
-            <Volume2 className="w-4 h-4" />
-          </div>
-          <span className="text-2xl font-extrabold text-rose-600">{metricsData.audioListens}</span>
-          <p className="text-xs text-slate-500 font-medium mt-1">{t.metrics.stats.audioListens}</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-2">
-            <BarChart3 className="w-4 h-4" />
-          </div>
-          <span className="text-2xl font-extrabold text-slate-900">{metricsData.triagesDone}</span>
-          <p className="text-xs text-slate-500 font-medium mt-1">{t.metrics.stats.triageCompleted}</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-2">
-            <ShieldAlert className="w-4 h-4" />
-          </div>
-          <span className="text-2xl font-extrabold text-red-600">{metricsData.emergenciesHandled}</span>
-          <p className="text-xs text-slate-500 font-medium mt-1">{t.metrics.stats.emergenciesRouted}</p>
-        </div>
-      </div>
-
-      {/* Détails du projet pilote */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm space-y-5">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold text-slate-900 text-base">Résultats du Micro-Pilote Terrain (Sénégal)</h3>
-          <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-full border border-emerald-100">
-            Phase Pilote Active
+          <span className="text-2xl font-extrabold text-on-surface">{metricsData.totalUsers}</span>
+          <span className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+            Femmes &amp; relais accompagnés
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-slate-400 font-medium block">Répartition Linguistique</span>
-            <div className="mt-2 space-y-1.5">
-              <div className="flex justify-between font-semibold text-slate-700">
-                <span>Wolof (Audio & Texte)</span>
-                <span className="text-rose-600">72%</span>
-              </div>
-              <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                <div className="bg-rose-500 h-full rounded-full" style={{ width: '72%' }}></div>
-              </div>
-              <div className="flex justify-between font-semibold text-slate-700 pt-1">
-                <span>Français</span>
-                <span>28%</span>
-              </div>
+        <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-outline-variant/20 shadow-xs flex flex-col">
+          <div className="w-8 h-8 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center mb-1.5">
+            <span className="material-symbols-outlined text-[18px]">record_voice_over</span>
+          </div>
+          <span className="text-2xl font-extrabold text-tertiary">{metricsData.audioListens}</span>
+          <span className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+            Écoutes audio en Wolof
+          </span>
+        </div>
+
+        <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-outline-variant/20 shadow-xs flex flex-col">
+          <div className="w-8 h-8 rounded-xl bg-surface-container-highest text-primary flex items-center justify-center mb-1.5">
+            <span className="material-symbols-outlined text-[18px]">health_and_safety</span>
+          </div>
+          <span className="text-2xl font-extrabold text-on-surface">{metricsData.triagesDone}</span>
+          <span className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+            Triages d'alerte effectués
+          </span>
+        </div>
+
+        <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-outline-variant/20 shadow-xs flex flex-col">
+          <div className="w-8 h-8 rounded-xl bg-error-container text-on-error-container flex items-center justify-center mb-1.5">
+            <span className="material-symbols-outlined text-[18px]">emergency</span>
+          </div>
+          <span className="text-2xl font-extrabold text-error">{metricsData.emergenciesHandled}</span>
+          <span className="text-[11px] text-on-surface-variant font-medium mt-0.5">
+            Alertes SAMU 1515 orientées
+          </span>
+        </div>
+      </div>
+
+      {/* 3. ANALYSE DU MICRO-PILOTE TERRAIN */}
+      <div className="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/20 shadow-xs flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-headline text-base text-on-surface font-bold">
+            Résultats du Micro-Pilote Terrain (Sénégal)
+          </h3>
+          <span className="text-[9px] bg-secondary-container text-on-secondary-container font-extrabold px-2 py-0.5 rounded-full">
+            Pilote Actif
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-2.5 text-xs">
+          {/* Wolof vs Français */}
+          <div className="p-3 rounded-xl bg-surface-container-low flex flex-col gap-1.5">
+            <span className="text-on-surface-variant font-medium text-[11px]">
+              Répartition Linguistique (Inclusion des populations orales)
+            </span>
+            <div className="flex justify-between font-bold text-on-surface">
+              <span>Wolof (Audio &amp; Texte)</span>
+              <span className="text-primary">72%</span>
+            </div>
+            <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+              <div className="bg-primary h-full rounded-full" style={{ width: '72%' }}></div>
+            </div>
+            <div className="flex justify-between text-[11px] text-on-surface-variant pt-0.5">
+              <span>Français</span>
+              <span>28%</span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-slate-400 font-medium block">Couverture Géographique Initiale</span>
-            <ul className="mt-2 space-y-1 font-semibold text-slate-700">
-              <li className="flex justify-between"><span>Dakar & Banlieue (Pikine/Guédiawaye)</span><span>54%</span></li>
-              <li className="flex justify-between"><span>Thiès & Périurbain</span><span>28%</span></li>
-              <li className="flex justify-between"><span>Kaolack & Autres</span><span>18%</span></li>
-            </ul>
+          {/* Zones */}
+          <div className="p-3 rounded-xl bg-surface-container-low flex flex-col gap-1.5">
+            <span className="text-on-surface-variant font-medium text-[11px]">
+              Répartition Géographique
+            </span>
+            <div className="flex justify-between font-bold text-on-surface">
+              <span>Dakar &amp; Banlieue (Pikine / Guédiawaye)</span>
+              <span>54%</span>
+            </div>
+            <div className="flex justify-between font-bold text-on-surface">
+              <span>Thiès &amp; Périurbain</span>
+              <span>28%</span>
+            </div>
+            <div className="flex justify-between font-bold text-on-surface">
+              <span>Kaolack &amp; Autres régions</span>
+              <span>18%</span>
+            </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="text-slate-400 font-medium block">Conformité UNICEF Innovation Fund</span>
-            <div className="mt-2 space-y-1 text-slate-700 font-medium">
-              <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Licence Open Source (MIT)</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>100% Anonymisé (No PII)</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Digital Public Good prêt</span>
-              </div>
+          {/* Critères UNICEF */}
+          <div className="p-3 rounded-xl bg-surface-container-low flex flex-col gap-1.5">
+            <span className="text-on-surface-variant font-medium text-[11px]">
+              Conformité UNICEF / Suède Innovation Fund
+            </span>
+            <div className="flex items-center gap-1.5 text-secondary font-bold">
+              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+              <span>Licence Open Source (MIT)</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-secondary font-bold">
+              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+              <span>100% Anonymisé (Respect strict RGPD / Sutura)</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-secondary font-bold">
+              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+              <span>Digital Public Good prêt pour l'Afrique de l'Ouest</span>
             </div>
           </div>
         </div>
 
-        {/* Note sur la protection des données */}
-        <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 text-xs text-indigo-900 leading-relaxed">
-          <strong>Engagement de confidentialité (Sutura) :</strong> Aucune donnée personnelle nominative (nom, prénom, numéro de téléphone direct) n'est stockée ni partagée publiquement. Seules les métriques d'usage agrégées et les scores de santé anonymisés sont publiés pour évaluer l'impact et orienter les politiques de santé publique de l'UNICEF et de ses partenaires.
+        {/* Note de confidentialité */}
+        <div className="p-3 rounded-xl bg-surface-container text-[11px] text-on-surface-variant leading-relaxed">
+          <strong>Principe de Sutura :</strong> Aucune donnée personnelle nominative n'est enregistrée. Seules les statistiques d'usage globales et les scores de santé anonymisés sont publiés pour appuyer les décisions de santé publique de l'UNICEF et du Ministère de la Santé du Sénégal.
         </div>
       </div>
     </div>
