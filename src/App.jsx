@@ -68,8 +68,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* MENU CENTRAL COMPACT */}
-          <nav className="flex items-center bg-[#eaeef8] rounded-xl p-0.5 gap-0.5 border border-[#ddc0bd]/30 shadow-xs">
+          {/* MENU CENTRAL COMPACT ET ÉQUILIBRÉ */}
+          <nav className="flex items-center bg-[#eaeef8] rounded-full p-0.5 gap-1 border border-[#ddc0bd]/40 shadow-xs">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
@@ -77,7 +77,7 @@ export default function App() {
                   key={item.id}
                   type="button"
                   onClick={() => setActiveTab(item.id)}
-                  className={`min-h-[28px] px-2.5 lg:px-3 py-0.5 rounded-lg font-bold text-[11px] lg:text-xs flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`min-h-[28px] px-2.5 py-1 rounded-full font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
                       ? item.isEmergency
                         ? 'bg-[#ba1a1a] text-white shadow-xs'
@@ -94,8 +94,7 @@ export default function App() {
                   >
                     {item.icon}
                   </span>
-                  <span className="inline lg:hidden">{item.shortLabel}</span>
-                  <span className="hidden lg:inline">{item.fullLabel}</span>
+                  <span>{item.shortLabel}</span>
                 </button>
               );
             })}
