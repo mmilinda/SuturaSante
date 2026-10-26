@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Animations légères pour fluidité mobile */
+.pulse-emergency {
+  animation: pulseEmergency 1.8s infinite;
+}
+
+@keyframes pulseEmergency {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(225, 29, 72, 0);
+  }
+}
