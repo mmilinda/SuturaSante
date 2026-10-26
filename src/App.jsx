@@ -151,13 +151,6 @@ export default function App() {
               <span className="material-symbols-outlined text-[14px]">call</span>
               <span>1515</span>
             </a>
-
-            {/* Avatar */}
-            <img
-              alt="Profile"
-              className="w-7 h-7 rounded-full object-cover ring-1 ring-[#aeeecb]"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvavF8-Jf-IsqnS9F4cy8uZvFCqs34hbFzdsbQwmsm5nJWts7NQO10gzM-EW8-kC0cxXmEtC6POZi8SwxbOP90ardcI8n0H7VyqcQxX5w9HjQll-p_vsCMedW6SgYTqSg6j3Jz0tk671vb4LwBrZ4zl1Y5IPXwjmmA3Nwmsx8dmPtDTpxm7udAi3zoPD0Qj1V8TUyjBiyPD1REXhdv3b-GdC4_33O4c1JtRulAKSQ"
-            />
           </div>
         </div>
       </header>

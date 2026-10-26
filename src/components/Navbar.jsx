@@ -92,19 +92,6 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
                   <span>FR</span>
                 </button>
               </div>
-
-              {/* Photo de Profil officielle Stitch */}
-              <button
-                aria-label="Profil utilisatrice"
-                className="min-h-[34px] min-w-[34px] flex items-center justify-center focus:outline-none"
-                type="button"
-              >
-                <img
-                  alt="Profile"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-[#aeeecb]"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvavF8-Jf-IsqnS9F4cy8uZvFCqs34hbFzdsbQwmsm5nJWts7NQO10gzM-EW8-kC0cxXmEtC6POZi8SwxbOP90ardcI8n0H7VyqcQxX5w9HjQll-p_vsCMedW6SgYTqSg6j3Jz0tk671vb4LwBrZ4zl1Y5IPXwjmmA3Nwmsx8dmPtDTpxm7udAi3zoPD0Qj1V8TUyjBiyPD1REXhdv3b-GdC4_33O4c1JtRulAKSQ"
-                />
-              </button>
             </div>
           </div>
 
