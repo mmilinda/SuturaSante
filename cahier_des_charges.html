@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cahier des Charges - SuturaSanté (UNICEF Femtech Innovation Fund)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    
+    @page {
+      size: A4;
+      margin: 20mm 15mm 20mm 15mm;
+      @bottom-right {
+        content: counter(page) "/" counter(pages);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      font-size: 10.5pt;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+
+    .cover-header {
+      border-bottom: 3px solid #e11d48;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-unicef {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-country {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 9pt;
+    }
+
+    h1 {
+      color: #0f172a;
+      font-size: 26pt;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+
+    h1 span {
+      color: #e11d48;
+    }
+
+    .subtitle {
+      font-size: 13pt;
+      color: #475569;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .meta-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .meta-item {
+      font-size: 9.5pt;
+    }
+
+    .meta-item strong {
+      color: #0f172a;
+    }
+
+    h2 {
+      color: #0f172a;
+      font-size: 14pt;
+      font-weight: 700;
+      border-left: 4px solid #e11d48;
+      padding-left: 12px;
+      margin-top: 30px;
+      margin-bottom: 14px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      color: #334155;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    ul {
+      margin-top: 0;
+      margin-bottom: 14px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      margin-bottom: 20px;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      text-align: left;
+      font-weight: 700;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+    }
+
+    td {
+      padding: 9px 12px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    .callout {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    .callout-rose {
+      background-color: #fff1f2;
+      border-left: 4px solid #e11d48;
+      color: #881337;
+    }
+
+    .callout-blue {
+      background-color: #eff6ff;
+      border-left: 4px solid #2563eb;
+      color: #1e3a8a;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .footer-note {
+      margin-top: 40px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+      font-size: 8.5pt;
+      color: #64748b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EN-TÊTE OFFICIEL -->
+  <div class="cover-header">
+    <div class="badge-unicef">UNICEF / SUÈDE INNOVATION FUND — FEMTECH COHORT</div>
+    <div class="badge-country">SÉNÉGAL 🇸🇳</div>
+  </div>
+
+  <h1>Sutura<span>Santé</span></h1>
+  <div class="subtitle">Cahier des Charges Fonctionnel & Technique d'Innovation Maternelle</div>
+
+  <!-- METADATA PROJET -->
+  <div class="meta-box">
+    <div class="meta-item"><strong>Nom de la Solution :</strong> SuturaSanté</div>
+    <div class="meta-item"><strong>Pays de Déploiement :</strong> Sénégal (Dakar, Thiès, Kaolack)</div>
+    <div class="meta-item"><strong>Date Limite Soumission :</strong> 04 Novembre 2026</div>
+    <div class="meta-item"><strong>Licence Technologique :</strong> Open Source (MIT) / Digital Public Good</div>
+    <div class="meta-item"><strong>Canaux d'Usage :</strong> PWA Mobile-First + Pont WhatsApp + Audio Wolof</div>
+    <div class="meta-item"><strong>Indicateurs Publics :</strong> Dashboard /metrics en temps réel anonymisé</div>
+  </div>
+
+  <h2>1. Contexte Local & Problématique au Sénégal</h2>
+  <p>
+    Au Sénégal, la réduction de la mortalité maternelle et néonatale demeure une priorité absolue de santé publique. Malgré des efforts constants, plusieurs freins critiques persistent sur le terrain :
+  </p>
+  <ul>
+    <li><strong>Rupture de suivi des Consultations Prénatales (CPN) :</strong> Moins de 50 % des femmes enceintes effectuent les 4 consultations CPN requises par l'OMS et le Ministère de la Santé du Sénégal, ce qui empêche la détection précoce des complications (pré-éclampsie, anémie sévère).</li>
+    <li><strong>Barrière de la langue et prédominance de l'oralité :</strong> Si le français est la langue administrative, le <em>wolof</em> parlé est la langue véhiculaire de plus de 80 % de la population. Les solutions numériques exclusivement textuelles excluent de facto les femmes les plus vulnérables.</li>
+    <li><strong>Pudeur culturelle (Le principe de « Sutura ») :</strong> Les questions relatives à la santé reproductive, aux menstruations, à l'intimité et aux violences demeurent des sujets tabous difficiles à verbaliser en public.</li>
+    <li><strong>Contraintes technologiques locales :</strong> Les téléphones d'entrée de gamme disposent d'un stockage saturé et de forfaits internet limités (utilisation prédominante des pass WhatsApp chez Orange, Free et Expresso).</li>
+  </ul>
+
+  <h2>2. Vision & Proposition de Valeur</h2>
+  <p>
+    <strong>SuturaSanté</strong> est une solution de technologie inclusive (Femtech) conçue pour lever l'ensemble de ces freins sans imposer le téléchargement d'une application lourde sur les stores applicatifs :
+  </p>
+  <div class="callout callout-rose">
+    <strong>Le concept clé :</strong> Une Progressive Web App (PWA) de moins de 2 Mo, immédiatement accessible via un simple lien partagé sur WhatsApp ou un QR code de centre de santé, guidant l'utilisatrice à la voix en <strong>Wolof et en Français</strong> avec un algorithme de triage d'urgence et un tableau de bord d'impact public.
+  </div>
+
+  <h2>3. Spécifications Fonctionnelles Détaillées</h2>
+
+  <h3>Module A : Calculateur de Grossesse & Calendrier CPN Dynamique</h3>
+  <ul>
+    <li>Calcul immédiat du terme en semaines d'aménorrhée (SA) et de la date prévue d'accouchement (DPA).</li>
+    <li>Génération des 4 jalons de consultations CPN alignés sur les protocoles nationaux sénégalais :
+      <ul>
+        <li><strong>CPN 1 (avant 12 SA) :</strong> Dépistage précoce anémie, supplémentation fer/acide folique.</li>
+        <li><strong>CPN 2 (20-24 SA) :</strong> Dépistage échographique, mouvements du fœtus, vaccination antitétanique.</li>
+        <li><strong>CPN 3 (28 SA) :</strong> Prévention du paludisme (TPI), surveillance de la tension artérielle.</li>
+        <li><strong>CPN 4 (32-36 SA) :</strong> Plan d'accouchement, identification du transport d'urgence.</li>
+      </ul>
+    </li>
+    <li>Lecture vocale explicative en Wolof pour chaque étape.</li>
+  </ul>
+
+  <h3>Module B : Triage d'Urgence des Signes de Danger Obstétrique</h3>
+  <ul>
+    <li>Questionnaire interactif évaluant les 5 alertes critiques (saignements vaginaux, céphalées aiguës/vision trouble, diminution des mouvements de l'enfant, fièvre persistante, contractions précoces).</li>
+    <li><strong>Système d'alerte tripolaire :</strong>
+      <ul>
+        <li><span style="color:#16a34a; font-weight:bold;">Vert (Normal) :</span> Conseils d'hygiène et de repos.</li>
+        <li><span style="color:#d97706; font-weight:bold;">Orange (Vigilance) :</span> Consultation recommandée sous 24-48h au poste de santé.</li>
+        <li><span style="color:#dc2626; font-weight:bold;">Rouge (Urgence Vitale) :</span> Déclenchement d'une alerte visuelle et activation d'un bouton d'appel direct vers le <strong>SAMU National Sénégal (1515)</strong>.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <h3>Module C : Guide Médical & Nutritionnel Adapté aux Réalités Locales</h3>
+  <p>Fiches pratiques médicalement validées, enrichies d'enregistrements audio en Wolof :</p>
+  <ul>
+    <li><strong>Nutrition locale :</strong> Valorisation des aliments riches en fer et micronutriments disponibles au marché sénégalais (feuilles de Moringa/Neverdie, niébé, poisson frais, lentilles) et mise en garde sur la consommation immédiate de thé (ataaya).</li>
+    <li><strong>Hygiène menstruelle & suivi du cycle :</strong> Démystification et dépistage des douleurs anormales.</li>
+    <li><strong>Santé post-partum & bien-être mental :</strong> Accompagnement bienveillant face au baby blues (<em>Nafsa</em>).</li>
+  </ul>
+
+  <h3>Module D : Répertoire National des Structures & Numéros Verts</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Service / Structure</th>
+        <th>Numéro Direct</th>
+        <th>Couverture / Rôle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SAMU National Sénégal</strong></td>
+        <td><strong>1515</strong> (Gratuit)</td>
+        <td>Régulation médicale des urgences et ambulances 24/7</td>
+      </tr>
+      <tr>
+        <td><strong>Sapeurs-Pompiers</strong></td>
+        <td><strong>18</strong> (Gratuit)</td>
+        <td>Secours d'urgence et évacuation sanitaire</td>
+      </tr>
+      <tr>
+        <td><strong>Ligne Nationale Écoute & Protection VBG</strong></td>
+        <td><strong>116</strong> (Gratuit)</td>
+        <td>Assistance confidentielle femmes et enfants en situation de violence</td>
+      </tr>
+      <tr>
+        <td><strong>Maternités de Référence</strong></td>
+        <td>Hôpital Principal, Dalal Jamm, Roi Baudouin, Thiès, Kaolack</td>
+        <td>Prise en charge spécialisée et blocs césarienne</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Transparence & Données Publiques (Critère UNICEF Innovation Fund)</h2>
+  <div class="callout callout-blue">
+    <strong>Conformité Open Data & Protection de la Vie Privée (No PII) :</strong><br>
+    SuturaSanté intègre nativement une interface publique accessible à l'adresse <code>/metrics</code>. Ce tableau de bord agrège en direct et de manière strictement anonymisée :
+    <ul>
+      <li>Le volume cumulé de femmes et relais communautaires accompagnés.</li>
+      <li>Le taux d'utilisation de l'assistance audio en Wolof (démontrant l'inclusion des populations orales).</li>
+      <li>La proportion d'alertes de triage rouges orientées vers le SAMU et les centres de santé.</li>
+      <li>La répartition géographique préliminaire par région (Dakar, Thiès, Kaolack).</li>
+    </ul>
+    Aucune donnée nominative (nom, prénom, numéro de téléphone personnel) n'est jamais exposée ni revendue.
+  </div>
+
+  <h2>5. Architecture Technique & Choix Technologiques</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Composant</th>
+        <th>Technologie retenue</th>
+        <th>Bénéfice Opérationnel au Sénégal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend</strong></td>
+        <td>React 18, Vite, Tailwind CSS</td>
+        <td>Poids ultra-léger (< 200 Ko de script), affichage immédiat même en 3G.</td>
+      </tr>
+      <tr>
+        <td><strong>Audio & Langues</strong></td>
+        <td>Web Speech API + Clips Audio Wolof</td>
+        <td>Fonctionne nativement sur tout smartphone Android sans plugin externe.</td>
+      </tr>
+      <tr>
+        <td><strong>Offline-First</strong></td>
+        <td>PWA Service Worker + Cache Local</td>
+        <td>Consulte les fiches et calcule les CPN même sans connexion internet active.</td>
+      </tr>
+      <tr>
+        <td><strong>Licence Logicielle</strong></td>
+        <td>MIT License (GitHub Public)</td>
+        <td>Conformité totale aux critères Digital Public Goods d'UNICEF.</td>
+      </tr>
+      <tr>
+        <td><strong>Hébergement</strong></td>
+        <td>Vercel Edge Network</td>
+        <td>HTTPS mondial gratuit, temps de réponse < 150 ms en Afrique de l'Ouest.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6. Calendrier de Soumission & Pilote (Sprint vers le 4 Novembre)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Jalon Clé</th>
+        <th>Livrable pour le dossier UNICEF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>26 - 28 Octobre</td>
+        <td>Déploiement en ligne & Tests internes</td>
+        <td>URL Vercel active + Dépôt GitHub Open Source MIT.</td>
+      </tr>
+      <tr>
+        <td>29 - 31 Octobre</td>
+        <td>Micro-pilote terrain au Sénégal</td>
+        <td>Diffusion auprès de 30 à 50 femmes/relais communautaires (WhatsApp).</td>
+      </tr>
+      <tr>
+        <td>01 - 02 Novembre</td>
+        <td>Consolidation des données publiques</td>
+        <td>Graphiques réels sur le dashboard <code>/metrics</code> + Témoignages usagères.</td>
+      </tr>
+      <tr>
+        <td>03 - 04 Novembre</td>
+        <td>Dépôt officiel UNICEF</td>
+        <td>Soumission finale avant la date limite du 04 Novembre 2026.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-note">
+    Document établi pour la candidature à l'appel à projets UNICEF / Suède Femtech Innovation Fund 2026.<br>
+    Projet SuturaSanté — Tous droits réservés sous licence Open Source MIT.
+  </div>
+
+</body>
+</html>
