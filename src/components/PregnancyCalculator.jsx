@@ -488,7 +488,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
           <div className="grid grid-cols-2 gap-3 w-full">
             <a
               href="tel:*1515%23"
-              className="bg-white border border-[#ddc0bd]/40 rounded-2xl p-3.5 flex flex-col gap-2 shadow-xs hover:bg-[#f0f4fd] transition-colors active:scale-[0.98]"
+              className="bg-white border border-[#ddc0bd]/40 rounded-2xl p-4 flex flex-col gap-2 shadow-xs hover:bg-[#f0f4fd] transition-colors active:scale-[0.98]"
             >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
@@ -509,7 +509,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
               href="https://wa.me/221770000000?text=Bonjour%20SuturaSante"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white border border-[#ddc0bd]/40 rounded-2xl p-3.5 flex flex-col gap-2 shadow-xs hover:bg-[#f0f4fd] transition-colors active:scale-[0.98]"
+              className="bg-white border border-[#ddc0bd]/40 rounded-2xl p-4 flex flex-col gap-2 shadow-xs hover:bg-[#f0f4fd] transition-colors active:scale-[0.98]"
             >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
@@ -525,6 +525,31 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
                 <span className="text-[11px] text-[#574240]">Conseillère santé</span>
               </div>
             </a>
+          </div>
+
+          {/* CONSEIL DE LA SAGE-FEMME AVEC PHOTO SÉNÉGALAISE - FIXATION DU SQUISH / SUPERPOSITION */}
+          <div className="bg-white rounded-2xl overflow-hidden border border-[#ddc0bd]/40 shadow-sm flex flex-col">
+            <div className="w-full h-56 overflow-hidden relative">
+              <img
+                className="w-full h-full object-cover object-center"
+                alt="Mère sénégalaise épanouie à Dakar"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCeg2rd31C_5hdpqvP-vCBNIid_vP6FlVqjLyx14gqNl52MQHq3qQv_crrjuuOE1e2CEAkR-fYQT-fK5eOWBWPEMWh9axyzn5wnn6hc8R9mICKlmCW-KT6pvwrXOVP6FAwCHoL9z-oNSkLg6b-01jcNx0ne7P9VKsWeMwY_qtKIUsOycm2DN0P-LYYmsf99TGuJIwCz-yDawYUopu3sneOpJYr_c1QV9JRt0BPnuE"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute bottom-3 left-4 right-4">
+                <span className="px-3 py-1 rounded-full bg-white/95 text-[#902e2a] text-xs font-bold uppercase tracking-wider shadow-xs">
+                  Conseil de la Sage-Femme
+                </span>
+              </div>
+            </div>
+            <div className="p-4 flex flex-col gap-1.5">
+              <p className="text-sm font-serif italic text-[#171c23] leading-relaxed">
+                « Parlez régulièrement au bébé. Les voix douces de la famille renforcent le lien d'attachement avant l'arrivée. »
+              </p>
+              <span className="text-[11px] text-[#574240] font-medium">
+                Pratique recommandée par les sages-femmes du Ministère de la Santé
+              </span>
+            </div>
           </div>
 
           {/* COMPLÉMENTS & NUTRITION LOCALE SÉNÉGALAISE */}
@@ -580,7 +605,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
             </label>
 
             {/* Alliés naturels : Moringa & Bissap */}
-            <div className="flex items-center gap-3 bg-[#f0f4fd] rounded-xl p-3.5 border border-[#ddc0bd]/20">
+            <div className="flex items-center gap-3.5 bg-[#f0f4fd] rounded-xl p-3.5 border border-[#ddc0bd]/20">
               <img
                 className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs"
                 alt="Moringa et Bissap sénégalais"
@@ -594,23 +619,6 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack 
                   Ajoutez du Moringa (Nebeday) à vos repas et buvez du jus de bouye frais pour l'énergie.
                 </span>
               </div>
-            </div>
-          </div>
-
-          {/* CONSEIL DE LA SAGE-FEMME AVEC PHOTO SÉNÉGALAISE */}
-          <div className="flex items-center gap-3.5 p-4 bg-white rounded-2xl border border-[#ddc0bd]/40 shadow-sm">
-            <img
-              className="w-18 h-18 rounded-xl object-cover shrink-0 shadow-xs"
-              alt="Mère sénégalaise épanouie"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCeg2rd31C_5hdpqvP-vCBNIid_vP6FlVqjLyx14gqNl52MQHq3qQv_crrjuuOE1e2CEAkR-fYQT-fK5eOWBWPEMWh9axyzn5wnn6hc8R9mICKlmCW-KT6pvwrXOVP6FAwCHoL9z-oNSkLg6b-01jcNx0ne7P9VKsWeMwY_qtKIUsOycm2DN0P-LYYmsf99TGuJIwCz-yDawYUopu3sneOpJYr_c1QV9JRt0BPnuE"
-            />
-            <div className="flex flex-col justify-center min-w-0">
-              <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#902e2a' }}>
-                Conseil de la Sage-Femme
-              </span>
-              <span className="text-xs text-[#574240] leading-snug mt-1">
-                « Parlez régulièrement au bébé. Les voix douces de la famille renforcent le lien avant l'arrivée. »
-              </span>
             </div>
           </div>
 
