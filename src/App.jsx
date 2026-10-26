@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
+import DispensaryDashboard from './components/DispensaryDashboard';
+import ClinicalTriageConsole from './components/ClinicalTriageConsole';
+import MotherFileDashboard from './components/MotherFileDashboard';
+import PublicImpactMetrics from './components/PublicImpactMetrics';
 import PregnancyCalculator from './components/PregnancyCalculator';
 import DangerSignsTriage from './components/DangerSignsTriage';
 import ReproductiveHealthGuide from './components/ReproductiveHealthGuide';
 import DirectoryView from './components/DirectoryView';
-import PublicImpactMetrics from './components/PublicImpactMetrics';
 
 export default function App() {
   const [lang, setLang] = useState('wo');
-  const [activeTab, setActiveTab] = useState('pregnancy');
+  // Par défaut sur desktop : 'dispensary' (Tableau de Bord & File CPN du dispensaire)
+  // Sur mobile, l'utilisateur navigue naturellement entre grossesse, triage, conseils, urgences
+  const [activeTab, setActiveTab] = useState('dispensary');
+
+  // Sous-onglet pour la vue Patiente PWA quand activeTab === 'patient' ou sur mobile
+  const [patientSubTab, setPatientSubTab] = useState('calculator');
 
   const [metrics, setMetrics] = useState({
     totalUsers: 48,
@@ -34,12 +42,13 @@ export default function App() {
     });
   };
 
-  const navItems = [
-    { id: 'pregnancy', shortLabel: 'Grossesse', fullLabel: 'Grossesse & CPN', icon: 'pregnant_woman' },
-    { id: 'triage', shortLabel: 'Triage', fullLabel: 'Signes Danger', icon: 'health_and_safety' },
-    { id: 'guide', shortLabel: 'Conseils', fullLabel: 'Conseils & Guide', icon: 'menu_book' },
-    { id: 'emergency', shortLabel: 'Urgences', fullLabel: 'Urgences 1515', icon: 'phone_in_talk', isEmergency: true },
-    { id: 'metrics', shortLabel: 'Impact', fullLabel: 'Impact UNICEF (DPG)', icon: 'analytics' },
+  // Navigation Desktop (Dashboards Stitch complets + Mode Patiente)
+  const desktopNavItems = [
+    { id: 'dispensary', shortLabel: 'Dispensaire CPN', fullLabel: "Tableau de Bord & File d'Attente CPN", icon: 'stethoscope' },
+    { id: 'clinical-triage', shortLabel: 'Console SAMU', fullLabel: 'Triage Obstétrique & Urgences SAMU 1515', icon: 'emergency', isEmergency: true },
+    { id: 'mother-file', shortLabel: 'Dossier Mère', fullLabel: "Dossier Mère - Fiche d'Admission Desktop", icon: 'folder_shared' },
+    { id: 'metrics', shortLabel: 'Impact UNICEF', fullLabel: "Dashboard Public d'Impact DPG Sénégal", icon: 'analytics' },
+    { id: 'patient', shortLabel: 'Vue Patiente PWA', fullLabel: 'Calculateur & Conseils Maman (PWA)', icon: 'pregnant_woman' },
   ];
 
   return (
@@ -48,11 +57,11 @@ export default function App() {
           1. HEADER DESKTOP SLIM ET ÉPURÉ (Sticky en haut)
           ========================================================================= */}
       <header className="hidden md:flex h-14 shrink-0 sticky top-0 bg-[#f8f9ff]/95 backdrop-blur-xl z-50 border-b border-[#ddc0bd]/40 shadow-[0_1px_4px_rgba(0,0,0,0.03)] px-4 lg:px-8">
-        <div className="w-full max-w-6xl mx-auto h-full flex items-center justify-between gap-3">
+        <div className="w-full max-w-7xl mx-auto h-full flex items-center justify-between gap-3">
           {/* Logo compact */}
           <div
             className="flex items-center gap-2.5 cursor-pointer select-none shrink-0"
-            onClick={() => setActiveTab('pregnancy')}
+            onClick={() => setActiveTab('dispensary')}
           >
             <div className="w-8 h-8 rounded-xl bg-[#902e2a] flex items-center justify-center text-white font-serif text-sm font-bold shadow-xs">
               S
@@ -69,7 +78,7 @@ export default function App() {
 
           {/* MENU CENTRAL COMPACT ET ÉQUILIBRÉ */}
           <nav className="flex items-center bg-[#eaeef8] rounded-full p-1 gap-1 border border-[#ddc0bd]/40 shadow-xs">
-            {navItems.map((item) => {
+            {desktopNavItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
@@ -162,8 +171,18 @@ export default function App() {
         <Navbar
           lang={lang}
           setLang={setLang}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          activeTab={activeTab === 'dispensary' || activeTab === 'clinical-triage' || activeTab === 'mother-file' ? 'dispensary' : activeTab}
+          setActiveTab={(tab) => {
+            if (tab === 'dispensary') setActiveTab('dispensary');
+            else if (tab === 'triage') setActiveTab('clinical-triage');
+            else if (tab === 'metrics') setActiveTab('metrics');
+            else {
+              setActiveTab('patient');
+              if (tab === 'pregnancy') setPatientSubTab('calculator');
+              else if (tab === 'guide') setPatientSubTab('guide');
+              else if (tab === 'emergency') setPatientSubTab('emergency');
+            }
+          }}
           isFramed={false}
         />
       </div>
@@ -172,40 +191,123 @@ export default function App() {
           3. CONTENU PRINCIPAL EN FLEX NATUREL (Prend la place nécessaire)
           ========================================================================= */}
       <main className="flex-1 w-full pt-20 md:pt-6 pb-24 md:pb-12 bg-[#f8f9ff]">
-        <div className="w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col gap-6">
-          {activeTab === 'pregnancy' && (
-            <PregnancyCalculator
-              onNavigateToTriage={() => setActiveTab('triage')}
-              onActionTrack={trackAction}
-            />
-          )}
-
-          {activeTab === 'triage' && (
-            <DangerSignsTriage
-              onNavigateToEmergency={() => setActiveTab('emergency')}
-              onActionTrack={trackAction}
-            />
-          )}
-
-          {activeTab === 'guide' && (
-            <ReproductiveHealthGuide
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col gap-6">
+          {/* DASHBOARD 1: DISPENSAIRE & FILE D'ATTENTE CPN */}
+          {activeTab === 'dispensary' && (
+            <DispensaryDashboard
               lang={lang}
               onActionTrack={trackAction}
             />
           )}
 
-          {activeTab === 'emergency' && (
-            <DirectoryView
+          {/* DASHBOARD 2: CONSOLE CLINIQUE & TRIAGE SAMU 1515 */}
+          {activeTab === 'clinical-triage' && (
+            <ClinicalTriageConsole
               lang={lang}
               onActionTrack={trackAction}
             />
           )}
 
+          {/* DASHBOARD 3: DOSSIER MÈRE FICHE D'ADMISSION & SUIVI */}
+          {activeTab === 'mother-file' && (
+            <MotherFileDashboard
+              lang={lang}
+              onActionTrack={trackAction}
+            />
+          )}
+
+          {/* DASHBOARD 4: IMPACT PUBLIC UNICEF (DPG) */}
           {activeTab === 'metrics' && (
             <PublicImpactMetrics
               metricsData={metrics}
               lang={lang}
             />
+          )}
+
+          {/* VUE PATIENTE PWA (Calculateur CPN, Triage rapide, Conseils, Urgences) */}
+          {activeTab === 'patient' && (
+            <div className="flex flex-col gap-5">
+              {/* Sélecteur de sous-page Patiente */}
+              <div className="flex items-center justify-between bg-white p-2.5 rounded-2xl shadow-xs border border-[#ddc0bd]/40 flex-wrap gap-2">
+                <span className="text-xs font-bold text-[#902e2a] px-2">
+                  Vue Patiente (PWA Mobile) :
+                </span>
+                <div className="flex items-center gap-1.5 bg-[#eaeef8] p-1 rounded-xl flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setPatientSubTab('calculator')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      patientSubTab === 'calculator'
+                        ? 'bg-[#902e2a] text-white shadow-xs'
+                        : 'text-[#574240] hover:text-[#171c23]'
+                    }`}
+                  >
+                    Calculateur CPN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPatientSubTab('triage')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      patientSubTab === 'triage'
+                        ? 'bg-[#902e2a] text-white shadow-xs'
+                        : 'text-[#574240] hover:text-[#171c23]'
+                    }`}
+                  >
+                    Signes Danger
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPatientSubTab('guide')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      patientSubTab === 'guide'
+                        ? 'bg-[#902e2a] text-white shadow-xs'
+                        : 'text-[#574240] hover:text-[#171c23]'
+                    }`}
+                  >
+                    Conseils Nutrition
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPatientSubTab('emergency')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      patientSubTab === 'emergency'
+                        ? 'bg-[#ba1a1a] text-white shadow-xs'
+                        : 'text-[#ba1a1a] hover:bg-[#ffdad6]/60'
+                    }`}
+                  >
+                    Urgences 1515
+                  </button>
+                </div>
+              </div>
+
+              {patientSubTab === 'calculator' && (
+                <PregnancyCalculator
+                  onNavigateToTriage={() => setPatientSubTab('triage')}
+                  onActionTrack={trackAction}
+                />
+              )}
+
+              {patientSubTab === 'triage' && (
+                <DangerSignsTriage
+                  onNavigateToEmergency={() => setPatientSubTab('emergency')}
+                  onActionTrack={trackAction}
+                />
+              )}
+
+              {patientSubTab === 'guide' && (
+                <ReproductiveHealthGuide
+                  lang={lang}
+                  onActionTrack={trackAction}
+                />
+              )}
+
+              {patientSubTab === 'emergency' && (
+                <DirectoryView
+                  lang={lang}
+                  onActionTrack={trackAction}
+                />
+              )}
+            </div>
           )}
 
           {/* Footer élégant */}
