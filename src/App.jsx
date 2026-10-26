@@ -49,7 +49,7 @@ export default function App() {
           Conçu pour préserver l'espace vertical et éliminer tout défilement
           ========================================================================= */}
       <header className="hidden md:flex h-12 shrink-0 bg-[#f8f9ff]/95 backdrop-blur-xl z-50 border-b border-[#ddc0bd]/40 shadow-[0_1px_3px_rgba(0,0,0,0.03)] px-3 lg:px-6">
-        <div className="w-full max-w-7xl mx-auto h-full flex items-center justify-between gap-2 lg:gap-4">
+        <div className="w-full max-w-5xl mx-auto h-full flex items-center justify-between gap-2 lg:gap-4">
           {/* Logo compact */}
           <div
             className="flex items-center gap-2 cursor-pointer select-none shrink-0"
@@ -182,7 +182,7 @@ export default function App() {
           - Ordinateur (lg+) : lg:overflow-hidden (100% visible sans scroll vertical)
           ========================================================================= */}
       <main className="flex-1 w-full pt-20 md:pt-1 pb-20 md:pb-1 bg-[#f8f9ff] overflow-y-auto lg:overflow-hidden flex flex-col justify-between">
-        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 flex-1 flex flex-col justify-between h-full">
+        <div className="w-full max-w-5xl mx-auto px-2 sm:px-4 lg:px-6 flex-1 flex flex-col justify-between h-full">
           <div className="flex-1 flex flex-col justify-center">
             {activeTab === 'pregnancy' && (
               <PregnancyCalculator
