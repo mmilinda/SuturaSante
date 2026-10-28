@@ -4,17 +4,25 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
   const getTabLabel = () => {
     switch (activeTab) {
       case 'pregnancy':
-        return 'Grossesse & Cpn';
+        return 'Grossesse & CPN';
       case 'triage':
-        return 'Signes Danger';
+        return 'Signes de Danger';
       case 'guide':
-        return 'Conseils';
+        return 'Conseils & Nutrition';
       case 'emergency':
-        return 'Urgences 1515';
+        return 'Urgences SAMU 1515';
+      case 'dispensary':
+        return 'Dispensaire CPN';
+      case 'clinical-triage':
+        return 'Console SAMU 1515';
+      case 'mother-file':
+        return 'Dossier Mères';
       case 'metrics':
-        return 'Impact UNICEF';
+        return 'Impact UNICEF (DPG)';
+      case 'admin':
+        return 'Dashboard Admin';
       default:
-        return 'Grossesse & Cpn';
+        return 'Grossesse & CPN';
     }
   };
 
@@ -169,13 +177,13 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
         </div>
       </div>
 
-      {/* BARRE INFÉRIEURE DE NAVIGATION MOBILE STITCH EXACT */}
+      {/* BARRE INFÉRIEURE DE NAVIGATION MOBILE STITCH EXACT (5 Onglets clairs & directs) */}
       <nav
         className={`${
           isFramed ? 'absolute' : 'fixed'
         } bottom-0 left-0 right-0 z-40 pb-safe bg-[#f8f9ff]/95 backdrop-blur-xl border-t border-[#ddc0bd]/40 shadow-[0_-2px_12px_rgba(0,0,0,0.06)]`}
       >
-        <div className="grid grid-cols-4 items-center h-18 sm:h-20 px-1 max-w-md mx-auto">
+        <div className="grid grid-cols-5 items-center h-18 sm:h-20 px-1 max-w-lg mx-auto">
           <button
             type="button"
             onClick={() => setActiveTab('pregnancy')}
@@ -235,7 +243,32 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
               <span className="material-symbols-outlined text-[20px] sm:text-[22px]">emergency</span>
               <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[#ba1a1a]"></span>
             </div>
-            <span className="text-[9px] sm:text-[10px] text-center font-bold leading-tight truncate w-full">Urgences 1515</span>
+            <span className="text-[9px] sm:text-[10px] text-center font-bold leading-tight truncate w-full">1515</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('admin')}
+            className={`flex flex-col items-center justify-center gap-1 py-1 px-0.5 transition-colors ${
+              ['dispensary', 'clinical-triage', 'mother-file', 'metrics', 'admin'].includes(activeTab)
+                ? 'text-[#902e2a] font-bold'
+                : 'text-[#574240]'
+            }`}
+          >
+            <div className="relative flex items-center justify-center">
+              <span
+                className="material-symbols-outlined text-[20px] sm:text-[22px]"
+                style={{
+                  fontVariationSettings: ['dispensary', 'clinical-triage', 'mother-file', 'metrics', 'admin'].includes(activeTab)
+                    ? "'FILL' 1"
+                    : "'FILL' 0",
+                }}
+              >
+                admin_panel_settings
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2c694e] absolute -top-0.5 -right-0.5 animate-pulse"></span>
+            </div>
+            <span className="text-[9px] sm:text-[10px] text-center leading-tight truncate w-full">Admin</span>
           </button>
         </div>
       </nav>
