@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFramed = false }) {
+export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFramed = false, onOpenChatbot }) {
   const getTabLabel = () => {
     switch (activeTab) {
       case 'pregnancy':
@@ -51,6 +51,20 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
 
             {/* Switch Langue & Avatar Stitch Exact */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Bouton Chatbot IA Mobile */}
+              {onOpenChatbot && (
+                <button
+                  type="button"
+                  onClick={onOpenChatbot}
+                  className="min-h-[28px] sm:min-h-[30px] px-2 sm:px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#902e2a] to-[#ba1a1a] text-white text-[11px] font-bold flex items-center gap-1 shadow-xs active:scale-95 transition-all"
+                  title="Discuter avec l'IA Sutura (Vocal & Écrit)"
+                >
+                  <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                  <span>IA</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#aeeecb] animate-pulse"></span>
+                </button>
+              )}
+
               {/* Sélecteur de Langue Mobile Segmenté */}
               <div
                 aria-label="Choix de langue"

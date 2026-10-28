@@ -9,6 +9,7 @@ import DispensaryDashboard from './components/DispensaryDashboard';
 import ClinicalTriageConsole from './components/ClinicalTriageConsole';
 import MotherFileDashboard from './components/MotherFileDashboard';
 import AdminDashboard from './components/AdminDashboard';
+import SuturaAIChatbot from './components/SuturaAIChatbot';
 
 export default function App() {
   const [lang, setLang] = useState('wo');
@@ -17,6 +18,9 @@ export default function App() {
   // false = Site Public SuturaSanté (par défaut)
   // true = Espace Dashboards Cliniques & Admin (accessible via le bouton en bas dans le footer)
   const [isDashboardMode, setIsDashboardMode] = useState(false);
+
+  // État d'ouverture du Chatbot IA Sutura (vocal et écrit)
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   // Onglet actif pour le site public : 'pregnancy', 'triage', 'guide', 'emergency', 'metrics'
   const [publicTab, setPublicTab] = useState('pregnancy');
@@ -195,6 +199,18 @@ export default function App() {
                   </button>
                 </div>
 
+                {/* Bouton Chatbot IA Sutura (Vocal & Écrit) */}
+                <button
+                  type="button"
+                  onClick={() => setIsChatbotOpen((prev) => !prev)}
+                  className="min-h-[30px] px-3 rounded-full bg-gradient-to-r from-[#902e2a] to-[#ba1a1a] hover:from-[#7a2420] hover:to-[#902e2a] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+                  title="Ouvrir le Chatbot IA Sutura (Vocal & Écrit)"
+                >
+                  <span className="material-symbols-outlined text-[15px]">smart_toy</span>
+                  <span>Chat IA</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#aeeecb] animate-pulse"></span>
+                </button>
+
                 <a
                   href="tel:1515"
                   className="min-h-[30px] px-3.5 rounded-full bg-[#ba1a1a] hover:bg-[#93000a] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all"
@@ -214,6 +230,7 @@ export default function App() {
               activeTab={publicTab}
               setActiveTab={setPublicTab}
               isFramed={false}
+              onOpenChatbot={() => setIsChatbotOpen(true)}
             />
           </div>
 
@@ -558,6 +575,18 @@ export default function App() {
           </main>
         </div>
       )}
+
+      {/* CHATBOT IA SUTURA : ASSISTANCE VOCALE ET ÉCRITE BILINGUE */}
+      <SuturaAIChatbot
+        lang={lang}
+        setLang={setLang}
+        isOpen={isChatbotOpen}
+        setIsOpen={setIsChatbotOpen}
+        onNavigateTab={(tab) => {
+          setIsDashboardMode(false);
+          setPublicTab(tab);
+        }}
+      />
     </div>
   );
 }
