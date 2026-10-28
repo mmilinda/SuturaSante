@@ -34,17 +34,27 @@ Projet développé dans le cadre de l'appel à projets **UNICEF / Suède Innovat
 ### Installation locale
 ```bash
 # Cloner le projet
-git clone https://github.com/<votre-organisation>/sutura-sante.git
+git clone https://github.com/mmilinda/SuturaSante.git
 cd sutura-sante
 
-# Installer les dépendances
+# Installer les dépendances (frontend et backend)
 npm install
 
-# Lancer le serveur local
+# Démarrer le serveur Backend API (port 5000)
+npm run server
+
+# Dans un autre terminal, démarrer l'application Frontend (port 3000)
 npm run dev
 ```
 
 L'application s'ouvrira sur `http://localhost:3000`.
+
+### 🔌 Architecture Backend & APIs Intégrées
+Le backend Express (sur `http://localhost:5000`) fournit :
+* **`POST /api/chat`** : Moteur IA de consultation maternelle et triage d'urgence obstétricale (Français & Wolof) avec déclenchement automatique de l'alerte SAMU 1515.
+* **`POST /api/translate`** : API de traduction bidirectionnelle Wolof (Wolofal) <-> Français spécialisée en santé communautaire et termes médicaux.
+* **`GET /api/metrics`** & **`POST /api/metrics/track`** : Observatoire public des données d'impact UNICEF DPG 100% anonymisées.
+* **`GET /api/health`** : Endpoint de vérification et statut des services.
 
 ### Déploiement en 1 clic
 Ce projet peut être déployé immédiatement sur **Vercel**, **Netlify** ou **Render** :

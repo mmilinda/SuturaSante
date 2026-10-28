@@ -1,149 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 /**
- * Knowledge Base & Répondeur IA Médicale SuturaSanté
- * Couvre les protocoles officiels de santé maternelle du Sénégal (CPN, triage SONU, nutrition locale, allaitement, urgences)
+ * Knowledge Base locale de secours (utilisée si le backend est hors-ligne)
  */
-const KNOWLEDGE_RESPONSES = [
+const LOCAL_KNOWLEDGE = [
   {
     keywords: ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'nakamou', 'nanga def', 'salaam'],
-    category: 'greeting',
     fr: "Salamalékoum ! Je suis **Sutura AI**, votre assistante de santé maternelle et reproductive. Je suis là pour vous écouter avec bienveillance, discrétion (*Sutura*) et sans jugement. Vous pouvez me poser vos questions à l'écrit ou en cliquant sur le micro pour me parler. En quoi puis-je vous aider aujourd'hui ?",
     wo: "Salamalékoum ! Man la **Sutura AI**, sa xarit bu la mën a dimbali ci wàllu wér-gu-yaramu jigéen ak birr bi. Mën nga ma wax sa jafe-jafe ci kàddu walla bind ma ko ci sutura. Lu la naqari walla lu nga bëgg a laaj tay ?",
     suggestions: ['Mes rendez-vous CPN', 'Signes de danger', 'Aliments riches en fer', 'SAMU 1515']
   },
   {
-    keywords: ['cpn', 'rendez-vous', 'visite', 'calendrier', 'semaine', 'grossesse', 'date', 'échographie', 'echo', 'carnet', 'saytu', 'waxtu'],
-    category: 'cpn',
+    keywords: ['cpn', 'rendez-vous', 'visite', 'calendrier', 'semaine', 'grossesse', 'date', 'echographie', 'echo', 'carnet', 'saytu', 'waxtu'],
     fr: "Au Sénégal, le Ministère de la Santé préconise au minimum **4 Consultations Prénatales (CPN)** essentielles :\n\n" +
-        "1. **CPN 1 (avant la 12e semaine)** : Confirmation, bilan sanguin (anémie, groupe, VIH), prescription de fer et acide folique.\n" +
-        "2. **CPN 2 (20e - 24e semaine)** : Échographie morphologique, écoute du cœur du bébé et 1ère dose de vaccin antitétanique.\n" +
-        "3. **CPN 3 (28e - 32e semaine)** : Prévention du paludisme (TPI à la sulfadoxine), mesure de la tension artérielle.\n" +
-        "4. **CPN 4 (36e - 38e semaine)** : Planification de l'accouchement, détection de la position du bébé et préparation du transport d'urgence.\n\n" +
-        "💡 *Conseil : Utilisez notre Calculateur CPN sur l'onglet 'Grossesse' pour calculer vos dates exactes à partir de vos dernières règles.*",
-    wo: "Ci réewum Sénégal, Ministère bu Wér-gi-yaram digale na ñu def lu néew néew **4 saytu CPN** yu am solo :\n\n" +
-        "1. **CPN 1 (bala 12 ayu-bës)** : Dëggal birr bi, saytu deret (anémie) ak jël fer.\n" +
-        "2. **CPN 2 (diggante 20 ak 24 ayu-bës)** : Xool liir bi ci masin (écho) ak jël ñakk VAT.\n" +
-        "3. **CPN 3 (28e ayu-bës)** : Faju sibiru (paludisme TPI) ak saytu tension.\n" +
-        "4. **CPN 4 (diggante 36 ak 38 ayu-bës)** : Waajal wàsin bi ak auto bu lay yóbbu fajuwaay.\n\n" +
-        "💡 *Xelal : Mën nga jëfandikoo Nattukaayu CPN bi ci wàllu 'Grossesse' ngir xam sa bési CPN ci sa bésu regle.*",
+        "1. **CPN 1 (avant 12 SA)** : Confirmation, bilan d'anémie, prescription de fer & acide folique.\n" +
+        "2. **CPN 2 (20 à 24 SA)** : Échographie morphologique, mouvements fœtaux, vaccin antitétanique.\n" +
+        "3. **CPN 3 (28 à 32 SA)** : Prévention du paludisme (TPI), surveillance de la tension.\n" +
+        "4. **CPN 4 (36 à 38 SA)** : Plan d'accouchement et organisation du transport d'urgence.",
+    wo: "Ci Sénégal, Ministère bi digale na ñu def lu néew néew **4 saytu CPN** :\n\n" +
+        "1. **CPN 1 (bala 12 ayu-bës)** : Dëggal birr bi, saytu deret ak joxe fer.\n" +
+        "2. **CPN 2 (20 ba 24 ayu-bës)** : Écho masin ak ñakk VAT.\n" +
+        "3. **CPN 3 (28 ba 32 ayu-bës)** : Saytu tension ak garapu sibiru.\n" +
+        "4. **CPN 4 (36 ba 38 ayu-bës)** : Waajal wàsin bi ak transport.",
     suggestions: ['Calculer mon terme', 'Quels aliments manger ?', 'Signes de danger']
   },
   {
-    keywords: ['saignement', 'sang', 'maux de tete', 'vision floue', 'mouche', 'tension', 'fievre', 'frisson', 'bebe bouge pas', 'bouge moins', 'eau qui coule', 'poche', 'convulsion', 'gonflement', 'oedeme', 'deret', 'metti bopp', 'sibiru', 'musiba'],
-    category: 'danger',
+    keywords: ['saignement', 'sang', 'maux de tete', 'vision floue', 'tension', 'fievre', 'frisson', 'bebe bouge pas', 'bouge moins', 'eau qui coule', 'deret', 'metti bopp', 'musiba'],
     isEmergency: true,
     fr: "🚨 **ATTENTION : SIGNE DE DANGER OBSTÉTRICAL DÉTECTÉ**\n\n" +
         "Ce symptôme nécessite une évaluation médicale immédiate sans attendre :\n" +
-        "- Risque d'hémorragie, de pré-éclampsie (hypertension sévère) ou de souffrance fœtale.\n" +
+        "- Risque d'hémorragie, de pré-éclampsie ou de souffrance fœtale.\n" +
         "- **Ne restez pas seule.** Prévenez un proche ou votre Bajenu Gox.\n\n" +
         "📞 **Action immédiate :**\n" +
-        "Appelez gratuitement le **SAMU Sénégal au 1515** ou rendez-vous au centre de santé / maternité le plus proche immédiatement.",
+        "Appelez gratuitement le **SAMU Sénégal au 1515** ou rendez-vous au centre de santé le plus proche.",
     wo: "🚨 **MOYTU : MANDARGA GU AM MUSIBA LA CI SA YARAM**\n\n" +
         "Li nga wax dafa laaj nga dem fajuwaay léegi te bul yéex :\n" +
-        "- Mën na doon deret buy sotti, tension bu kowe (pré-éclampsie) walla liir bi ci biir di sonn.\n" +
+        "- Mën na doon deret buy sotti, tension bu kowe walla liir bi di sonn.\n" +
         "- **Bul toog yaw rekk.** Wax ko sa mbokk walla sa Bajenu Gox.\n\n" +
-        "📞 **Li nga wara def léegi :**\n" +
-        "Wóoyal **SAMU Sénégal ci 1515** (feyul dara) walla nga gaaw a dem ci kër docteur bi gën a jege.",
+        "📞 **Li nga wara def :**\n" +
+        "Wóoyal **SAMU Sénégal ci 1515** (feyul dara) walla nga dem ci kër docteur bi gën a jege.",
     suggestions: ['Appeler le 1515', 'Centres de santé proches', 'Autres signes']
-  },
-  {
-    keywords: ['manger', 'nutrition', 'aliment', 'nourriture', 'fer', 'anemie', 'moringa', 'nebeday', 'bouye', 'vitamine', 'regime', 'naan', 'lekk'],
-    category: 'nutrition',
-    fr: "🍲 **Conseils Nutrition Maternelle au Sénégal :**\n\n" +
-        "Pour donner de la force à votre sang et aider bébé à bien grandir :\n" +
-        "• **Aliments riches en fer** : Feuilles de Moringa (*Nebeday*) dans vos sauces, lentilles, haricots (*ñebbe*), œufs bien cuits, poissons frais et viandes.\n" +
-        "• **Vitamine C pour absorber le fer** : Jus de Bouye (pain de singe), oranges, mangues, citron.\n" +
-        "• **Comprimés de fer & acide folique** : Prenez-les chaque jour avec un grand verre d'eau (évitez thé ou café dans l'heure qui suit).\n" +
-        "• **Hydratation** : Buvez au moins 2 à 3 litres d'eau potable par jour.",
-    wo: "🍲 **Digal ci wàllu lekk ngir jox sa yaram doole :**\n\n" +
-        "• **Yëf yu am fer** : Xob-u Neverdie (Moringa) ci sa ciin, ñebbe, lanti, nen yu ñor, ak jën yu bees.\n" +
-        "• **Vitamine C ngir fer bi duggu bu baax** : Njaan-u Bouye, limon, màngo.\n" +
-        "• **Garap u fer** : Naanal sa gàncax u fer ak acide folique bés bu nekk, te bul naan ataaya ci saa si.\n" +
-        "• **Ndox** : Naanal lu néew néew 2 ba 3 litru ndox mu sell bés bu nekk.",
-    suggestions: ['Que faire contre les nausées ?', 'Prendre mes vitamines', 'Mes CPN']
-  },
-  {
-    keywords: ['nausee', 'vomir', 'vomissement', 'fatigue', 'degout', 'vertige', 'wacc', 'sonn'],
-    category: 'symptoms',
-    fr: "🌿 **Conseils contre les nausées du 1er trimestre :**\n\n" +
-        "1. **Fractionnez vos repas** : Mangez de petites portions plus souvent dans la journée plutôt que de gros repas.\n" +
-        "2. **Au réveil** : Mangez un petit biscuit sec ou un morceau de pain avant même de poser le pied par terre.\n" +
-        "3. **Gingembre & Citron** : Une infusion légère de gingembre ou une tranche de citron dans de l'eau tiède aide à calmer l'estomac.\n" +
-        "4. Évitez les odeurs fortes de cuisine et les aliments trop gras ou trop épicés.\n\n" +
-        "⚠️ *Si vous ne parvenez plus à garder le moindre liquide pendant 24h, consultez une sage-femme.*",
-    wo: "🌿 **Digal ngir wàññi wàcc ak yaram buy tey ci tàmbalee bi :**\n\n" +
-        "1. **Wàññil sa lekk** : Lekkal tuuti tuuti ci bés bi te bul fessal sa biir ci benn yoon.\n" +
-        "2. **Bu bët setee** : Lekkal mburu mu wow bala ngay jóg ci lal bi.\n" +
-        "3. **Jinjer ak limon** : Jinjer bu xawa saff ak ndox mu tang tuuti mën na dalal sa xol.\n" +
-        "4. Moytul ñam yu am diw bu bari walla luy xeeñ lu metti.",
-    suggestions: ['Aliments conseillés', 'Calendrier CPN', 'Signes de danger']
-  },
-  {
-    keywords: ['allaitement', 'lait', 'sein', 'nourrir', 'bebe', 'colostrum', 'mammaire', 'nampal', 'meew'],
-    category: 'postpartum',
-    fr: "🤱 **Allaitement Maternel Exclusif (AME) :**\n\n" +
-        "• **Mise au sein immédiate** : Dans l'heure qui suit la naissance, donnez le premier lait jaunâtre appelé **Colostrum** (*Lait d'or*). Il protège bébé contre toutes les infections comme un premier vaccin naturel.\n" +
-        "• **6 premiers mois** : Rien d'autre que le lait maternel (pas d'eau, pas de tisane, pas de décoction).\n" +
-        "• **À la demande** : Donnez le sein jour et nuit dès que bébé montre des signes de faim.\n" +
-        "• En cas de douleurs aux mamelons, vérifiez la bonne prise en bouche avec votre sage-femme ou Bajenu Gox.",
-    wo: "🤱 **Nampal liir bi ci jàmm :**\n\n" +
-        "• **Tekk liir bi ci ween bi léegi** : Bala waxtu di jàll bu juddoo, nampalal ko meew mu njëkk mi (Colostrum). Mooy garap ak kaalaange liir bi ci jàngoro yépp.\n" +
-        "• **6 weer yu njëkk yi** : Meewu ndey ji rekk, bul ko jox ndox, bul ko jox dàq.\n" +
-        "• Nampalal liir bi saa yu bëggee ci guddi ak bëccëg.",
-    suggestions: ['Alimentation maman', 'Rendez-vous après accouchement', 'Espacement des naissances']
-  },
-  {
-    keywords: ['contraception', 'espacement', 'regle', 'cycle', 'pilule', 'implant', 'sterilet', 'planning', 'grossesse rapprochee', 'garap'],
-    category: 'family_planning',
-    fr: "🌸 **Planification Familiale & Espacement des Naissances :**\n\n" +
-        "Espacer les naissances d'au moins 2 à 3 ans permet à votre corps de récupérer et assure une meilleure croissance pour l'enfant.\n\n" +
-        "Plusieurs méthodes gratuites ou très abordables existent au poste de santé :\n" +
-        "• **Méthodes réversibles longue durée** : Implant sous-cutané (3 à 5 ans), DIU/Stérilet (5 à 10 ans).\n" +
-        "• **Méthodes hormonales** : Pilule quotidienne, injection trimestrielle (Sayana Press).\n" +
-        "• **Méthodes barrières** : Préservatifs masculins et féminins (protègent aussi des IST).\n\n" +
-        "Discutez-en en toute discrétion avec la sage-femme lors de votre visite post-natale.",
-    wo: "🌸 **Wàññi am doom ak dindi birr :**\n\n" +
-        "Mayante ci birr yi lu tollu ci 2 ba 3 at dafay dimbali yaramu ndey ji mu dellusi te liir bi dund bu baax.\n\n" +
-        "Ay fajuwaay yu bari am na ci kër docteur yi ci sutura :\n" +
-        "• **Implant** (3 ba 5 at) walla **Stérilet** (5 ba 10 at)\n" +
-        "• **Pilule** bés bu nekk walla **piqûre** ku weer ñatt (Sayana Press)\n" +
-        "• **Préservatif** ngir wér-gu-yaram.\n\n" +
-        "Mën nga ko waxtaan ak sa sage-femme ci kër docteur bi ci sutura gu mat sëkk.",
-    suggestions: ['Allaitement et règles', 'Conseils santé', 'Centres de santé']
-  },
-  {
-    keywords: ['samu', 'urgence', 'hopital', 'numero', '1515', 'ambulance', 'centre', 'fajuwaay', 'gawante'],
-    category: 'emergency',
-    isEmergency: true,
-    fr: "🚑 **Numéros d'Urgence Gratuits au Sénégal (24h/24) :**\n\n" +
-        "• **SAMU National : 1515** (Urgence médicale & ambulances de réanimation)\n" +
-        "• **Pompiers (BNSP) : 18**\n" +
-        "• **Ligne Verte Enfance & Violences Faites aux Femmes : 116** (Écoute et protection gratuite)\n" +
-        "• **Hôpital Principal de Dakar** : +221 33 839 50 50\n" +
-        "• **Hôpital Dalal Jamm (Guédiawaye)** : +221 33 879 92 92\n" +
-        "• **Maternité Roi Baudouin (Guédiawaye)** : +221 33 877 12 12",
-    wo: "🚑 **Numéro yu am solo ci Sénégal (24h/24 feyul dara) :**\n\n" +
-        "• **SAMU Sénégal : 1515** (Gawante ak ambulance)\n" +
-        "• **Sapeurs Pompiers : 18**\n" +
-        "• **Numéro 116** (Dimbali jigéen ñi ak xale yi ci sutura)\n" +
-        "• **Hôpital Dalal Jamm** : +221 33 879 92 92\n" +
-        "• **Roi Baudouin** : +221 33 877 12 12",
-    suggestions: ['Appeler le 1515', 'Signes de danger', 'Mes CPN']
   }
 ];
 
-function findAnswer(query, preferredLang = 'fr') {
+function fallbackFindAnswer(query, preferredLang = 'fr') {
   const clean = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  
-  // 1. Recherche par mot clé
-  for (const item of KNOWLEDGE_RESPONSES) {
+  for (const item of LOCAL_KNOWLEDGE) {
     for (const kw of item.keywords) {
       const cleanKw = kw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       if (clean.includes(cleanKw)) {
         return {
           text: preferredLang === 'wo' ? item.wo : item.fr,
-          rawItem: item,
           isEmergency: !!item.isEmergency,
           suggestions: item.suggestions
         };
@@ -151,17 +58,10 @@ function findAnswer(query, preferredLang = 'fr') {
     }
   }
 
-  // 2. Réponse générale et bienveillante par défaut
-  if (preferredLang === 'wo') {
-    return {
-      text: "Degg naa sa laaj ci sutura. Man la Sutura AI, sa ndimbal ci wàllu birr ak wér-gu-yaramu jigéen. Ndax mën nga ma gën a leral sa jafe-jafe ci kàddu walla ci bind ? Mën nga ma laaj ci wàllu saytu CPN, lekk yu am fer, walla mandargay musiba ci birr bi.",
-      isEmergency: false,
-      suggestions: ['Saytu CPN', 'Mandargay musiba', 'Lekk yu am fer', 'Wóoyal 1515']
-    };
-  }
-
   return {
-    text: "Je vous écoute en toute discrétion et bienveillance. En tant qu'assistante SuturaSanté, je peux vous guider sur vos **rendez-vous de CPN**, les **signes d'alerte et de danger**, la **nutrition locale riche en fer** (Moringa, Bouye), l'**allaitement** ou les **urgences médicales (SAMU 1515)**.\n\nPouvez-vous préciser votre question ou choisir un des sujets ci-dessous ?",
+    text: preferredLang === 'wo'
+      ? "Degg naa sa laaj ci sutura. Man la Sutura AI, sa ndimbal ci wàllu birr ak wér-gu-yaram. Mën nga ma laaj ci saytu CPN, lekk yu am fer, walla mandargay musiba."
+      : "Je vous écoute en toute confidentialité (*Sutura*). En tant qu'assistante SuturaSanté, je peux vous guider sur vos **rendez-vous de CPN**, les **signes d'alerte**, la **nutrition locale** (Moringa, fer) ou les **urgences (SAMU 1515)**.\n\nEn quoi puis-je vous aider ?",
     isEmergency: false,
     suggestions: ['Mes 4 rendez-vous CPN', 'Signes de danger', 'Nutrition & Moringa', 'SAMU 1515 Sénégal']
   };
@@ -177,12 +77,30 @@ export default function SuturaAIChatbot({
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = externalSetIsOpen || setInternalIsOpen;
+
+  // Onglet interne du drawer : 'chat' (Discussion IA) ou 'translator' (Traducteur Wolof)
+  const [activeTabMode, setActiveTabMode] = useState('chat');
+
+  // État vocal
   const [isVoiceCallMode, setIsVoiceCallMode] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(false);
-  const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeVoiceMsgId, setActiveVoiceMsgId] = useState(null);
+
+  // État saisie chat
+  const [inputText, setInputText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [translatingMsgId, setTranslatingMsgId] = useState(null);
+
+  // État Traducteur Dédié
+  const [transSourceText, setTransSourceText] = useState('');
+  const [transResult, setTransResult] = useState(null);
+  const [transSourceLang, setTransSourceLang] = useState('fr');
+  const [transTargetLang, setTransTargetLang] = useState('wo');
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // Messages du chat
   const [messages, setMessages] = useState([
     {
       id: 'welcome-1',
@@ -195,22 +113,20 @@ export default function SuturaAIChatbot({
       isEmergency: false
     }
   ]);
-  const [isTyping, setIsTyping] = useState(false);
 
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const currentUtteranceRef = useRef(null);
 
-  // Auto-scroll au bas du chat
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && activeTabMode === 'chat') {
       scrollToBottom();
     }
-  }, [messages, isOpen, isTyping]);
+  }, [messages, isOpen, isTyping, activeTabMode]);
 
   // Initialisation Web Speech Recognition
   useEffect(() => {
@@ -230,11 +146,14 @@ export default function SuturaAIChatbot({
           const transcript = Array.from(event.results)
             .map((result) => result[0].transcript)
             .join('');
-          setInputText(transcript);
+          if (activeTabMode === 'chat') {
+            setInputText(transcript);
+          } else {
+            setTransSourceText(transcript);
+          }
         };
 
-        recognition.onerror = (event) => {
-          console.warn("Erreur reconnaissance vocale:", event.error);
+        recognition.onerror = () => {
           setIsListening(false);
         };
 
@@ -244,24 +163,22 @@ export default function SuturaAIChatbot({
 
         recognitionRef.current = recognition;
       } catch (err) {
-        console.warn("Impossible d'initialiser SpeechRecognition:", err);
+        console.warn("SpeechRecognition non supporté:", err);
       }
     }
 
     return () => {
       if (recognitionRef.current) {
-        try {
-          recognitionRef.current.abort();
-        } catch (_) {}
+        try { recognitionRef.current.abort(); } catch (_) {}
       }
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
     };
-  }, [lang]);
+  }, [lang, activeTabMode]);
 
-  // Synthèse vocale Text-to-Speech
-  const speakText = (text, msgId = null) => {
+  // Synthèse vocale TTS
+  const speakText = (text, msgId = null, targetLang = null) => {
     if (!('speechSynthesis' in window)) return;
 
     if (isSpeaking && activeVoiceMsgId === msgId) {
@@ -273,7 +190,6 @@ export default function SuturaAIChatbot({
 
     window.speechSynthesis.cancel();
 
-    // Nettoyer les emojis et astérisques markdown pour une lecture audio fluide
     const cleanSpeech = text
       .replace(/\*\*/g, '')
       .replace(/\*/g, '')
@@ -281,7 +197,8 @@ export default function SuturaAIChatbot({
       .replace(/🚨|💡|🍲|🌿|🤱|🌸|🚑|⚠️|📞/g, '');
 
     const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-    utterance.lang = lang === 'wo' ? 'fr-SN' : 'fr-FR';
+    const spokenLang = targetLang || lang;
+    utterance.lang = spokenLang === 'wo' ? 'fr-SN' : 'fr-FR';
     utterance.rate = 0.92;
     utterance.pitch = 1.05;
 
@@ -293,11 +210,8 @@ export default function SuturaAIChatbot({
     utterance.onend = () => {
       setIsSpeaking(false);
       setActiveVoiceMsgId(null);
-      // En mode appel vocal continu, réactiver l'écoute après la réponse de l'IA
       if (isVoiceCallMode && recognitionRef.current) {
-        setTimeout(() => {
-          startListening();
-        }, 500);
+        setTimeout(() => startListening(), 500);
       }
     };
 
@@ -320,9 +234,7 @@ export default function SuturaAIChatbot({
       try {
         recognitionRef.current.lang = lang === 'wo' ? 'fr-SN' : 'fr-FR';
         recognitionRef.current.start();
-      } catch (e) {
-        console.warn("Microphone déjà en écoute ou non autorisé", e);
-      }
+      } catch (_) {}
     } else {
       alert("Votre navigateur ne supporte pas l'entrée vocale directe. Vous pouvez écrire votre message ci-dessous.");
     }
@@ -330,23 +242,18 @@ export default function SuturaAIChatbot({
 
   const stopListening = () => {
     if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (_) {}
+      try { recognitionRef.current.stop(); } catch (_) {}
     }
     setIsListening(false);
   };
 
   const toggleListening = () => {
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
+    if (isListening) stopListening();
+    else startListening();
   };
 
-  // Envoi d'un message utilisateur
-  const handleSendMessage = (textToSend = null) => {
+  // Envoi d'un message avec appel API Backend (/api/chat)
+  const handleSendMessage = async (textToSend = null) => {
     const text = (textToSend !== null ? textToSend : inputText).trim();
     if (!text) return;
 
@@ -364,38 +271,147 @@ export default function SuturaAIChatbot({
     setInputText('');
     setIsTyping(true);
 
-    // Temps de réflexion réaliste de l'IA
-    setTimeout(() => {
-      const answer = findAnswer(text, lang);
+    try {
+      // 1. Appel API Backend /api/chat
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          lang: lang
+        })
+      });
+
+      let aiResult;
+      if (response.ok) {
+        const data = await response.json();
+        aiResult = {
+          text: data.reply,
+          suggestions: data.suggestions || [],
+          isEmergency: !!data.isEmergency,
+          engine: data.engine || 'backend-api'
+        };
+      } else {
+        // Repli local si statut non-200
+        aiResult = fallbackFindAnswer(text, lang);
+      }
+
       const aiMsgId = `ai-${Date.now()}`;
       const aiMessage = {
         id: aiMsgId,
         sender: 'assistant',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        text: answer.text,
-        suggestions: answer.suggestions,
-        isEmergency: answer.isEmergency
+        text: aiResult.text,
+        suggestions: aiResult.suggestions,
+        isEmergency: aiResult.isEmergency
       };
 
       setMessages((prev) => [...prev, aiMessage]);
       setIsTyping(false);
 
-      // Si lecture vocale automatique activée ou mode appel vocal
       if (autoSpeak || isVoiceCallMode) {
-        speakText(answer.text, aiMsgId);
+        speakText(aiResult.text, aiMsgId);
       }
-    }, 600);
-  };
+    } catch (err) {
+      console.warn("Backend API indisponible, utilisation du moteur local de secours:", err.message);
+      const fallback = fallbackFindAnswer(text, lang);
+      const aiMsgId = `ai-${Date.now()}`;
+      const aiMessage = {
+        id: aiMsgId,
+        sender: 'assistant',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        text: fallback.text,
+        suggestions: fallback.suggestions,
+        isEmergency: fallback.isEmergency
+      };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
+      setMessages((prev) => [...prev, aiMessage]);
+      setIsTyping(false);
+
+      if (autoSpeak || isVoiceCallMode) {
+        speakText(fallback.text, aiMsgId);
+      }
     }
   };
 
-  const handleSuggestionClick = (suggestion) => {
-    handleSendMessage(suggestion);
+  // Traduction d'un message spécifique du chat via l'API /api/translate
+  const handleTranslateMessage = async (msgId, text, currentMsgLang) => {
+    const target = currentMsgLang === 'wo' ? 'fr' : 'wo';
+    setTranslatingMsgId(msgId);
+
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          sourceLang: currentMsgLang,
+          targetLang: target
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === msgId
+              ? {
+                  ...m,
+                  translation: {
+                    text: data.translatedText,
+                    targetLang: target,
+                    confidence: data.confidence,
+                    engine: data.engine
+                  }
+                }
+              : m
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Erreur de traduction:", err);
+    } finally {
+      setTranslatingMsgId(null);
+    }
+  };
+
+  // Traduction dédiée dans l'onglet Traducteur
+  const handleExecuteTranslation = async (customText = null) => {
+    const textToTranslate = (customText !== null ? customText : transSourceText).trim();
+    if (!textToTranslate) return;
+
+    setIsTranslating(true);
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: textToTranslate,
+          sourceLang: transSourceLang,
+          targetLang: transTargetLang
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setTransResult(data);
+      }
+    } catch (err) {
+      console.error("Erreur appel traduction:", err);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const handleSwapTranslationLanguages = () => {
+    const prevSrc = transSourceLang;
+    const prevTgt = transTargetLang;
+    setTransSourceLang(prevTgt);
+    setTransTargetLang(prevSrc);
+    if (transResult?.translatedText) {
+      setTransSourceText(transResult.translatedText);
+      setTransResult(null);
+    }
   };
 
   const clearChat = () => {
@@ -423,7 +439,7 @@ export default function SuturaAIChatbot({
           <div className="hidden sm:flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#ddc0bd]/60 shadow-[0_4px_16px_rgba(0,0,0,0.08)] animate-pulse">
             <span className="w-2 h-2 rounded-full bg-[#2c694e]"></span>
             <span className="text-xs font-bold text-[#902e2a]">
-              IA Sutura • Vocal & Écrit
+              IA Sutura • Vocal, Écrit & Traduction
             </span>
           </div>
         )}
@@ -446,9 +462,7 @@ export default function SuturaAIChatbot({
               <span className="material-symbols-outlined text-[30px] group-hover:scale-110 transition-transform">
                 smart_toy
               </span>
-              {/* Onde pulsante pour inviter à la discussion */}
               <span className="absolute inset-0 rounded-full bg-[#902e2a] animate-ping opacity-25"></span>
-              {/* Petit badge micro */}
               <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#2c694e] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
                 <span className="material-symbols-outlined text-[12px]">mic</span>
               </span>
@@ -464,7 +478,7 @@ export default function SuturaAIChatbot({
         <div
           role="dialog"
           aria-label="Assistant IA SuturaSanté"
-          className="fixed bottom-22 md:bottom-24 right-2 md:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[420px] max-h-[85vh] h-[640px] bg-white/95 backdrop-blur-2xl rounded-3xl border border-[#ddc0bd]/80 shadow-[0_16px_48px_rgba(0,0,0,0.18)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-200"
+          className="fixed bottom-22 md:bottom-24 right-2 md:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[440px] max-h-[85vh] h-[660px] bg-white/95 backdrop-blur-2xl rounded-3xl border border-[#ddc0bd]/80 shadow-[0_16px_48px_rgba(0,0,0,0.18)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-200"
         >
           {/* HEADER CHATBOT */}
           <div className="bg-gradient-to-r from-[#902e2a] via-[#a83833] to-[#7a2420] text-white px-4 py-3 flex items-center justify-between shrink-0 shadow-sm">
@@ -481,7 +495,7 @@ export default function SuturaAIChatbot({
                     Sutura AI
                   </span>
                   <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-white/20 text-[#ffe3c7] font-extrabold tracking-wider">
-                    Femtech IA
+                    API Active
                   </span>
                 </div>
                 <span className="text-[10px] text-white/80 truncate flex items-center gap-1">
@@ -493,7 +507,6 @@ export default function SuturaAIChatbot({
 
             {/* Actions Header */}
             <div className="flex items-center gap-1">
-              {/* Bouton Mode Appel Vocal */}
               <button
                 type="button"
                 onClick={() => {
@@ -513,268 +526,469 @@ export default function SuturaAIChatbot({
                 <span className="material-symbols-outlined text-[13px]">
                   {isVoiceCallMode ? 'graphic_eq' : 'headset_mic'}
                 </span>
-                <span>{isVoiceCallMode ? 'Vocal Actif' : 'Mode Voix'}</span>
+                <span>{isVoiceCallMode ? 'Vocal' : 'Voix'}</span>
               </button>
 
-              {/* Switch Langue rapide */}
               <button
                 type="button"
                 onClick={() => setLang && setLang(lang === 'wo' ? 'fr' : 'wo')}
                 className="px-2 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold flex items-center gap-1 transition-colors"
-                title="Changer de langue"
+                title="Changer de langue principale"
               >
                 <span className="material-symbols-outlined text-[12px]">translate</span>
                 <span>{lang === 'wo' ? 'Wolof' : 'FR'}</span>
               </button>
 
-              {/* Réinitialiser conversation */}
               <button
                 type="button"
                 onClick={clearChat}
                 className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                title="Effacer l'historique de discussion"
+                title="Effacer la discussion"
               >
                 <span className="material-symbols-outlined text-[15px]">restart_alt</span>
               </button>
 
-              {/* Fermer */}
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
                 className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors ml-0.5"
-                title="Réduire le chatbot"
+                title="Réduire"
               >
                 <span className="material-symbols-outlined text-[16px]">expand_more</span>
               </button>
             </div>
           </div>
 
-          {/* BANNIÈRE MODE APPEL VOCAL INTERACTIF */}
-          {isVoiceCallMode && (
-            <div className="bg-[#ffe3c7] border-b border-[#fcba67]/40 px-3 py-2 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a] animate-ping"></span>
-                <span className="text-[11px] font-bold text-[#724600]">
-                  {isListening
-                    ? "À votre écoute... parlez librement"
-                    : isSpeaking
-                    ? "Sutura AI vous répond à voix haute..."
-                    : "Conversation vocale en continu"}
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="w-1 h-3 bg-[#724600] rounded-full animate-pulse"></span>
-                <span className="w-1 h-5 bg-[#724600] rounded-full animate-bounce"></span>
-                <span className="w-1 h-2 bg-[#724600] rounded-full animate-pulse"></span>
-              </div>
+          {/* SÉLECTEUR DE MODE : DISCUSSION IA vs TRADUCTEUR WOLOF */}
+          <div className="bg-[#eaeef8] px-3 py-1.5 border-b border-[#ddc0bd]/40 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1 bg-white p-0.5 rounded-full border border-[#ddc0bd]/50">
+              <button
+                type="button"
+                onClick={() => setActiveTabMode('chat')}
+                className={`px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-all ${
+                  activeTabMode === 'chat'
+                    ? 'bg-[#902e2a] text-white shadow-xs'
+                    : 'text-[#574240] hover:text-[#902e2a]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[13px]">chat</span>
+                <span>Discussion IA</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTabMode('translator')}
+                className={`px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-all ${
+                  activeTabMode === 'translator'
+                    ? 'bg-[#902e2a] text-white shadow-xs'
+                    : 'text-[#574240] hover:text-[#902e2a]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[13px]">translate</span>
+                <span>Traducteur Wolof API</span>
+              </button>
             </div>
+
+            <span className="text-[10px] text-[#2c694e] font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2c694e] animate-pulse"></span>
+              Backend API
+            </span>
+          </div>
+
+          {/* =========================================================================
+              VUE 1 : DISCUSSION CHATBOT IA
+              ========================================================================= */}
+          {activeTabMode === 'chat' && (
+            <>
+              {isVoiceCallMode && (
+                <div className="bg-[#ffe3c7] border-b border-[#fcba67]/40 px-3 py-2 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ba1a1a] animate-ping"></span>
+                    <span className="text-[11px] font-bold text-[#724600]">
+                      {isListening
+                        ? "À votre écoute... parlez librement"
+                        : isSpeaking
+                        ? "Sutura AI vous répond à voix haute..."
+                        : "Conversation vocale active"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="w-1 h-3 bg-[#724600] rounded-full animate-pulse"></span>
+                    <span className="w-1 h-5 bg-[#724600] rounded-full animate-bounce"></span>
+                    <span className="w-1 h-2 bg-[#724600] rounded-full animate-pulse"></span>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 bg-[#f8f9ff]/50">
+                {messages.map((msg) => {
+                  const isUser = msg.sender === 'user';
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} gap-1 max-w-[92%] ${
+                        isUser ? 'ml-auto' : 'mr-auto'
+                      }`}
+                    >
+                      <div
+                        className={`rounded-2xl px-3.5 py-2.5 shadow-xs text-xs leading-relaxed transition-all ${
+                          isUser
+                            ? 'bg-[#902e2a] text-white rounded-br-xs'
+                            : msg.isEmergency
+                            ? 'bg-[#ffdad6] text-[#410002] border border-[#ba1a1a]/50 rounded-bl-xs'
+                            : 'bg-white text-[#171c23] border border-[#ddc0bd]/40 rounded-bl-xs'
+                        }`}
+                      >
+                        <div className="whitespace-pre-wrap font-sans">
+                          {msg.text}
+                        </div>
+
+                        {/* Bloc de Traduction Automatique (si demandée) */}
+                        {msg.translation && (
+                          <div className="mt-2.5 pt-2 border-t border-[#ddc0bd]/40 bg-[#f8f9ff] p-2.5 rounded-xl flex flex-col gap-1">
+                            <div className="flex items-center justify-between text-[10px] text-[#724600] font-bold">
+                              <span className="flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[13px]">g_translate</span>
+                                Traduction ({msg.translation.targetLang === 'wo' ? 'Wolof' : 'Français'}) :
+                              </span>
+                              <span className="text-[9px] text-[#574240]/80">
+                                {Math.round(msg.translation.confidence * 100)}% précision
+                              </span>
+                            </div>
+                            <div className="text-xs text-[#171c23] font-medium italic">
+                              {msg.translation.text}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => speakText(msg.translation.text, `trans-${msg.id}`, msg.translation.targetLang)}
+                              className="self-start text-[10px] text-[#902e2a] font-bold flex items-center gap-1 mt-1 hover:underline cursor-pointer"
+                            >
+                              <span className="material-symbols-outlined text-[13px]">volume_up</span>
+                              Écouter la traduction
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Si alerte d'urgence */}
+                        {msg.isEmergency && (
+                          <div className="mt-2.5 pt-2 border-t border-[#ba1a1a]/30 flex flex-col gap-2">
+                            <a
+                              href="tel:1515"
+                              className="w-full py-1.5 px-3 rounded-full bg-[#ba1a1a] hover:bg-[#902e2a] text-white font-bold text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-transform"
+                            >
+                              <span className="material-symbols-outlined text-[16px] animate-bounce">
+                                emergency
+                              </span>
+                              <span>Appeler le SAMU 1515 (Gratuit)</span>
+                            </a>
+                          </div>
+                        )}
+
+                        {/* Barre d'actions du message */}
+                        <div className="mt-2 pt-1.5 border-t border-[#ddc0bd]/30 flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5">
+                            {!isUser && (
+                              <button
+                                type="button"
+                                onClick={() => speakText(msg.text, msg.id)}
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all ${
+                                  isSpeaking && activeVoiceMsgId === msg.id
+                                    ? 'bg-[#902e2a] text-white animate-pulse'
+                                    : 'bg-[#eaeef8] hover:bg-[#dee2ec] text-[#724600]'
+                                }`}
+                                title="Écouter à la voix"
+                              >
+                                <span className="material-symbols-outlined text-[13px]">
+                                  {isSpeaking && activeVoiceMsgId === msg.id ? 'stop' : 'volume_up'}
+                                </span>
+                                <span>{lang === 'wo' ? 'Déglul' : 'Écouter'}</span>
+                              </button>
+                            )}
+
+                            {/* Bouton Traduire via l'API Wolof */}
+                            {!msg.translation && (
+                              <button
+                                type="button"
+                                onClick={() => handleTranslateMessage(msg.id, msg.text, lang)}
+                                disabled={translatingMsgId === msg.id}
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#eaeef8] hover:bg-[#dee2ec] text-[#902e2a] transition-all cursor-pointer"
+                                title="Traduire ce message avec l'API Wolof"
+                              >
+                                <span className="material-symbols-outlined text-[12px]">translate</span>
+                                <span>
+                                  {translatingMsgId === msg.id
+                                    ? 'Traduction...'
+                                    : lang === 'wo'
+                                    ? 'Farañse'
+                                    : 'Wolof'}
+                                </span>
+                              </button>
+                            )}
+                          </div>
+
+                          <span className="text-[9px] text-[#574240]/70">{msg.time}</span>
+                        </div>
+                      </div>
+
+                      {/* Suggestions sous la bulle */}
+                      {!isUser && msg.suggestions && msg.suggestions.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {msg.suggestions.map((sugg, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => handleSendMessage(sugg)}
+                              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#eaeef8] text-[#902e2a] border border-[#ddc0bd]/70 text-[10px] font-bold transition-colors active:scale-95 shadow-xs"
+                            >
+                              💬 {sugg}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {isTyping && (
+                  <div className="flex items-center gap-2 text-xs text-[#574240] bg-white px-3 py-2 rounded-2xl border border-[#ddc0bd]/40 max-w-[200px] shadow-xs">
+                    <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                    <span className="text-[10px] font-bold text-[#902e2a]">Sutura AI réfléchit...</span>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Prévisualisation microphone */}
+              {isListening && (
+                <div className="bg-[#ffdad6] border-t border-[#ba1a1a]/40 px-3 py-2 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-3 h-3 rounded-full bg-[#ba1a1a] animate-ping"></span>
+                    <span className="text-xs font-bold text-[#ba1a1a] truncate">
+                      {inputText ? `"${inputText}"` : "À l'écoute... Parlez maintenant"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={stopListening}
+                    className="px-2 py-0.5 rounded-full bg-[#ba1a1a] text-white text-[10px] font-bold shrink-0"
+                  >
+                    Arrêter
+                  </button>
+                </div>
+              )}
+
+              {/* Saisie texte & micro */}
+              <div className="p-2.5 bg-white border-t border-[#ddc0bd]/50 flex flex-col gap-1.5 shrink-0">
+                <div className="flex items-center justify-between px-1 text-[10px] text-[#574240]">
+                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={autoSpeak}
+                      onChange={(e) => setAutoSpeak(e.target.checked)}
+                      className="rounded text-[#902e2a] focus:ring-[#902e2a] w-3 h-3"
+                    />
+                    <span className="font-semibold">
+                      {lang === 'wo' ? 'Déglul ci kàddu saa su tontoo' : 'Lecture vocale automatique'}
+                    </span>
+                  </label>
+                  <span className="text-[9px] text-[#2c694e] font-bold">API Backend Connectée</span>
+                </div>
+
+                <div className="flex items-center gap-1.5 bg-[#eaeef8] rounded-2xl p-1 border border-[#ddc0bd]/60 focus-within:border-[#902e2a] focus-within:bg-white transition-all">
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                      isListening
+                        ? 'bg-[#ba1a1a] text-white animate-pulse'
+                        : 'bg-white hover:bg-[#dee2ec] text-[#902e2a] shadow-xs'
+                    }`}
+                    title="Parler au micro"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">
+                      {isListening ? 'mic' : 'mic_none'}
+                    </span>
+                  </button>
+
+                  <input
+                    type="text"
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    placeholder={
+                      lang === 'wo'
+                        ? "Bindal sa laaj walla nga bës ci micro bi..."
+                        : "Écrivez ou dictez votre question santé..."
+                    }
+                    className="flex-1 bg-transparent border-none outline-none text-xs text-[#171c23] placeholder-[#574240]/60 px-2 py-1.5"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => handleSendMessage()}
+                    disabled={!inputText.trim()}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
+                      inputText.trim()
+                        ? 'bg-[#902e2a] text-white shadow-xs hover:bg-[#7a2420] active:scale-95'
+                        : 'bg-[#ddc0bd]/40 text-[#574240]/40 cursor-not-allowed'
+                    }`}
+                    title="Envoyer le message"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">send</span>
+                  </button>
+                </div>
+              </div>
+            </>
           )}
 
-          {/* CORPS DE DISCUSSION : MESSAGES */}
-          <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 bg-[#f8f9ff]/50">
-            {messages.map((msg) => {
-              const isUser = msg.sender === 'user';
-              return (
-                <div
-                  key={msg.id}
-                  className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} gap-1 max-w-[90%] ${
-                    isUser ? 'ml-auto' : 'mr-auto'
-                  }`}
+          {/* =========================================================================
+              VUE 2 : TRADUCTEUR DÉDIÉ WOLOF <-> FRANÇAIS (API BACKEND)
+              ========================================================================= */}
+          {activeTabMode === 'translator' && (
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3.5 bg-[#f8f9ff]/70">
+              {/* Sélecteur de direction de traduction */}
+              <div className="bg-white p-2.5 rounded-2xl border border-[#ddc0bd]/60 shadow-xs flex items-center justify-between">
+                <span className="text-xs font-bold text-[#902e2a] flex items-center gap-1.5">
+                  <span className="text-base">{transSourceLang === 'fr' ? '🇫🇷' : '🇸🇳'}</span>
+                  <span>{transSourceLang === 'fr' ? 'Français' : 'Wolof'}</span>
+                </span>
+
+                <button
+                  type="button"
+                  onClick={handleSwapTranslationLanguages}
+                  className="w-8 h-8 rounded-full bg-[#eaeef8] hover:bg-[#dee2ec] text-[#902e2a] flex items-center justify-center transition-all active:rotate-180"
+                  title="Inverser les langues"
                 >
-                  <div
-                    className={`rounded-2xl px-3.5 py-2.5 shadow-xs text-xs leading-relaxed transition-all ${
-                      isUser
-                        ? 'bg-[#902e2a] text-white rounded-br-xs'
-                        : msg.isEmergency
-                        ? 'bg-[#ffdad6] text-[#410002] border border-[#ba1a1a]/50 rounded-bl-xs'
-                        : 'bg-white text-[#171c23] border border-[#ddc0bd]/40 rounded-bl-xs'
+                  <span className="material-symbols-outlined text-[18px]">swap_horiz</span>
+                </button>
+
+                <span className="text-xs font-bold text-[#2c694e] flex items-center gap-1.5">
+                  <span className="text-base">{transTargetLang === 'wo' ? '🇸🇳' : '🇫🇷'}</span>
+                  <span>{transTargetLang === 'wo' ? 'Wolof (Wolofal)' : 'Français'}</span>
+                </span>
+              </div>
+
+              {/* Zone de texte source */}
+              <div className="flex flex-col gap-1.5 bg-white p-3 rounded-2xl border border-[#ddc0bd]/60 shadow-xs">
+                <div className="flex items-center justify-between text-[11px] text-[#574240] font-semibold">
+                  <span>Texte à traduire :</span>
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      isListening ? 'bg-[#ba1a1a] text-white animate-pulse' : 'bg-[#eaeef8] text-[#902e2a]'
                     }`}
                   >
-                    {/* Contenu textuel avec sauts de lignes */}
-                    <div className="whitespace-pre-wrap font-sans">
-                      {msg.text}
-                    </div>
+                    <span className="material-symbols-outlined text-[13px]">mic</span>
+                    <span>Dicter</span>
+                  </button>
+                </div>
 
-                    {/* Si alerte d'urgence médicale détectée */}
-                    {msg.isEmergency && (
-                      <div className="mt-2.5 pt-2 border-t border-[#ba1a1a]/30 flex flex-col gap-2">
-                        <a
-                          href="tel:1515"
-                          className="w-full py-1.5 px-3 rounded-full bg-[#ba1a1a] hover:bg-[#902e2a] text-white font-bold text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-transform"
-                        >
-                          <span className="material-symbols-outlined text-[16px] animate-bounce">
-                            emergency
-                          </span>
-                          <span>Appeler le SAMU 1515 (Gratuit)</span>
-                        </a>
-                        {onNavigateTab && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              onNavigateTab('emergency');
-                              setIsOpen(false);
-                            }}
-                            className="text-[11px] text-[#902e2a] font-bold underline text-center"
-                          >
-                            Voir l'annuaire complet des maternités
-                          </button>
-                        )}
-                      </div>
-                    )}
+                <textarea
+                  rows={3}
+                  value={transSourceText}
+                  onChange={(e) => setTransSourceText(e.target.value)}
+                  placeholder={
+                    transSourceLang === 'fr'
+                      ? "Ex : J'ai des maux de tête violents et de la fièvre..."
+                      : "Ex : Metti bopp bu tar ak yaram bu tang..."
+                  }
+                  className="w-full text-xs text-[#171c23] outline-none resize-none border-none bg-transparent"
+                />
 
-                    {/* Ligne inférieure du message assistant : Écouter l'audio + heure */}
-                    {!isUser && (
-                      <div className="mt-2 pt-1.5 border-t border-[#ddc0bd]/30 flex items-center justify-between gap-2">
-                        <button
-                          type="button"
-                          onClick={() => speakText(msg.text, msg.id)}
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all ${
-                            isSpeaking && activeVoiceMsgId === msg.id
-                              ? 'bg-[#902e2a] text-white animate-pulse'
-                              : 'bg-[#eaeef8] hover:bg-[#dee2ec] text-[#724600]'
-                          }`}
-                          title="Écouter ce message à la voix"
-                        >
-                          <span className="material-symbols-outlined text-[13px]">
-                            {isSpeaking && activeVoiceMsgId === msg.id ? 'stop' : 'volume_up'}
-                          </span>
-                          <span>
-                            {isSpeaking && activeVoiceMsgId === msg.id
-                              ? 'Lecture...'
-                              : lang === 'wo'
-                              ? 'Déglul'
-                              : 'Écouter'}
-                          </span>
-                        </button>
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={() => handleExecuteTranslation()}
+                    disabled={isTranslating || !transSourceText.trim()}
+                    className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#902e2a] to-[#ba1a1a] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 disabled:opacity-50"
+                  >
+                    <span className="material-symbols-outlined text-[15px]">
+                      {isTranslating ? 'sync' : 'translate'}
+                    </span>
+                    <span>{isTranslating ? 'Traduction API...' : 'Traduire en direct'}</span>
+                  </button>
+                </div>
+              </div>
 
-                        <span className="text-[9px] text-[#574240]/70">
-                          {msg.time}
-                        </span>
-                      </div>
-                    )}
+              {/* Résultat de la traduction */}
+              {transResult && (
+                <div className="bg-gradient-to-br from-[#ffe3c7]/60 to-[#ffd1b3]/40 border border-[#fcba67]/50 p-3.5 rounded-2xl shadow-xs flex flex-col gap-2">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-[#724600]">
+                    <span className="flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">verified</span>
+                      Traduction officielle Sutura API ({transResult.targetLang === 'wo' ? 'Wolof' : 'Français'})
+                    </span>
+                    <span className="text-[10px] bg-white/80 px-2 py-0.5 rounded-full">
+                      Score : {Math.round(transResult.confidence * 100)}%
+                    </span>
                   </div>
 
-                  {/* Suggestions sous la réponse de l'IA */}
-                  {!isUser && msg.suggestions && msg.suggestions.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {msg.suggestions.map((sugg, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => handleSuggestionClick(sugg)}
-                          className="px-2.5 py-1 rounded-full bg-white hover:bg-[#eaeef8] text-[#902e2a] border border-[#ddc0bd]/70 text-[10px] font-bold transition-colors active:scale-95 shadow-xs"
-                        >
-                          💬 {sugg}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <div className="text-sm text-[#2a1700] font-serif font-bold leading-relaxed">
+                    {transResult.translatedText}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-[#fcba67]/30">
+                    <button
+                      type="button"
+                      onClick={() => speakText(transResult.translatedText, 'trans-box', transResult.targetLang)}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#724600] text-white text-xs font-bold shadow-xs active:scale-95"
+                    >
+                      <span className="material-symbols-outlined text-[15px]">volume_up</span>
+                      <span>Écouter la prononciation</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(transResult.translatedText);
+                        alert("Texte traduit copié dans le presse-papier !");
+                      }}
+                      className="text-[10px] text-[#724600] font-bold hover:underline"
+                    >
+                      Copier
+                    </button>
+                  </div>
                 </div>
-              );
-            })}
+              )}
 
-            {/* Indicateur de frappe IA */}
-            {isTyping && (
-              <div className="flex items-center gap-2 text-xs text-[#574240] bg-white px-3 py-2 rounded-2xl border border-[#ddc0bd]/40 max-w-[200px] shadow-xs">
-                <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce"></span>
-                <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                <span className="w-1.5 h-1.5 bg-[#902e2a] rounded-full animate-bounce [animation-delay:0.4s]"></span>
-                <span className="text-[10px] font-bold text-[#902e2a]">Sutura AI réfléchit...</span>
+              {/* Suggestions de phrases médicales courantes */}
+              <div className="flex flex-col gap-1.5 pt-2">
+                <span className="text-[11px] font-bold text-[#574240]">Phrases médicales rapides :</span>
+                <div className="flex flex-wrap gap-1">
+                  {[
+                    "Consultation prénatale",
+                    "J'ai des maux de tête",
+                    "Saignement vaginal",
+                    "Aliments riches en fer",
+                    "Allaitement maternel",
+                    "Appelez le SAMU 1515"
+                  ].map((phrase, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setTransSourceText(phrase);
+                        setTransSourceLang('fr');
+                        setTransTargetLang('wo');
+                        handleExecuteTranslation(phrase);
+                      }}
+                      className="px-2.5 py-1 rounded-full bg-white hover:bg-[#eaeef8] text-[#902e2a] border border-[#ddc0bd]/60 text-[10px] font-semibold shadow-xs"
+                    >
+                      ⚡ {phrase}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* PRÉVISUALISATION MICROPHONE / VOIX EN COURS */}
-          {isListening && (
-            <div className="bg-[#ffdad6] border-t border-[#ba1a1a]/40 px-3 py-2 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="w-3 h-3 rounded-full bg-[#ba1a1a] animate-ping"></span>
-                <span className="text-xs font-bold text-[#ba1a1a] truncate">
-                  {inputText ? `"${inputText}"` : "À l'écoute... Parlez maintenant"}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={stopListening}
-                className="px-2 py-0.5 rounded-full bg-[#ba1a1a] text-white text-[10px] font-bold shrink-0"
-              >
-                Arrêter
-              </button>
             </div>
           )}
-
-          {/* FOOTER & SAISIE (Texte et Microphone) */}
-          <div className="p-2.5 bg-white border-t border-[#ddc0bd]/50 flex flex-col gap-1.5 shrink-0">
-            {/* Ligne d'outils secondaire */}
-            <div className="flex items-center justify-between px-1 text-[10px] text-[#574240]">
-              <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={autoSpeak}
-                  onChange={(e) => setAutoSpeak(e.target.checked)}
-                  className="rounded text-[#902e2a] focus:ring-[#902e2a] w-3 h-3"
-                />
-                <span className="font-semibold">
-                  {lang === 'wo' ? 'Déglul ci kàddu saa su tontoo' : 'Lecture vocale automatique'}
-                </span>
-              </label>
-
-              <span className="text-[9px] text-[#2c694e] font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2c694e]"></span>
-                DPG Ouvert
-              </span>
-            </div>
-
-            {/* Barre de saisie principale */}
-            <div className="flex items-center gap-1.5 bg-[#eaeef8] rounded-2xl p-1 border border-[#ddc0bd]/60 focus-within:border-[#902e2a] focus-within:bg-white transition-all">
-              {/* Bouton Microphone */}
-              <button
-                type="button"
-                onClick={toggleListening}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-                  isListening
-                    ? 'bg-[#ba1a1a] text-white animate-pulse'
-                    : 'bg-white hover:bg-[#dee2ec] text-[#902e2a] shadow-xs'
-                }`}
-                title={isListening ? "Arrêter l'enregistrement" : "Parler au microphone"}
-              >
-                <span className="material-symbols-outlined text-[20px]">
-                  {isListening ? 'mic' : 'mic_none'}
-                </span>
-              </button>
-
-              {/* Champ de texte */}
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={
-                  lang === 'wo'
-                    ? "Bindal sa laaj walla nga bës ci micro bi..."
-                    : "Écrivez ou dictez votre question santé..."
-                }
-                className="flex-1 bg-transparent border-none outline-none text-xs text-[#171c23] placeholder-[#574240]/60 px-2 py-1.5"
-              />
-
-              {/* Bouton Envoyer */}
-              <button
-                type="button"
-                onClick={() => handleSendMessage()}
-                disabled={!inputText.trim()}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer shrink-0 ${
-                  inputText.trim()
-                    ? 'bg-[#902e2a] text-white shadow-xs hover:bg-[#7a2420] active:scale-95'
-                    : 'bg-[#ddc0bd]/40 text-[#574240]/40 cursor-not-allowed'
-                }`}
-                title="Envoyer le message"
-              >
-                <span className="material-symbols-outlined text-[18px]">send</span>
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </>
