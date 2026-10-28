@@ -177,6 +177,21 @@ export default function App() {
                     </button>
                   );
                 })}
+
+                {/* Séparateur discret */}
+                <span className="w-px h-4 bg-[#ddc0bd]/60 mx-1"></span>
+
+                {/* Accès direct Espace Pro & Admin */}
+                <button
+                  type="button"
+                  onClick={() => setIsDashboardMode(true)}
+                  className="min-h-[30px] px-3 py-1 rounded-full font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-[#902e2a] hover:bg-white hover:shadow-xs"
+                  title="Accéder aux tableaux de bord cliniques, file d'attente CPN et console admin"
+                >
+                  <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                  <span>Espace Pro &amp; Admin</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2c694e] animate-pulse"></span>
+                </button>
               </nav>
 
               {/* Actions Droite : Switcher Langue + SAMU 1515 */}
@@ -254,6 +269,7 @@ export default function App() {
               setActiveTab={setPublicTab}
               isFramed={false}
               onOpenChatbot={() => setIsChatbotOpen(true)}
+              onOpenAdmin={() => setIsDashboardMode(true)}
             />
           </div>
 

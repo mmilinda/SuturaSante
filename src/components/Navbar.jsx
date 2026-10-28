@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFramed = false, onOpenChatbot }) {
+export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFramed = false, onOpenChatbot, onOpenAdmin }) {
   const getTabLabel = () => {
     switch (activeTab) {
       case 'pregnancy':
@@ -51,6 +51,19 @@ export default function Navbar({ lang, setLang, activeTab, setActiveTab, isFrame
 
             {/* Switch Langue & Avatar Stitch Exact */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Bouton Espace Pro Mobile */}
+              {onOpenAdmin && (
+                <button
+                  type="button"
+                  onClick={onOpenAdmin}
+                  className="min-h-[28px] sm:min-h-[30px] px-2 sm:px-2.5 py-0.5 rounded-full bg-[#eaeef8] hover:bg-[#dee2ec] text-[#902e2a] border border-[#ddc0bd]/60 text-[11px] font-bold flex items-center gap-1 shadow-xs active:scale-95 transition-all"
+                  title="Accéder à l'Espace Clinique & Admin"
+                >
+                  <span className="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+                  <span>Pro</span>
+                </button>
+              )}
+
               {/* Bouton Chatbot IA Mobile */}
               {onOpenChatbot && (
                 <button
