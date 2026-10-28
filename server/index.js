@@ -5,6 +5,7 @@ import chatRouter from './routes/chat.js';
 import translateRouter from './routes/translate.js';
 import metricsRouter from './routes/metrics.js';
 import pregnancyRouter from './routes/pregnancy.js';
+import adminRouter from './routes/admin.js';
 
 dotenv.config();
 
@@ -28,7 +29,8 @@ app.get('/api/health', (req, res) => {
       chatbot: 'active',
       wolofTranslator: 'active',
       metrics: 'active',
-      pregnancy: 'active'
+      pregnancy: 'active',
+      admin: 'active'
     },
     timestamp: new Date().toISOString()
   });
@@ -39,6 +41,7 @@ app.use('/api/chat', chatRouter);
 app.use('/api/translate', translateRouter);
 app.use('/api/metrics', metricsRouter);
 app.use('/api/pregnancy', pregnancyRouter);
+app.use('/api/admin', adminRouter);
 
 // Gestion des routes inconnues
 app.use((req, res, next) => {

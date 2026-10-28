@@ -580,6 +580,7 @@ export default function App() {
                   lang={lang}
                   onActionTrack={trackAction}
                   metrics={metrics}
+                  onNavigateTab={(tab) => setDashboardTab(tab)}
                 />
               )}
 
