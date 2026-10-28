@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import chatRouter from './routes/chat.js';
 import translateRouter from './routes/translate.js';
 import metricsRouter from './routes/metrics.js';
@@ -8,6 +11,10 @@ import pregnancyRouter from './routes/pregnancy.js';
 import adminRouter from './routes/admin.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, '..', 'dist');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,14 +43,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Enregistrement des routes
+// Enregistrement des routes API
 app.use('/api/chat', chatRouter);
 app.use('/api/translate', translateRouter);
 app.use('/api/metrics', metricsRouter);
 app.use('/api/pregnancy', pregnancyRouter);
 app.use('/api/admin', adminRouter);
 
-// Gestion des routes inconnues
+// En production, servir l'application PWA statique si le dossier dist existe
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
+// Gestion des routes inconnues pour l'API
 app.use((req, res, next) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({

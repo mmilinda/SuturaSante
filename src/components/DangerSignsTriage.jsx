@@ -117,7 +117,7 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
             <div className="flex items-start gap-3.5">
               <div className="relative shrink-0">
                 <img
-                  src="/images/alerts/bleeding.jpg"
+                  src="/images/alerts/bleeding.webp"
                   alt="Saignements anormaux"
                   className="w-16 h-16 rounded-xl object-cover border border-[#ffdad6] shadow-xs"
                 />
@@ -169,7 +169,7 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
             <div className="flex items-start gap-3.5">
               <div className="relative shrink-0">
                 <img
-                  src="/images/alerts/headache.jpg"
+                  src="/images/alerts/headache.webp"
                   alt="Maux de tête et tension"
                   className="w-16 h-16 rounded-xl object-cover border border-[#ddc0bd]/40 shadow-xs"
                 />
@@ -221,7 +221,7 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
             <div className="flex items-start gap-3.5">
               <div className="relative shrink-0">
                 <img
-                  src="/images/alerts/fever.jpg"
+                  src="/images/alerts/fever.webp"
                   alt="Fièvre forte et frissons"
                   className="w-16 h-16 rounded-xl object-cover border border-[#fcba67]/40 shadow-xs"
                 />
@@ -273,7 +273,7 @@ export default function DangerSignsTriage({ onNavigateToEmergency, onActionTrack
             <div className="flex items-start gap-3.5">
               <div className="relative shrink-0">
                 <img
-                  src="/images/alerts/movement.jpg"
+                  src="/images/alerts/movement.webp"
                   alt="Diminution des mouvements"
                   className="w-16 h-16 rounded-xl object-cover border border-[#aeeecb] shadow-xs"
                 />

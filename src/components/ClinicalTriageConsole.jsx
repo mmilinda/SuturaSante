@@ -14,7 +14,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       relais: 'Khadija Diop (Badien Gox Pikine Ouest) sur les lieux',
       samuStatus: 'Ambulance SAMU 1515 en route (ETA 6 min)',
       destination: 'Hôpital Dalal Jamm',
-      image: '/images/alerts/bleeding.jpg',
+      image: '/images/alerts/bleeding.webp',
     },
     {
       id: 'SN-PIK-8419',
@@ -27,7 +27,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       samuStatus: 'Alerte Pompiers 18 envoyée',
       destination: 'Centre Dominique',
       urgentAction: true,
-      image: '/images/alerts/headache.jpg',
+      image: '/images/alerts/headache.webp',
     },
     {
       id: 'SN-PIK-3382',
@@ -39,7 +39,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       relais: 'Acceptation Réanimation Néonatale : Hôpital Dalal Jamm validée',
       samuStatus: 'Attente départ convoi médicalisé',
       destination: 'Hôpital Dalal Jamm',
-      image: '/images/alerts/fever.jpg',
+      image: '/images/alerts/fever.webp',
     },
   ];
 
@@ -50,7 +50,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       title: 'Diminution nette des mouvements fœtaux (> 12h)',
       desc: 'Monitoring Cardiotocographe (CTG) en cours. Bruits du cœur présents mais réactivité modérée. Reprise sucre effectuée.',
       badien: 'Badien Gox : Aminata Sow',
-      image: '/images/alerts/movement.jpg',
+      image: '/images/alerts/movement.webp',
     },
     {
       id: 'SN-PIK-6211',
@@ -58,7 +58,7 @@ export default function ClinicalTriageConsole({ lang = 'wo', onActionTrack }) {
       title: 'Anémie Clinique Décompensée (Hb < 7.1 g/dL)',
       desc: 'Dyspnée d\'effort, conjonctives décolorées, vertiges persistants. Hémocue confirmé 6.8 g/dL. Recherche sang O+ compatible.',
       badien: 'Réserve Sang CNTS Pikine : 2 Culots Dispo',
-      image: '/images/advice/moringa.jpg',
+      image: '/images/advice/moringa.webp',
     },
   ];
 

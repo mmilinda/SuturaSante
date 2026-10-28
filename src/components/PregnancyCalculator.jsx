@@ -907,7 +907,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack,
               <img
                 className="w-full h-full object-cover object-center"
                 alt="Mère sénégalaise épanouie à Dakar"
-                src="/images/advice/breastfeeding.jpg"
+                src="/images/advice/breastfeeding.webp"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
@@ -1003,7 +1003,7 @@ export default function PregnancyCalculator({ onNavigateToTriage, onActionTrack,
               <img
                 className="w-14 h-14 rounded-xl object-cover shrink-0 shadow-xs"
                 alt="Moringa et Bouye sénégalais"
-                src="/images/advice/moringa.jpg"
+                src="/images/advice/moringa.webp"
               />
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-[#724600]">

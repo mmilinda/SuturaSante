@@ -104,7 +104,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Feuilles de Moringa Nebeday"
-                  src="/images/advice/moringa.jpg"
+                  src="/images/advice/moringa.webp"
                 />
                 <div className="absolute top-3 left-3 bg-[#aeeecb] text-[#316e52] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Fer & Vitalité
@@ -144,7 +144,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Pain de Singe Bouye"
-                  src="/images/advice/bouye.jpg"
+                  src="/images/advice/bouye.webp"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffddb8] text-[#724600] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Vitamine C
@@ -184,7 +184,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Fleurs d'hibiscus Bissap"
-                  src="/images/advice/bissap.jpg"
+                  src="/images/advice/bissap.webp"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffdad6] text-[#ba1a1a] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Hydratation Active
@@ -225,7 +225,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   alt="Posture de repos maternel"
-                  src="/images/advice/sleep.jpg"
+                  src="/images/advice/sleep.webp"
                 />
                 <div className="absolute top-3 left-3 bg-[#ffdad6] text-[#ba1a1a] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                   Indispensable
@@ -302,7 +302,7 @@ export default function ReproductiveHealthGuide({ lang, onActionTrack }) {
               <img
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 alt="Allaitement maternel exclusif"
-                src="/images/advice/breastfeeding.jpg"
+                src="/images/advice/breastfeeding.webp"
               />
               <div className="absolute top-3 left-3 bg-[#aeeecb] text-[#316e52] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                 Norme OMS 6 Mois

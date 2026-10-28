@@ -1,33 +1,17 @@
 import { Router } from 'express';
+import { getDatabase, saveDatabaseSync } from '../data/dbStore.js';
 
 const router = Router();
+const db = getDatabase();
 
 // Ensemble des identifiants anonymes uniques vus (zéro PII, hachés)
 const uniqueAnonymousUsers = new Set();
-for (let i = 1; i <= 48; i++) {
+for (let i = 1; i <= (db.metrics?.totalUsers || 48); i++) {
   uniqueAnonymousUsers.add(`anon_seed_${i}`);
 }
 
-// Données mémoire initiales agrégées
-let impactMetrics = {
-  totalUsers: uniqueAnonymousUsers.size,
-  audioListens: 93,
-  triagesDone: 37,
-  emergenciesHandled: 9,
-  calculationsDone: 29,
-  translationsCount: 14,
-  lastUpdated: new Date().toISOString()
-};
-
-// Journal en direct des 10 dernières actions anonymisées (audit admin)
-let liveActivityLog = [
-  { id: 'act-1', type: 'pregnancy_calculation', label: 'Calculateur CPN (Terme estimé 14 SA)', lang: 'wo', time: 'Il y a 2 min', status: 'Complété' },
-  { id: 'act-2', type: 'audio_listen', label: 'Écoute guidage audio Wolof (Moringa & Fer)', lang: 'wo', time: 'Il y a 5 min', status: 'Écouté 100%' },
-  { id: 'act-3', type: 'chatbot_inquiry', label: 'Dialogue Chatbot IA (Question nausées du matin)', lang: 'wo', time: 'Il y a 9 min', status: 'Répondu' },
-  { id: 'act-4', type: 'triage_eval', label: 'Triage Signes de Danger (Niveau Vert - Rassurant)', lang: 'fr', time: 'Il y a 14 min', status: 'Orienté' },
-  { id: 'act-5', type: 'translation', label: 'Traduction Français ➔ Wolof (Phrases médicales)', lang: 'wo', time: 'Il y a 19 min', status: 'Traduit' },
-  { id: 'act-6', type: 'emergency_red', label: 'Alerte Urgence Cutanée/Céphalée (Appel SAMU 1515)', lang: 'wo', time: 'Il y a 27 min', status: 'Prioritaire' }
-];
+let impactMetrics = db.metrics;
+let liveActivityLog = db.liveActivityLog;
 
 /**
  * GET /api/metrics
@@ -108,6 +92,7 @@ router.post('/track', (req, res) => {
   }
 
   impactMetrics.lastUpdated = new Date().toISOString();
+  saveDatabaseSync();
 
   res.json({
     success: true,
