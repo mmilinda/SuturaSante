@@ -41,28 +41,91 @@ export function toWolofPhoneticSpeech(wolofText) {
  */
 const LOCAL_KNOWLEDGE = [
   {
-    keywords: ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'nakamou', 'nanga def', 'salaam'],
-    fr: "Salamalékoum ma sœur ! Je suis **Sutura AI**, votre assistante de santé maternelle et reproductive. Je suis là pour vous écouter avec bienveillance, discrétion (*Sutura*) et sans jugement. Vous pouvez me poser vos questions à l'écrit ou en cliquant sur le micro pour me parler. En quoi puis-je vous aider aujourd'hui ?",
+    keywords: ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'nakamou', 'nanga def', 'salaam', 'dalal ak jamm'],
+    fr: "Salamalékoum ma sœur ! Je suis **Sutura AI**, votre assistante de santé maternelle et reproductive. Je suis là pour vous écouter avec bienveillance, discrétion (*Sutura*) et sans jugement. Vous pouvez me poser vos questions à l'écrit ou en cliquant sur le micro pour me parler. Comment vous sentez-vous aujourd'hui et quelle est votre question ?",
     wo: "Salamalékoum sama soxna si ! Dalal ak jàmm. Man la sa xarit Sutura AI. Bul ci am benn tiit dé, lii yepp ci sutura la. Wax ma, nanga def ? Yaram jàmm ? Lu la metti walla lu nga bëgg a laaj tay sama soxna si ?",
-    suggestions: ['Mes rendez-vous CPN', 'Signes de danger', 'Aliments riches en fer', 'SAMU 1515']
+    suggestions: ['Maux de ventre', 'Nausées du matin', 'Mes 4 CPN', 'Signes de danger']
+  },
+  {
+    keywords: ['mal au ventre', 'maux de ventre', 'douleur ventre', 'tiraillement', 'crampe', 'bas ventre', 'ventre lourd', 'ventre dur', 'biir buy metti', 'metti biir', 'sama biir', 'biir bu dees'],
+    fr: "J'ai bien entendu que vous ressentez des douleurs ou des tiraillements au ventre, ma sœur. C'est une inquiétude très fréquente.\n\n" +
+        "• **Quand est-ce bénin ?** : L'utérus grandit et étire les ligaments. Ces tiraillements brefs sont normaux si le ventre reste souple et qu'il n'y a aucun saignement.\n" +
+        "• **Que faire ?** : Allongez-vous sur le côté gauche, buvez de l'eau, évitez de porter des charges et reposez-vous.\n" +
+        "• **Alerte** : Si le ventre devient dur comme du bois, ou si la douleur s'accompagne de saignements, rendez-vous immédiatement au poste de santé ou appelez le 1515.",
+    wo: "Degg naa bu baax sama soxna si, ne nga sa biir dafay metti walla dafa dees.\n\n" +
+        "• **Lu baax li :** Sa birr dafay màgg, téyeyukaayu liir bi di seel. Bu amul deret te du mettit bu tàcculikoo, bul tiit.\n" +
+        "• **Li nga wara def :** Tëddal ci sa wetu càmmooñ (côté gauche), naanal ndox mu baree bari te noppal sa yaram.\n" +
+        "• **Gawante :** Bu dee biir bi dafa dees te dëgër ni xeer walla am deret buy sotti, gaawal dem kër docteur léegi léegi !",
+    suggestions: ['Signes de danger', 'Se reposer sur le côté gauche', 'Prendre rendez-vous CPN']
+  },
+  {
+    keywords: ['nausee', 'nausees', 'vomir', 'vomissement', 'vomissements', 'ecoeurement', 'wacc', 'wàcc', 'xol buy jeex'],
+    fr: "J'ai bien compris que vous souffrez de nausées ou d'envies de vomir, ma sœur.\n\n" +
+        "• **Au réveil** : Mangez un petit biscuit sec ou un morceau de pain de singe (*Bouye*) avant de vous lever du lit.\n" +
+        "• **Fractionnez** : Faites 5 petits repas légers au lieu de 2 gros repas lourds.\n" +
+        "• **Remèdes doux** : Une eau tiède avec un peu de citron, du jus de Bouye et évitez les odeurs de friture d'huile chaude.\n" +
+        "• **Attention** : Si vous ne gardez aucune gorgée d'eau depuis 24h, consultez la sage-femme pour éviter la déshydratation.",
+    wo: "Degg naa bu baax sama soxna si, ne nga xol bi dafay jeex te ngay wàcc.\n\n" +
+        "• **Bu bët setee :** Lakkal biscuit bu wow walla Bouye bala ngay jóg ci lal bi.\n" +
+        "• **Xàjjale sa lekk :** Lekkal ndànk ndànk 4 ba 5 yoon ci bës bi.\n" +
+        "• **Pajum cosaan :** Limon bu ñu xat ci ndox mu teey ak njaan-u Bouye. Ràppal sa bopp ci diwlin bu tàng.",
+    suggestions: ['Aliments faciles à digérer', 'Jus de Bouye', 'Prendre rendez-vous CPN']
+  },
+  {
+    keywords: ['pieds gonfles', 'pied gonfle', 'cheville enflee', 'gonflement', 'oedeme', 'tank buy gemb', 'gemb', 'gémb', 'tank yu fatt'],
+    fr: "J'ai bien noté que vous avez les pieds ou chevilles enflés, ma sœur.\n\n" +
+        "• **Soulagement** : Surélevez vos jambes avec un coussin dès que vous êtes assise ou couchée. Réduisez le sel et les cubes bouillons.\n" +
+        "• **🚨 SIGNE DE DANGER** : Si le gonflement monte brutalement aux **mains et au visage** avec de violents maux de tête ou la vue trouble, c'est peut-être une **hypertension sévère (pré-éclampsie)**. Consultez immédiatement ou appelez le 1515 !",
+    wo: "Degg naa bu baax sama soxna si, ne nga sa tank yi dañuy gémb te fatt.\n\n" +
+        "• **Li koy wàññi :** Tekal sa tank yi ci kaw poos bu ngay toog. Wàññil xorom ak bouillon yi ci cin bi.\n" +
+        "• **🚨 MOYTU BIILE MANDARGA :** Bu dee sa kanam ak sa loxo teggi gémb te sa bopp di metti bu tar, tension bi mën na kowe ! Gaawal dem kër docteur !",
+    suggestions: ['Prendre ma tension', 'Signes de pré-éclampsie', 'Alimentation sans sel']
+  },
+  {
+    keywords: ['mal de dos', 'douleur dos', 'reins', 'sciatique', 'bassin', 'metti gannaaw', 'gannaaw buy metti', 'gannaaw'],
+    fr: "J'ai bien compris que vous avez mal au dos ou au bassin, ma sœur.\n\n" +
+        "• **Posture** : Pliez les genoux pour ramasser des objets, portez des chaussures plates et confortables.\n" +
+        "• **Soulagement doux** : Massage doux avec du beurre de karité tiède et dormez sur le côté gauche avec un coussin entre les jambes.",
+    wo: "Degg naa bu baax sama soxna si, ne nga sa gannaaw dafay metti.\n\n" +
+        "• **Pajum karité :** Jëlal diw-u karité bu tàngal tuuti ñu masaas la gannaaw gi ndànk ndànk.\n" +
+        "• **Tëdd ci càmmooñ :** Tekal coussin ci sa diggante ñaari tank yi bu ngay tëdd.",
+    suggestions: ['Massage au karité', 'Dormir sur le côté gauche', 'Conseils sage-femme']
+  },
+  {
+    keywords: ['faire l amour', 'rapport', 'sexe', 'sexualite', 'sekki', 'sey', 'borom ker'],
+    fr: "J'ai bien entendu votre question intime sur les rapports sexuels pendant la grossesse, ma sœur.\n\n" +
+        "• **Sécurité de bébé** : Bébé est parfaitement protégé dans sa poche des eaux derrière le col de l'utérus. Faire l'amour est naturel et sans danger.\n" +
+        "• **Contre-indications** : Ne faites pas de rapports uniquement si la sage-femme l'a interdit (saignements, col ouvert, menace prématurée).",
+    wo: "Degg naa bu baax sama soxna si, ci sutura gu mat sëkk ngay waxe lii ci wàllu séy ak sa borom kër.\n\n" +
+        "• **Liir bi ci biir :** Mukk duko lor ! Liir bi dafa nekk ci ndox mu sell mu ko aar.\n" +
+        "• **Kañ lañ koy téye :** Bu dee am nga deret buy sotti walla sage-femme bi dafa la ko xañ.",
+    suggestions: ['Signes de danger', 'Prendre conseil sage-femme', 'Sutura du couple']
+  },
+  {
+    keywords: ['dormir', 'position sommeil', 'dormir sur le dos', 'cote gauche', 'teud', 'nelaw'],
+    fr: "J'ai bien compris votre question sur la meilleure position pour dormir enceinte, ma sœur.\n\n" +
+        "• **La position d'or : CÔTÉ GAUCHE** : Elle libère la circulation sanguine et apporte un maximum d'oxygène à votre bébé.\n" +
+        "• **Évitez d'être sur le dos au 3e trimestre** : Le poids du bébé écrase vos vaisseaux sanguins et peut causer des malaises.",
+    wo: "Degg naa bu baax sama soxna si, ne nga tëdd bi dafa la jafe.\n\n" +
+        "• **Wetu càmmooñ (côté gauche) :** Mooy wet gi gën ci adduna jigeen bu ëmm ! Dafay ubbi deret ji di yóbbu ngelaw ci liir bi.",
+    suggestions: ['Soulager le dos', 'Coussin entre les jambes', 'Bien dormir']
   },
   {
     keywords: ['cpn', 'rendez-vous', 'visite', 'calendrier', 'semaine', 'grossesse', 'date', 'echographie', 'echo', 'carnet', 'saytu', 'waxtu'],
     fr: "Au Sénégal, le Ministère de la Santé préconise au minimum **4 Consultations Prénatales (CPN)** essentielles :\n\n" +
-        "1. **CPN 1 (avant 12 SA)** : Confirmation, bilan d'anémie, prescription de fer & acide folique.\n" +
-        "2. **CPN 2 (20 à 24 SA)** : Échographie morphologique, mouvements fœtaux, vaccin antitétanique.\n" +
-        "3. **CPN 3 (28 à 32 SA)** : Prévention du paludisme (TPI), surveillance de la tension.\n" +
-        "4. **CPN 4 (36 à 38 SA)** : Plan d'accouchement et organisation du transport d'urgence.",
+        "1. **CPN 1 (avant 12 SA)** : Confirmation, bilan d'anémie, prescription de fer & acide folique gratuits.\n" +
+        "2. **CPN 2 (20 à 24 SA)** : Échographie morphologique, mouvements fœtaux, vaccin antitétanique (VAT).\n" +
+        "3. **CPN 3 (28 à 32 SA)** : Prévention du paludisme (TPI gratuit), surveillance de la tension.\n" +
+        "4. **CPN 4 (36 à 38 SA)** : Plan d'accouchement et organisation du transport vers la maternité.",
     wo: "Waaw kaye sama soxna si, deggluma bu baax dé ! Birr bi dafa laaj ñu koy saytu ndànk ndànk ci jàmm :\n\n" +
         "• **CPN 1 (bala weer bi di jàll)** : Dëggal birr bi, saytu deret ak joxe fer.\n" +
         "• **CPN 2 (20 ba 24 ayu-bës)** : Écho masin ak ñakk VAT.\n" +
         "• **CPN 3 (28 ba 32 ayu-bës)** : Saytu tension ak garapu sibiru.\n" +
-        "• **CPN 4 (36 ba 38 ayu-bës)** : Waajal wàsin bi ak auto bu lay yóbbu.\n\n" +
-        "Bul fatte kaye fajuwaay bi dé !",
-    suggestions: ['Calculer mon terme', 'Quels aliments manger ?', 'Signes de danger']
+        "• **CPN 4 (36 ba 38 ayu-bës)** : Waajal wàsin bi ak auto bu lay yóbbu.",
+    suggestions: ['Calculer mon terme', 'Aliments riches en fer', 'Signes de danger']
   },
   {
-    keywords: ['saignement', 'sang', 'maux de tete', 'vision floue', 'tension', 'fievre', 'frisson', 'bebe bouge pas', 'bouge moins', 'eau qui coule', 'deret', 'metti bopp', 'musiba'],
+    keywords: ['saignement', 'sang', 'maux de tete violents', 'vision floue', 'tension', 'fievre', 'frisson', 'bebe bouge pas', 'bouge moins', 'eau qui coule', 'deret', 'metti bopp', 'musiba'],
     isEmergency: true,
     fr: "🚨 **ATTENTION : SIGNE DE DANGER OBSTÉTRICAL DÉTECTÉ**\n\n" +
         "Ce symptôme nécessite une évaluation médicale immédiate sans attendre :\n" +
@@ -95,12 +158,20 @@ function fallbackFindAnswer(query, preferredLang = 'fr') {
     }
   }
 
+  // Fallback avec écoute active intelligente (ne dit JAMAIS "quelle est votre question")
+  const shortQ = query.length > 50 ? query.substring(0, 47) + '...' : query;
   return {
     text: preferredLang === 'wo'
-      ? "Degg naa sa laaj ci sutura. Man la Sutura AI, sa ndimbal ci wàllu birr ak wér-gu-yaram. Mën nga ma laaj ci saytu CPN, lekk yu am fer, walla mandargay musiba."
-      : "Je vous écoute en toute confidentialité (*Sutura*). En tant qu'assistante SuturaSanté, je peux vous guider sur vos **rendez-vous de CPN**, les **signes d'alerte**, la **nutrition locale** (Moringa, fer) ou les **urgences (SAMU 1515)**.\n\nEn quoi puis-je vous aider ?",
+      ? `Degg naa bu baax li nga ma laaj ci : « ${shortQ} » sama soxna si.\n\n` +
+        "Ci sutura gu mat sëkk, man la sa xarit Sutura AI. Bu dee am nga mettit ci biir bi, yaram bu tàng, walla liir bi di sonn, gaawal dem kër docteur.\n\n" +
+        "Naanal ndox mu bari, lekk xob-u Nebeday (Moringa) ak Bouye, te waxal ak sa Bajenu Gox ci gox bi !"
+      : `J'ai bien entendu votre question concernant : « ${shortQ} », ma sœur.\n\n` +
+        "C'est une très bonne initiative de poser cette question pour prendre soin de vous et de votre futur bébé :\n\n" +
+        "• **Règle d'or de sécurité** : Écoutez toujours votre corps. En cas de douleur persistante, de fièvre ou de doute, ne prenez aucun médicament sans avis médical.\n" +
+        "• **Repos et nutrition** : Reposez-vous sur le côté gauche, buvez beaucoup d'eau propre et enrichissez vos repas avec du Moringa (*Nebeday*) et du fer.\n" +
+        "• **Votre sage-femme et votre Bajenu Gox** sont là pour vous examiner au poste de santé. N'hésitez pas à me poser une question plus précise sur vos maux de ventre, nausées, ou vos CPN !",
     isEmergency: false,
-    suggestions: ['Mes 4 rendez-vous CPN', 'Signes de danger', 'Nutrition & Moringa', 'SAMU 1515 Sénégal']
+    suggestions: ['Maux de ventre', 'Nausées & Vomissements', 'Mes 4 CPN', 'Signes de danger']
   };
 }
 
