@@ -260,7 +260,7 @@ export default function App() {
                   ========================================================================= */}
               <footer className="w-full pt-6 mt-4 border-t border-[#ddc0bd]/40 flex flex-col md:flex-row items-center justify-between text-xs text-[#574240] gap-3">
                 <span className="font-bold text-[#902e2a]">
-                  SuturaSanté • UNICEF Femtech 2026 Sénégal
+                  Sam Corporate • SuturaSanté • UNICEF Femtech 2026 Sénégal
                 </span>
 
                 {/* BOUTON ESPACE DASHBOARD DANS LE FOOTER */}
@@ -276,7 +276,7 @@ export default function App() {
                 </button>
 
                 <span className="text-[#2c694e] font-semibold">
-                  100% Anonymisé • Protocole Sutura • Licence MIT
+                  Sam Corporate • 100% Anonymisé • Protocole Sutura • Licence MIT
                 </span>
               </footer>
             </div>
@@ -543,7 +543,7 @@ export default function App() {
 
               {/* Footer dans l'espace dashboard */}
               <footer className="w-full pt-6 border-t border-[#ddc0bd]/40 flex flex-col sm:flex-row items-center justify-between text-xs text-[#574240] gap-3">
-                <span className="font-bold text-[#902e2a]">Espace Clinique Professionnel • Poste Pikine Icotaf</span>
+                <span className="font-bold text-[#902e2a]">Sam Corporate • Espace Clinique Professionnel • Poste Pikine Icotaf</span>
                 <button
                   type="button"
                   onClick={() => setIsDashboardMode(false)}
@@ -552,7 +552,7 @@ export default function App() {
                   <span className="material-symbols-outlined text-[14px]">arrow_back</span>
                   <span>Retourner au Site Public</span>
                 </button>
-                <span className="text-[#2c694e] font-semibold">100% AES-GCM chiffré</span>
+                <span className="text-[#2c694e] font-semibold">Sam Corporate • 100% AES-GCM chiffré</span>
               </footer>
             </div>
           </main>

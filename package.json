@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Plateforme mobile-first de suivi prénatal, santé reproductive et triage d'urgence bilingue (Français & Wolof) - UNICEF Femtech Innovation Fund",
+  "author": "MM",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
