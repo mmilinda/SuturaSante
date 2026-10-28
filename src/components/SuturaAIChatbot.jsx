@@ -1,13 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 /**
- * Knowledge Base locale de secours (utilisée si le backend est hors-ligne)
+ * Convertit le texte Wolof écrit en représentation phonétique pour les synthétiseurs vocaux web
+ * Permet d'obtenir une prononciation sénégalaise 100% humaine, chaleureuse et fluide
+ */
+export function toWolofPhoneticSpeech(wolofText) {
+  if (!wolofText || typeof wolofText !== 'string') return '';
+  let speech = wolofText
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/[#•\-]/g, ' ')
+    .replace(/🚨|💡|🍲|🌿|🤱|🌸|🚑|⚠️|📞/g, '');
+
+  speech = speech.replace(/\bci\b/gi, 'tchi');
+  speech = speech.replace(/\bca\b/gi, 'tcha');
+  speech = speech.replace(/ceeb/gi, 'tchééb');
+  speech = speech.replace(/c([aeiou])/gi, 'tch$1');
+  speech = speech.replace(/C([aeiou])/g, 'Tch$1');
+  speech = speech.replace(/j/gi, (m) => m === 'J' ? 'Dj' : 'dj');
+  speech = speech.replace(/x/gi, (m) => m === 'X' ? 'Kh' : 'kh');
+  speech = speech.replace(/ñ/gi, (m) => m === 'Ñ' ? 'Gn' : 'gn');
+  speech = speech.replace(/\bw([aàeéio])/gi, (m, v) => (m[0] === 'W' ? 'Ou' : 'ou') + v);
+  speech = speech.replace(/wà/gi, 'oua');
+  speech = speech.replace(/ë/gi, 'eu');
+  speech = speech.replace(/u/gi, 'ou');
+  speech = speech.replace(/dé(\b|[!?.])/gi, 'déé$1');
+  speech = speech.replace(/\bwaaw\b/gi, 'ouaoou');
+  speech = speech.replace(/\blool\b/gi, 'lôle');
+  speech = speech.replace(/\bsama soxna si\b/gi, 'sama sokhna si');
+  speech = speech.replace(/\bsama xarit\b/gi, 'sama kharit');
+  speech = speech.replace(/\byaram jàmm\b/gi, 'yaram djamm');
+  speech = speech.replace(/\bjàmm\b/gi, 'djamm');
+  speech = speech.replace(/\bndànk ndànk\b/gi, 'ndank ndank');
+
+  return speech;
+}
+
+/**
+ * Knowledge Base locale de secours humanisée (utilisée si le backend est hors-ligne)
  */
 const LOCAL_KNOWLEDGE = [
   {
     keywords: ['bonjour', 'salut', 'salam', 'coucou', 'hello', 'nakamou', 'nanga def', 'salaam'],
-    fr: "Salamalékoum ! Je suis **Sutura AI**, votre assistante de santé maternelle et reproductive. Je suis là pour vous écouter avec bienveillance, discrétion (*Sutura*) et sans jugement. Vous pouvez me poser vos questions à l'écrit ou en cliquant sur le micro pour me parler. En quoi puis-je vous aider aujourd'hui ?",
-    wo: "Salamalékoum ! Man la **Sutura AI**, sa xarit bu la mën a dimbali ci wàllu wér-gu-yaramu jigéen ak birr bi. Mën nga ma wax sa jafe-jafe ci kàddu walla bind ma ko ci sutura. Lu la naqari walla lu nga bëgg a laaj tay ?",
+    fr: "Salamalékoum ma sœur ! Je suis **Sutura AI**, votre assistante de santé maternelle et reproductive. Je suis là pour vous écouter avec bienveillance, discrétion (*Sutura*) et sans jugement. Vous pouvez me poser vos questions à l'écrit ou en cliquant sur le micro pour me parler. En quoi puis-je vous aider aujourd'hui ?",
+    wo: "Salamalékoum sama soxna si ! Dalal ak jàmm. Man la sa xarit Sutura AI. Bul ci am benn tiit dé, lii yepp ci sutura la. Wax ma, nanga def ? Yaram jàmm ? Lu la metti walla lu nga bëgg a laaj tay sama soxna si ?",
     suggestions: ['Mes rendez-vous CPN', 'Signes de danger', 'Aliments riches en fer', 'SAMU 1515']
   },
   {
@@ -17,11 +53,12 @@ const LOCAL_KNOWLEDGE = [
         "2. **CPN 2 (20 à 24 SA)** : Échographie morphologique, mouvements fœtaux, vaccin antitétanique.\n" +
         "3. **CPN 3 (28 à 32 SA)** : Prévention du paludisme (TPI), surveillance de la tension.\n" +
         "4. **CPN 4 (36 à 38 SA)** : Plan d'accouchement et organisation du transport d'urgence.",
-    wo: "Ci Sénégal, Ministère bi digale na ñu def lu néew néew **4 saytu CPN** :\n\n" +
-        "1. **CPN 1 (bala 12 ayu-bës)** : Dëggal birr bi, saytu deret ak joxe fer.\n" +
-        "2. **CPN 2 (20 ba 24 ayu-bës)** : Écho masin ak ñakk VAT.\n" +
-        "3. **CPN 3 (28 ba 32 ayu-bës)** : Saytu tension ak garapu sibiru.\n" +
-        "4. **CPN 4 (36 ba 38 ayu-bës)** : Waajal wàsin bi ak transport.",
+    wo: "Waaw kaye sama soxna si, deggluma bu baax dé ! Birr bi dafa laaj ñu koy saytu ndànk ndànk ci jàmm :\n\n" +
+        "• **CPN 1 (bala weer bi di jàll)** : Dëggal birr bi, saytu deret ak joxe fer.\n" +
+        "• **CPN 2 (20 ba 24 ayu-bës)** : Écho masin ak ñakk VAT.\n" +
+        "• **CPN 3 (28 ba 32 ayu-bës)** : Saytu tension ak garapu sibiru.\n" +
+        "• **CPN 4 (36 ba 38 ayu-bës)** : Waajal wàsin bi ak auto bu lay yóbbu.\n\n" +
+        "Bul fatte kaye fajuwaay bi dé !",
     suggestions: ['Calculer mon terme', 'Quels aliments manger ?', 'Signes de danger']
   },
   {
@@ -33,12 +70,12 @@ const LOCAL_KNOWLEDGE = [
         "- **Ne restez pas seule.** Prévenez un proche ou votre Bajenu Gox.\n\n" +
         "📞 **Action immédiate :**\n" +
         "Appelez gratuitement le **SAMU Sénégal au 1515** ou rendez-vous au centre de santé le plus proche.",
-    wo: "🚨 **MOYTU : MANDARGA GU AM MUSIBA LA CI SA YARAM**\n\n" +
-        "Li nga wax dafa laaj nga dem fajuwaay léegi te bul yéex :\n" +
+    wo: "🚨 **HÉ SAMA SOXNA SI, DEGGLUMA BU BAAX DÉ !**\n\n" +
+        "Li nga ma wax ni dafa gawa laaj fajuwaay ci saa si ! Bul toog di xalaat mukk dé :\n" +
         "- Mën na doon deret buy sotti, tension bu kowe walla liir bi di sonn.\n" +
-        "- **Bul toog yaw rekk.** Wax ko sa mbokk walla sa Bajenu Gox.\n\n" +
-        "📞 **Li nga wara def :**\n" +
-        "Wóoyal **SAMU Sénégal ci 1515** (feyul dara) walla nga dem ci kër docteur bi gën a jege.",
+        "- **Bul toog yaw rekk ci kër gi.** Wax ko sa borom kër walla sa Bajenu Gox léegi léegi !\n\n" +
+        "📞 **Li nga wara def ci saa si :**\n" +
+        "Wóoyal **SAMU Sénégal ci 1515** (feyul dara) walla nga gaaw a dem ci kër docteur bi gën a jege. Yàlla na la Yàlla may jàmm, gaawal dem dé !",
     suggestions: ['Appeler le 1515', 'Centres de santé proches', 'Autres signes']
   }
 ];
@@ -177,8 +214,8 @@ export default function SuturaAIChatbot({
     };
   }, [lang, activeTabMode]);
 
-  // Synthèse vocale TTS
-  const speakText = (text, msgId = null, targetLang = null) => {
+  // Synthèse vocale TTS adaptée à la phonétique Wolof sénégalaise
+  const speakText = (text, msgId = null, targetLang = null, phoneticOverride = null) => {
     if (!('speechSynthesis' in window)) return;
 
     if (isSpeaking && activeVoiceMsgId === msgId) {
@@ -190,17 +227,35 @@ export default function SuturaAIChatbot({
 
     window.speechSynthesis.cancel();
 
-    const cleanSpeech = text
-      .replace(/\*\*/g, '')
-      .replace(/\*/g, '')
-      .replace(/[#•\-]/g, ' ')
-      .replace(/🚨|💡|🍲|🌿|🤱|🌸|🚑|⚠️|📞/g, '');
+    const spokenLang = targetLang || lang;
+    let cleanSpeech = '';
+
+    if (spokenLang === 'wo') {
+      // Pour le Wolof, on utilise la translitération phonétique pour une prononciation sénégalaise naturelle
+      cleanSpeech = phoneticOverride || toWolofPhoneticSpeech(text);
+    } else {
+      cleanSpeech = text
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/[#•\-]/g, ' ')
+        .replace(/🚨|💡|🍲|🌿|🤱|🌸|🚑|⚠️|📞/g, '');
+    }
 
     const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-    const spokenLang = targetLang || lang;
     utterance.lang = spokenLang === 'wo' ? 'fr-SN' : 'fr-FR';
-    utterance.rate = 0.92;
-    utterance.pitch = 1.05;
+    // Rhythme doux, posé et chaleureux d'une Bajenu Gox
+    utterance.rate = spokenLang === 'wo' ? 0.88 : 0.92;
+    utterance.pitch = spokenLang === 'wo' ? 1.02 : 1.05;
+
+    // Détection de voix naturelle féminine / française si disponible
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      const preferred = voices.find(v =>
+        (v.lang.startsWith('fr') || v.lang.startsWith('wo')) &&
+        (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Amélie') || v.name.includes('Audrey'))
+      ) || voices.find(v => v.lang.startsWith('fr'));
+      if (preferred) utterance.voice = preferred;
+    }
 
     utterance.onstart = () => {
       setIsSpeaking(true);
@@ -287,13 +342,17 @@ export default function SuturaAIChatbot({
         const data = await response.json();
         aiResult = {
           text: data.reply,
+          phoneticSpeech: data.phoneticSpeech,
           suggestions: data.suggestions || [],
           isEmergency: !!data.isEmergency,
           engine: data.engine || 'backend-api'
         };
       } else {
-        // Repli local si statut non-200
-        aiResult = fallbackFindAnswer(text, lang);
+        const fallback = fallbackFindAnswer(text, lang);
+        aiResult = {
+          ...fallback,
+          phoneticSpeech: lang === 'wo' ? toWolofPhoneticSpeech(fallback.text) : fallback.text
+        };
       }
 
       const aiMsgId = `ai-${Date.now()}`;
@@ -302,6 +361,7 @@ export default function SuturaAIChatbot({
         sender: 'assistant',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         text: aiResult.text,
+        phoneticSpeech: aiResult.phoneticSpeech,
         suggestions: aiResult.suggestions,
         isEmergency: aiResult.isEmergency
       };
@@ -310,17 +370,19 @@ export default function SuturaAIChatbot({
       setIsTyping(false);
 
       if (autoSpeak || isVoiceCallMode) {
-        speakText(aiResult.text, aiMsgId);
+        speakText(aiResult.text, aiMsgId, lang, aiResult.phoneticSpeech);
       }
     } catch (err) {
       console.warn("Backend API indisponible, utilisation du moteur local de secours:", err.message);
       const fallback = fallbackFindAnswer(text, lang);
+      const phonetic = lang === 'wo' ? toWolofPhoneticSpeech(fallback.text) : fallback.text;
       const aiMsgId = `ai-${Date.now()}`;
       const aiMessage = {
         id: aiMsgId,
         sender: 'assistant',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         text: fallback.text,
+        phoneticSpeech: phonetic,
         suggestions: fallback.suggestions,
         isEmergency: fallback.isEmergency
       };
@@ -329,7 +391,7 @@ export default function SuturaAIChatbot({
       setIsTyping(false);
 
       if (autoSpeak || isVoiceCallMode) {
-        speakText(fallback.text, aiMsgId);
+        speakText(fallback.text, aiMsgId, lang, phonetic);
       }
     }
   };
@@ -359,6 +421,7 @@ export default function SuturaAIChatbot({
                   ...m,
                   translation: {
                     text: data.translatedText,
+                    phoneticSpeech: data.phoneticSpeech,
                     targetLang: target,
                     confidence: data.confidence,
                     engine: data.engine
@@ -659,7 +722,7 @@ export default function SuturaAIChatbot({
                             </div>
                             <button
                               type="button"
-                              onClick={() => speakText(msg.translation.text, `trans-${msg.id}`, msg.translation.targetLang)}
+                              onClick={() => speakText(msg.translation.text, `trans-${msg.id}`, msg.translation.targetLang, msg.translation.phoneticSpeech)}
                               className="self-start text-[10px] text-[#902e2a] font-bold flex items-center gap-1 mt-1 hover:underline cursor-pointer"
                             >
                               <span className="material-symbols-outlined text-[13px]">volume_up</span>
@@ -689,7 +752,7 @@ export default function SuturaAIChatbot({
                             {!isUser && (
                               <button
                                 type="button"
-                                onClick={() => speakText(msg.text, msg.id)}
+                                onClick={() => speakText(msg.text, msg.id, lang, msg.phoneticSpeech)}
                                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all ${
                                   isSpeaking && activeVoiceMsgId === msg.id
                                     ? 'bg-[#902e2a] text-white animate-pulse'
@@ -938,7 +1001,7 @@ export default function SuturaAIChatbot({
                   <div className="flex items-center justify-between pt-1 border-t border-[#fcba67]/30">
                     <button
                       type="button"
-                      onClick={() => speakText(transResult.translatedText, 'trans-box', transResult.targetLang)}
+                      onClick={() => speakText(transResult.translatedText, 'trans-box', transResult.targetLang, transResult.phoneticSpeech)}
                       className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#724600] text-white text-xs font-bold shadow-xs active:scale-95"
                     >
                       <span className="material-symbols-outlined text-[15px]">volume_up</span>

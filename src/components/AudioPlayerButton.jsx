@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toWolofPhoneticSpeech } from './SuturaAIChatbot';
 
 export default function AudioPlayerButton({
   textToSpeak,
@@ -20,10 +21,21 @@ export default function AudioPlayerButton({
       }
 
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      const spokenContent = lang === 'wo' ? toWolofPhoneticSpeech(textToSpeak) : textToSpeak;
+      const utterance = new SpeechSynthesisUtterance(spokenContent);
       utterance.lang = lang === 'wo' ? 'fr-SN' : 'fr-FR';
-      utterance.rate = 0.9;
-      utterance.pitch = 1.05;
+      // Rythme doux, posé et chaleureux d'une Bajenu Gox
+      utterance.rate = lang === 'wo' ? 0.88 : 0.9;
+      utterance.pitch = lang === 'wo' ? 1.02 : 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        const preferredVoice = voices.find(v =>
+          (v.lang.startsWith('fr') || v.lang.startsWith('wo')) &&
+          (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Amélie') || v.name.includes('Audrey'))
+        ) || voices.find(v => v.lang.startsWith('fr'));
+        if (preferredVoice) utterance.voice = preferredVoice;
+      }
 
       utterance.onstart = () => {
         setIsPlaying(true);

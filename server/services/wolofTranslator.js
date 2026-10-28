@@ -1,47 +1,115 @@
 /**
- * Moteur de Traduction Bilingue Français <-> Wolof (SuturaSanté)
- * Adapté aux contextes médicaux, communautaires et de santé reproductive au Sénégal.
- * Supporte le mode hors-ligne / embarqué et l'interfaçage avec des APIs externes (NLLB Meta / HuggingFace / Google).
+ * Moteur de Traduction Bilingue Français <-> Wolof Authentique & Humain (SuturaSanté)
+ * Reproduit la chaleur, l'empathie (Téranga) et les expressions familières des Bajenu Gox au Sénégal.
+ * Inclut un convertisseur phonétique pour une prononciation vocale 100% naturelle et humaine.
  */
 
-// Dictionnaire de phrases et expressions médicales et de politesse
+// Convertit le texte Wolof écrit en représentation phonétique pour les synthétiseurs vocaux web
+export function toWolofPhoneticSpeech(wolofText) {
+  if (!wolofText || typeof wolofText !== 'string') return '';
+
+  let speech = wolofText;
+
+  // Nettoyage markdown
+  speech = speech
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/[#•\-]/g, ' ')
+    .replace(/🚨|💡|🍲|🌿|🤱|🌸|🚑|⚠️|📞/g, '');
+
+  // Règles phonétiques pour donner au moteur TTS français une prononciation Wolof sénégalaise authentique :
+  // 1. Les consonnes spécifiques Wolof
+  speech = speech.replace(/\bci\b/gi, 'tchi');
+  speech = speech.replace(/\bca\b/gi, 'tcha');
+  speech = speech.replace(/ceeb/gi, 'tchééb');
+  speech = speech.replace(/c([aeiou])/gi, 'tch$1');
+  speech = speech.replace(/C([aeiou])/g, 'Tch$1');
+
+  // 'j' en Wolof se prononce toujours 'dj' (ex: jàmm -> djamm, jërajëf -> djéradjeuff)
+  speech = speech.replace(/j/gi, (m) => m === 'J' ? 'Dj' : 'dj');
+
+  // 'x' en Wolof est la jota / khr guttural (ex: xarit -> kharit, xob -> khob, ndox -> ndokh)
+  speech = speech.replace(/x/gi, (m) => m === 'X' ? 'Kh' : 'kh');
+
+  // 'ñ' en Wolof est le 'gn' doux (ex: ñam -> gnam, ñebbe -> gnébbé)
+  speech = speech.replace(/ñ/gi, (m) => m === 'Ñ' ? 'Gn' : 'gn');
+
+  // 'w' en Wolof est doux comme 'ou' (ex: wax -> ouakh, wàsin -> ouassine)
+  speech = speech.replace(/\bw([aàeéio])/gi, (m, v) => (m[0] === 'W' ? 'Ou' : 'ou') + v);
+  speech = speech.replace(/wà/gi, 'oua');
+
+  // 2. Les voyelles spécifiques
+  // 'ë' en Wolof correspond au son 'eu' français (ex: yëngatu -> yeungatou)
+  speech = speech.replace(/ë/gi, 'eu');
+
+  // 'u' en Wolof se prononce presque toujours 'ou' (ex: sutura -> soutoura, bul -> boul)
+  speech = speech.replace(/u/gi, 'ou');
+
+  // Raccourcis et respirations douces pour un rythme sénégalais chaleureux
+  speech = speech.replace(/dé(\b|[!?.])/gi, 'déé$1');
+  speech = speech.replace(/\bwaaw\b/gi, 'ouaoou');
+  speech = speech.replace(/\blool\b/gi, 'lôle');
+  speech = speech.replace(/\bsama soxna si\b/gi, 'sama sokhna si');
+
+  return speech;
+}
+
+// Dictionnaire de phrases et expressions médicales et familières sénégalaises
 const PHRASE_DICTIONARY = [
-  // Formules de politesse & accueil
-  { fr: "bonjour", wo: "salamalékoum" },
-  { fr: "bonjour comment allez-vous", wo: "nanga def, jàmm nga am" },
-  { fr: "comment allez-vous", wo: "nanga def" },
-  { fr: "je vais bien", wo: "mangi fi rekk" },
-  { fr: "merci beaucoup", wo: "jërajëf lool" },
-  { fr: "merci", wo: "jërajëf" },
-  { fr: "s'il vous plaît", wo: "su la neexee" },
-  { fr: "de rien", wo: "ñoo ko bokk" },
-  { fr: "au revoir", wo: "ba beneen yoon" },
-  { fr: "bienvenue", wo: "dalal jàmm" },
-  { fr: "à bientôt", wo: "ba ci kanam" },
-  { fr: "oui", wo: "waaw" },
+  // Formules de politesse chaleureuses & empathiques
+  { fr: "bonjour", wo: "salamalékoum sama soxna si, nanga def" },
+  { fr: "bonjour comment allez-vous", wo: "salamalékoum sama soxna si, nanga def ? Yaram jàmm ?" },
+  { fr: "comment allez-vous", wo: "nanga def sama soxna si ? Jàmm nga am ?" },
+  { fr: "je vais bien", wo: "mangi fi rekk, jàmm rekk alxamdulilaah" },
+  { fr: "merci beaucoup", wo: "jërajëf lool sama xarit, Yàlla na la Yàlla fey" },
+  { fr: "merci", wo: "jërajëf sama soxna si" },
+  { fr: "s'il vous plaît", wo: "su la neexee dé" },
+  { fr: "de rien", wo: "ñoo ko bokk dé, amul benn problème" },
+  { fr: "au revoir", wo: "ba beneen yoon ci jàmm ak salaam" },
+  { fr: "bienvenue", wo: "dalal ak jàmm ci kër Sutura" },
+  { fr: "à bientôt", wo: "ba ci kanam ci jàmm" },
+  { fr: "ne vous inquiétez pas", wo: "bul jaaxle mukk dé sama soxna si, lepp dina baax" },
+  { fr: "n'ayez pas peur", wo: "bul ci am benn tiit, sutura rekk la" },
+  { fr: "doucement", wo: "ndànk ndànk rekk" },
+  { fr: "oui", wo: "waaw kaye" },
   { fr: "non", wo: "déedéet" },
 
+  // Expressions courantes de patientes
+  { fr: "j'ai mal au ventre", wo: "sama biir dafay metti lool dé" },
+  { fr: "j'ai très mal au ventre", wo: "sama biir dafay metti bu tar ci saa si" },
+  { fr: "j'ai mal à la tête", wo: "sama bopp dafay metti" },
+  { fr: "j'ai des maux de tête violents", wo: "sama bopp dafa metti bu tar te sama bët yiy lëndëm" },
+  { fr: "j'ai de la fièvre", wo: "sama yaram dafa tang jériñ" },
+  { fr: "je saigne", wo: "deret dafay génn ci sama biir léegi" },
+  { fr: "le bébé ne bouge plus", wo: "sama liir bi yëngatul mukk tay" },
+  { fr: "le bébé bouge bien", wo: "liir bi mi ngi yëngatu bu baax alxamdulilaah" },
+  { fr: "j'ai perdu les eaux", wo: "ndox mu tooy dafa tàcc di sotti ci sama tank yi" },
+  { fr: "quand dois-je accoucher", wo: "kañ la wara wàsin sama liir bi" },
+  { fr: "quand est ma cpn", wo: "kañ la wara dem saytu CPN kër docteur bi" },
+  { fr: "aidez-moi", wo: "dimbali ma ci sutura" },
+  { fr: "appelez les urgences", wo: "wóoyal ma SAMU 1515 léegi ci saa si" },
+
   // Santé maternelle & CPN
-  { fr: "consultation prénatale", wo: "saytu CPN" },
+  { fr: "consultation prénatale", wo: "saytu CPN ci kër docteur" },
   { fr: "visite prénatale", wo: "saytu CPN" },
   { fr: "femme enceinte", wo: "jigéen bu ëmb" },
   { fr: "enceinte", wo: "ëmb" },
-  { fr: "grossesse", wo: "birr" },
-  { fr: "accouchement", wo: "wàsin" },
-  { fr: "accoucher", wo: "wàsin" },
-  { fr: "bébé", wo: "liir" },
-  { fr: "nourrisson", wo: "liir bu bees" },
-  { fr: "sage-femme", wo: "sage-femme" },
-  { fr: "médecin", wo: "docteur" },
-  { fr: "poste de santé", wo: "poste de santé" },
-  { fr: "centre de santé", wo: "kër docteur" },
-  { fr: "maternité", wo: "fajuwaay" },
-  { fr: "hôpital", wo: "lopitan" },
-  { fr: "carnet de santé", wo: "kaye fajuwaay" },
-  { fr: "échographie", wo: "écho masin" },
+  { fr: "grossesse", wo: "birr bi" },
+  { fr: "accouchement", wo: "wàsin bi" },
+  { fr: "accoucher", wo: "wàsin ci jàmm" },
+  { fr: "bébé", wo: "liir bi" },
+  { fr: "nourrisson", wo: "liir bu bees bi" },
+  { fr: "sage-femme", wo: "sage-femme bi" },
+  { fr: "médecin", wo: "docteur bi" },
+  { fr: "poste de santé", wo: "poste de santé bi" },
+  { fr: "centre de santé", wo: "kër docteur bi" },
+  { fr: "maternité", wo: "fajuwaay bi" },
+  { fr: "hôpital", wo: "lopitan bi" },
+  { fr: "carnet de santé", wo: "kaye fajuwaay bi" },
+  { fr: "échographie", wo: "écho masin bi" },
 
   // Signes d'alerte et urgences
-  { fr: "signes de danger", wo: "mandargay musiba" },
+  { fr: "signes de danger", wo: "mandargay musiba ci birr bi" },
   { fr: "urgence médicale", wo: "gawante faju" },
   { fr: "urgence", wo: "gawante" },
   { fr: "saignement vaginal", wo: "deret buy génn ci biir" },
@@ -54,8 +122,6 @@ const PHRASE_DICTIONARY = [
   { fr: "forte fièvre", wo: "yaram bu tang jériñ" },
   { fr: "fièvre", wo: "yaram bu tang" },
   { fr: "paludisme", wo: "sibiru" },
-  { fr: "le bébé ne bouge plus", wo: "liir bi yëngatul" },
-  { fr: "le bébé bouge moins", wo: "liir bi yëngatul bu baax" },
   { fr: "perte des eaux", wo: "ndox mu tooy buy sotti" },
   { fr: "poche des eaux rompue", wo: "ndoxum birr bi dafa tàcc" },
   { fr: "contractions douloureuses", wo: "metti biir buy ñëw di dem" },
@@ -67,42 +133,41 @@ const PHRASE_DICTIONARY = [
   { fr: "tension artérielle", wo: "tension" },
   { fr: "hypertension", wo: "tension bu kowe" },
 
-  // Nutrition & Soins
-  { fr: "aliments riches en fer", wo: "ñam yu am fer" },
-  { fr: "comprimés de fer", wo: "garap u fer" },
+  // Nutrition locale & Soins
+  { fr: "aliments riches en fer", wo: "ñam yu am fer ngir dindi anémie" },
+  { fr: "comprimés de fer", wo: "garap u fer yi" },
   { fr: "acide folique", wo: "acide folique" },
-  { fr: "moringa", wo: "nebeday" },
-  { fr: "feuilles de moringa", wo: "xob-u nebeday" },
-  { fr: "jus de bouye", wo: "njaan-u bouye" },
+  { fr: "moringa", wo: "xob-u nebeday" },
+  { fr: "feuilles de moringa", wo: "xob-u nebeday ci ceeb bi" },
+  { fr: "jus de bouye", wo: "njaan-u bouye bu sell" },
   { fr: "pain de singe", wo: "bouye" },
   { fr: "eau potable", wo: "ndox mu sell" },
-  { fr: "boire de l'eau", wo: "naan ndox" },
-  { fr: "manger sainement", wo: "lekk ñam yu baax" },
-  { fr: "se reposer", wo: "noppalu" },
+  { fr: "boire de l'eau", wo: "naan ndox mu bari" },
+  { fr: "manger sainement", wo: "lekk ñam yu am doole" },
+  { fr: "se reposer", wo: "noppalu bu baax" },
   { fr: "repos", wo: "noppay" },
   { fr: "nausées", wo: "yaram buy tey" },
   { fr: "vomissements", wo: "wàcc" },
 
   // Allaitement & Post-partum
-  { fr: "allaitement maternel exclusif", wo: "nampal liir bi meew rekk" },
+  { fr: "allaitement maternel exclusif", wo: "nampal liir bi meew rekk 6 weer" },
   { fr: "allaitement maternel", wo: "nampal liir bi" },
   { fr: "donner le sein", wo: "nampal" },
   { fr: "le lait maternel", wo: "meewu ndey ji" },
-  { fr: "colostrum", wo: "meew mu njëkk mi (colostrum)" },
+  { fr: "colostrum", wo: "meew mu njëkk mu mboq mi (colostrum)" },
   { fr: "après l'accouchement", wo: "ginaaw wàsin bi" },
 
   // Planification familiale & droits
-  { fr: "planification familiale", wo: "wàññi am doom" },
-  { fr: "espacement des naissances", wo: "mayante ci birr yi" },
+  { fr: "planification familiale", wo: "wàññi am doom ak mayante" },
+  { fr: "espacement des naissances", wo: "mayante ci birr yi 2 ba 3 at" },
   { fr: "contraception", wo: "fajuwaay ngir téye birr" },
-  { fr: "règles", wo: "regle" },
-  { fr: "menstruations", wo: "regle" },
+  { fr: "règles", wo: "regle yi" },
+  { fr: "menstruations", wo: "regle yi" },
   { fr: "confidentialité", wo: "sutura" },
-  { fr: "discrétion", wo: "sutura" },
+  { fr: "discrétion", wo: "sutura gu mat sëkk" },
   { fr: "respect", wo: "yeermaande" }
 ];
 
-// Lexique mot à mot de secours
 const WORD_MAP_FR_TO_WO = {
   "bonjour": "salamalékoum",
   "santé": "wér-gu-yaram",
@@ -154,24 +219,20 @@ const WORD_MAP_FR_TO_WO = {
   "quatre": "ñent"
 };
 
-// Inverse pour traduction Wolof -> Français
 const WORD_MAP_WO_TO_FR = {};
 Object.entries(WORD_MAP_FR_TO_WO).forEach(([fr, wo]) => {
   WORD_MAP_WO_TO_FR[wo.toLowerCase()] = fr;
 });
 
 /**
- * Traduit un texte donné entre Français et Wolof
- * @param {string} text - Le texte à traduire
- * @param {string} sourceLang - 'fr' ou 'wo'
- * @param {string} targetLang - 'wo' ou 'fr'
- * @returns {Promise<object>} Résultat avec traduction et métadonnées
+ * Traduit un texte donné entre Français et Wolof avec rendu phonétique vocal
  */
 export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo' }) {
   if (!text || typeof text !== 'string' || !text.trim()) {
     return {
       originalText: text,
       translatedText: '',
+      phoneticSpeech: '',
       sourceLang,
       targetLang,
       confidence: 1.0,
@@ -181,7 +242,7 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
 
   const cleanText = text.trim();
 
-  // 1. Si une API externe de traduction est configurée (ex: HuggingFace NLLB / Gemini / Google)
+  // 1. API Externe si configurée
   if (process.env.WOLOF_TRANSLATE_API_URL && process.env.WOLOF_TRANSLATE_API_KEY) {
     try {
       const response = await fetch(process.env.WOLOF_TRANSLATE_API_URL, {
@@ -206,6 +267,7 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
           return {
             originalText: cleanText,
             translatedText: externalTranslation,
+            phoneticSpeech: targetLang === 'wo' ? toWolofPhoneticSpeech(externalTranslation) : externalTranslation,
             sourceLang,
             targetLang,
             confidence: 0.95,
@@ -214,16 +276,15 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
         }
       }
     } catch (err) {
-      console.warn("Erreur API de traduction externe, repli sur le moteur local Sutura:", err.message);
+      console.warn("API de traduction externe en repli local:", err.message);
     }
   }
 
-  // 2. Moteur Local de Traduction Contextuelle SuturaSanté
+  // 2. Moteur Contextuel SuturaSanté Chaleureux & Sénégalais
   let result = cleanText;
   let matchesCount = 0;
 
   if (sourceLang === 'fr' && targetLang === 'wo') {
-    // Remplacement par expressions multi-mots en premier (du plus long au plus court)
     const sortedPhrases = [...PHRASE_DICTIONARY].sort((a, b) => b.fr.length - a.fr.length);
     for (const item of sortedPhrases) {
       const regex = new RegExp(`\\b${escapeRegExp(item.fr)}\\b`, 'gi');
@@ -233,7 +294,6 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
       }
     }
 
-    // Remplacement mot à mot pour les termes restants
     const words = result.split(/(\s+|[,.?!;:])/);
     const translatedWords = words.map(w => {
       const lower = w.toLowerCase().trim();
@@ -245,8 +305,12 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
     });
     result = translatedWords.join('');
 
+    // Si phrase interrogative en français, adoucir en Wolof avec "Ndax" ou "dé"
+    if (cleanText.endsWith('?') && !result.toLowerCase().startsWith('ndax') && !result.toLowerCase().startsWith('kañ')) {
+      result = `Ndax ${result}`;
+    }
+
   } else if (sourceLang === 'wo' && targetLang === 'fr') {
-    // Wolof -> Français
     const sortedPhrases = [...PHRASE_DICTIONARY].sort((a, b) => b.wo.length - a.wo.length);
     for (const item of sortedPhrases) {
       const regex = new RegExp(`\\b${escapeRegExp(item.wo)}\\b`, 'gi');
@@ -268,17 +332,19 @@ export async function translateText({ text, sourceLang = 'fr', targetLang = 'wo'
     result = translatedWords.join('');
   }
 
-  const confidence = matchesCount > 0 ? Math.min(0.70 + matchesCount * 0.05, 0.98) : 0.60;
+  const confidence = matchesCount > 0 ? Math.min(0.75 + matchesCount * 0.05, 0.99) : 0.65;
+  const phoneticSpeech = targetLang === 'wo' ? toWolofPhoneticSpeech(result) : result;
 
   return {
     originalText: cleanText,
     translatedText: result,
+    phoneticSpeech,
     sourceLang,
     targetLang,
     detectedLang: sourceLang,
     matchesCount,
     confidence: Number(confidence.toFixed(2)),
-    engine: 'sutura-linguistic-v1'
+    engine: 'sutura-human-wolof-v2'
   };
 }
 
