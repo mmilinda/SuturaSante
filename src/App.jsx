@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import PregnancyCalculator from './components/PregnancyCalculator';
 import DangerSignsTriage from './components/DangerSignsTriage';
@@ -10,6 +10,7 @@ import ClinicalTriageConsole from './components/ClinicalTriageConsole';
 import MotherFileDashboard from './components/MotherFileDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import SuturaAIChatbot from './components/SuturaAIChatbot';
+import { trackAnonymousEvent } from './utils/telemetry';
 
 export default function App() {
   const [lang, setLang] = useState('wo');
@@ -36,7 +37,29 @@ export default function App() {
     calculationsDone: 29,
   });
 
-  const trackAction = (type) => {
+  // Récupération des métriques réelles depuis l'API backend au chargement
+  useEffect(() => {
+    fetch('/api/metrics')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.totalUsers) {
+          setMetrics((prev) => ({
+            ...prev,
+            totalUsers: data.totalUsers,
+            audioListens: data.audioListens,
+            triagesDone: data.triagesDone,
+            emergenciesHandled: data.emergenciesHandled,
+            calculationsDone: data.calculationsDone,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const trackAction = (type, label = null) => {
+    // Télémétrie éthique : envoi anonymisé d'événement sans PII ni compte
+    trackAnonymousEvent(type, { lang, label });
+
     setMetrics((prev) => {
       const updated = { ...prev };
       if (type === 'audio_listen') updated.audioListens += 1;
@@ -555,6 +578,7 @@ export default function App() {
                 <AdminDashboard
                   lang={lang}
                   onActionTrack={trackAction}
+                  metrics={metrics}
                 />
               )}
 
