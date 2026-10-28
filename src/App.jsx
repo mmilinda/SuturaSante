@@ -264,6 +264,7 @@ export default function App() {
                 <PregnancyCalculator
                   onNavigateToTriage={() => setPublicTab('triage')}
                   onActionTrack={trackAction}
+                  lang={lang}
                 />
               )}
 
